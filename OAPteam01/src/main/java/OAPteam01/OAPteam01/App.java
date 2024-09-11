@@ -14,5 +14,6 @@ public class App
         int i = 3;
         int x = 4; 
       
+        System.out.print(i+x);
        
 }}
