@@ -10,9 +10,5 @@ public class App
     {
         System.out.println( "Hello World!" );
         System.out.println( "Hello World!" );
-        
-        int i = 3;
-        int x = 4; 
-      
        
 }}
