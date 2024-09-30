@@ -2,7 +2,7 @@ package OAPteam01.OAPteam01;
 
 /**
  * Hello world!
- *
+ * Trudy prøver å endre noe
  */
 public class App 
 {
