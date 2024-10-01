@@ -4,6 +4,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+/**
+ * Connects the app to the database
+ * 
+ * @author Trudy
+ * 
+ */
 public class JDBC {
 	  // Database URL
     static String dbUrl = "jdbc:mysql://localhost:3306/sakila";
