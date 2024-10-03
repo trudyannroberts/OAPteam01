@@ -1,11 +1,11 @@
 package OAPteam01.OAPteam01;
 /**
- *  Profile class. Is a parentclass for childUser and adultUser.
+ *  Profile class.
  *  
  *  @author Erica Laub Varpe
  */
 public class Profile{
-
+//legg inn bolean om profilen er child eller adult
 
 
 }
