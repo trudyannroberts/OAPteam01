@@ -1,14 +1,11 @@
 package OAPteam01.OAPteam01;
 /**
- *  Profile class
+ *  Profile class. Is a parentclass for childUser and adultUser.
  *  
  *  @author Erica Laub Varpe
  */
-public class Profile extends Customer {
+public class Profile{
 
-	Profile(String firstName) {
-		super(firstName);
-		// TODO Auto-generated constructor stub
-	}
+
 
 }
