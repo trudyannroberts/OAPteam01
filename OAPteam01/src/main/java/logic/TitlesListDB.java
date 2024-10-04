@@ -21,17 +21,6 @@ public class TitlesListDB {
             String sql = "SELECT title FROM film";
             ResultSet rs = stmt.executeQuery("select * from film");
 
-            List<String> getFilmTitles() throws SQLException {
-    	        List<String> filmTitles = new ArrayList<>();
-    	        String query = "SELECT title FROM film";  // Replace 'films' with your actual table name
-
-    	        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
-    	            while (resultSet.next()) {
-    	                filmTitles.add(resultSet.getString("title"));
-    	            }
-    	        }
-    	        return filmTitles;
-    	    }
             rs.close();
             stmt.close();
         } catch (SQLException | ClassNotFoundException e) {
@@ -44,15 +33,12 @@ public class TitlesListDB {
             }
         }
     }
-}
 
-	 /*   // Initialize the database connection
-	    public TitlesListDB(String dbUrl, String user, String pass) throws SQLException {
-	        conn = DriverManager.getConnection(dbUrl, user, pass);
-	    }
 
-	    // Fetch all film titles from the database
-	    public List<String> getFilmTitles() throws SQLException {
+	
+
+	    //Fetch all film titles from the database
+	    public List<String>s getFilmTitle() throws SQLException {
 	        List<String> filmTitles = new ArrayList<>();
 	        String query = "SELECT title FROM film";  // Replace 'films' with your actual table name
 
