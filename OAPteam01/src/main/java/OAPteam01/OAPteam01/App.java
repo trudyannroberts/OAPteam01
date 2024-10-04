@@ -15,4 +15,6 @@ public class App
         System.out.println( "Hello World!" );
         System.out.println( "Hello World!" );
        
+        Actor a = new Actor ("Per","Hansen");
+        a.display();
 }}
