@@ -2,15 +2,12 @@
 
 package logic;
 
-/**
- *@author Trudy Ann Roberts
- *Whenever we want to use the database, remember to import the class for the DatabaseConnection:
- */
-import database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import db.DatabaseConnection;
 
 public class UserAuthenticator {
     
@@ -21,7 +18,7 @@ public class UserAuthenticator {
      * @param email is the users email  ----- HERE I NEED TO ADD CONSTRAINTS FOR A VALID EMAIL
      *  @param username is a username of the user's choice
      *  @param password ---- NEEDS CONSTRAINTS (capital letters, minimum 8 characters, and numbers)
-     *  @param addressId has to be added because it is NOT NULL in the database. 
+     *  @param addressId has to be added because it is NOT NULL in the db. 
      */
     public static void registerUser() {
         Scanner scanner = new Scanner(System.in);
@@ -36,12 +33,10 @@ public class UserAuthenticator {
         String username = scanner.nextLine();
         System.out.print("Enter Password: ");
         String password = scanner.nextLine();
-        System.out.print("Enter address_id: ");
-        int addressId = scanner.nextInt();
-      
+     
       
         String query = "INSERT INTO staff (first_name, last_name, address_id, email, store_id, active, username, password, last_update) " +
-                       "VALUES (?, ?, ?, ?, 1, 1, ?, ?, NOW())";
+                       "VALUES (?, ?, 1, ?, 1, 1, ?, ?, NOW())";
         /**
          * Calling the Connection method from the DatabaseConnection class. 
          * The prepared statement sets the first parameter in the SQL query to the value firstName.
@@ -51,10 +46,9 @@ public class UserAuthenticator {
              
             pstmt.setString(1, firstName);
             pstmt.setString(2, lastName);
-            pstmt.setInt(3, addressId);
-            pstmt.setString(4, email);
-            pstmt.setString(5, username);
-            pstmt.setString(6, password);
+            pstmt.setString(3, email);
+            pstmt.setString(4, username);
+            pstmt.setString(5, password);
             
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -108,7 +102,7 @@ public class UserAuthenticator {
     /**
      * 
      * @param args. A main method where the user can choose to either register or log in.
-     * If successfull, you will be greeted by your first name. If the username or password is not in the database,
+     * If successfull, you will be greeted by your first name. If the username or password is not in the db,
      * the user will be informed that the user either doesn't exist or the password is wrong.
      * HERE WE HAVE TO CREATE BUTTONS.
      */
