@@ -40,13 +40,13 @@ public class FilmReview {
      * @param filmTitle is the film title that is to be saved.
      * @param newReview is the review given by the user.
      * Here we have an Array List that will list all the titles and reviews. 
-     * If the file exists
+     * If the file exists, it will read the file.
      */
     private static void saveReviewToFile(String filmTitle, int newReview) {
         try {
             List<String> lines = new ArrayList<>();
             if (Files.exists(Paths.get(REVIEW_FILE))) {
-                lines = Files.readAllLines(Paths.get(REVIEW_FILE)); // Read existing reviews
+                lines = Files.readAllLines(Paths.get(REVIEW_FILE)); 
             }
 
             /**
