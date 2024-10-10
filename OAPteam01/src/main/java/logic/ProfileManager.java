@@ -2,21 +2,40 @@ package logic;
 import java.io.*;
 import java.util.*;
 
+/**
+ * @author Trudy Ann Roberts
+ * The ProfileManager class lets a user create up to five profiles, either an adult or children's profile.
+ * The data is stored in a local file, and each profile is linked to a specific user via a userId.
+ */
 public class ProfileManager {
+
     private static final int MAX_PROFILES = 5;
     private List<UserProfile> profiles = new ArrayList<>(); // To hold user profiles in memory
     private int userId; // The ID of the user (fetched from database)
 
+    /**
+     * Initializes the ProfileManager for a specific user, using their userId.
+     * Profiles linked to this user are loaded from the file.
+     *
+     * @param userId The userId of the user that is logged in. This is the staff_id from the database.
+     */
     public ProfileManager(int userId) {
         this.userId = userId;
         loadProfilesFromFile(); // Load profiles from file upon initialization
     }
 
-    // Add a new profile for the logged-in user
+    /**
+     * Adds a new profile for the logged-in user. Users can create up to five profiles.
+     * If the profile is successfully added, it is saved to the local file.
+     *
+     * @param profile The new profile that the user creates (either Adult or Children).
+     * @return true if the profile was successfully added and saved to the file, 
+     *         false if the maximum number of profiles has already been reached.
+     */
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
-            saveProfilesToFile(); // Save updated profiles to file
+            saveProfilesToFile(); // Save the updated list to the file
             return true;
         } else {
             System.out.println("Maximum number of profiles reached.");
@@ -24,7 +43,10 @@ public class ProfileManager {
         }
     }
 
-    // Save profiles to a local text file (linked to the user)
+    /**
+     * Saves the user's profiles to a local text file. 
+     * Each profile is associated with the userId of the current user, and duplicates are avoided.
+     */
     private void saveProfilesToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("profiles.txt", true))) {
             for (UserProfile profile : profiles) {
@@ -38,17 +60,21 @@ public class ProfileManager {
         }
     }
 
-    // Load profiles from the file and filter by userId
+    /**
+     * Loads the profiles associated with this user from the local file.
+     * The file stores profiles in CSV format (ProfileName, ProfileType, UserId).
+     * Only profiles that match the current userId are loaded into memory.
+     */
     private void loadProfilesFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("profiles.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(","); // Assuming fields are comma-separated
+                String[] parts = line.split(","); // Split the CSV line into components
                 String profileName = parts[0];
                 String profileType = parts[1];
                 int storedUserId = Integer.parseInt(parts[2]);
 
-                // Only load profiles for this user
+                // Load only profiles for the current user (matching userId)
                 if (storedUserId == userId) {
                     if ("Adult".equals(profileType)) {
                         profiles.add(new AdultProfile(profileName));
@@ -64,7 +90,10 @@ public class ProfileManager {
         }
     }
 
-    // Display the profiles in memory
+    /**
+     * Displays all the profiles currently loaded in memory for this user.
+     * It shows the profile index, profile name, and whether the profile can watch R-rated movies.
+     */
     public void displayProfiles() {
         for (int i = 0; i < profiles.size(); i++) {
             UserProfile profile = profiles.get(i);
@@ -73,6 +102,11 @@ public class ProfileManager {
         }
     }
 
+    /**
+     * Returns the number of profiles that the user has created.
+     *
+     * @return The count of profiles currently associated with the userId.
+     */
     public int getProfileCount() {
         return profiles.size();
     }

@@ -1,33 +1,43 @@
 package logic;
+
 /**
  * @author Trudy Ann Roberts
- * This is the application that outputs the reviews. This can be removed and these methods implemented into GUI. 
- * Since GUI is in a different package, remember to import the logic package.
+ * 
+ * This is the FilmReviewApp, a console-based application that outputs film reviews. 
+ * In a real implementation, these methods could be integrated into a GUI class. 
+ * When integrating with a GUI located in a different package, be sure to import the 
+ * relevant classes from the `logic` package.
  */
-
 public class FilmReviewApp {
 
     public static void main(String[] args) {
-        /**
-         * Creating an instance of a search class.
-         */
+        // Create an instance of FilmSearcher to retrieve film titles by their ID.
         FilmSearcher filmSearcher = new FilmSearcher();
         
         /**
-         * @param filmId is the value of film_id in the database. 
-         * @param filmTitle connects with the filmId. 
-         * The method getFilmTitleById() is inherited from the FilmSearcher class.
-         * Right now filmId is set to 1, which means it will always show Academy Dinosaur. 
-         * I need to change to a dynamic feature, that is connected to the current film the user is watching.
+         * The current film ID being used for the demo is statically set to 1, which will 
+         * always return "Academy Dinosaur" from the database. The method getFilmTitleById() 
+         * from the FilmSearcher class is used to fetch the title based on the given filmId.
+         * 
+         * @param filmId represents the unique film identifier from the database.
+         * @param filmTitle stores the title of the film returned by the getFilmTitleById() method.
+         * 
+         * To make the application more dynamic, this filmId should be replaced with a 
+         * value representing the film currently being watched by the user, obtained through 
+         * the actual film-watching logic or the GUI interaction.
          */
-        int filmId = 1; 
+        int filmId = 1;  // For demo purposes, filmId is statically set.
         String filmTitle = filmSearcher.getFilmTitleById(filmId);
 
         if (filmTitle != null) {
             System.out.println("You are watching: " + filmTitle);
-            
+
             /**
-             * This method can be picked up by the class where the user is playing a fil
+             * The promptForReview() method from the FilmReview class could be invoked by 
+             * the class where the user is actively watching a film. This method prompts the 
+             * user for a review and processes the input for the current film title.
+             * 
+             * The GUI class should replace this console output with a user interface action.
              */
             FilmReview.promptForReview(filmTitle);
         } else {
