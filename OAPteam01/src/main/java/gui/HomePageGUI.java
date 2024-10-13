@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HomePageGUI extends JFrame {
-	protected JPanel contentPanel; // Panel to display different content
+	protected JPanel contentPanel; 
 	
 	public HomePageGUI() {
         setTitle("Streaming Service Home");
@@ -13,17 +13,17 @@ public class HomePageGUI extends JFrame {
         setLocationRelativeTo(null); 
         setLayout(new BorderLayout());
 
-     // Create a navigation panel
+     //Navigation panel
         JPanel navPanel = createNavPanel();
-        add(navPanel, BorderLayout.NORTH); // Add the navigation bar at the top
+        add(navPanel, BorderLayout.NORTH); 
 
-        // Create a content panel where specific functionality will be displayed
+        //Content panel 
         contentPanel = new JPanel();
         contentPanel.setLayout(new CardLayout()); // Use CardLayout for switching between content
         contentPanel.setBackground(new Color(240, 248, 255));
         add(contentPanel, BorderLayout.CENTER);
         
-        // Initialize the GUI with a default view
+       
         showDefaultPage();
         
         setVisible(true);
@@ -72,11 +72,11 @@ public class HomePageGUI extends JFrame {
         return panel;
     }
     
-    // Method to show the default page (like the homepage)
+    // Method to show the homepage
     protected void showDefaultPage() {
         contentPanel.removeAll();
         JLabel label = new JLabel("Welcome to the Streaming Service", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); // Set text color to blue
+        label.setForeground(new Color(70, 130, 180)); 
         contentPanel.add(label, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -86,7 +86,7 @@ public class HomePageGUI extends JFrame {
     protected void showBrowsePage() {
         contentPanel.removeAll();
         JLabel label = new JLabel("Browse Movies", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); // Set text color to red
+        label.setForeground(new Color(70, 130, 180)); 
         contentPanel.add(label, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -96,7 +96,7 @@ public class HomePageGUI extends JFrame {
     protected void showAccountPage() {
         contentPanel.removeAll();
         JLabel label = new JLabel("Manage Account", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); // Set text color to green
+        label.setForeground(new Color(70, 130, 180)); 
         contentPanel.add(label, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -106,7 +106,7 @@ public class HomePageGUI extends JFrame {
     protected void showReviewPage() {
         contentPanel.removeAll();
         JLabel label = new JLabel("Review Movies", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); // Set text color to magenta
+        label.setForeground(new Color(70, 130, 180)); 
         contentPanel.add(label, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -116,7 +116,7 @@ public class HomePageGUI extends JFrame {
     protected void showHistoryPage() {
         contentPanel.removeAll();
         JLabel label = new JLabel("Viewing History", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); // Set text color to orange
+        label.setForeground(new Color(70, 130, 180)); 
         contentPanel.add(label, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -125,9 +125,9 @@ public class HomePageGUI extends JFrame {
 
     // Main method to launch the GUI
     public static void main(String[] args) {
-        // Ensure that GUI creation is done on the Event Dispatch Thread (EDT)
+       
         SwingUtilities.invokeLater(() -> {
-            new HomePageGUI(); // Create and display the GUI
+            new HomePageGUI(); 
         });
     }
 }
