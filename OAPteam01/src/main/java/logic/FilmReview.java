@@ -1,16 +1,17 @@
 package logic;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
- * @author Trudy Ann Roberts
- * 
- * This class manages film reviews. It allows users to review films and stores the reviews 
+ * FilmReview class manages film reviews. It allows users to review films and stores the reviews
  * along with the film titles in a file. If a film already has reviews, it updates the average review.
+ * 
+ * @author Trudy Ann Roberts
  */
 public class FilmReview {
 
@@ -19,52 +20,54 @@ public class FilmReview {
     /**
      * Prompts the user to provide a review for a selected film.
      * 
-     * @param filmTitle The title of the film the user is reviewing.
+     * @param title The title of the film the user is reviewing.
      * 
-     * This method asks the user to input a rating between 1 and 10. 
+     * This method asks the user to input a rating between 1 and 10.
      * If the rating is valid, it calls the `saveReviewToFile()` method to store or update the review.
      * If the rating is invalid (less than 1 or greater than 10), it outputs an error message.
      */
     public static void promptForReview(String filmTitle) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Please rate the film '" + filmTitle + "' (1-10): ");
-        int review = scanner.nextInt();
+        String input = JOptionPane.showInputDialog("Please rate the film '" + filmTitle + "' (1-10):");
         
-        if (review < 1 || review > 10) {
-            System.out.println("Invalid input. Please enter a number between 1 and 10.");
+        if (input == null) {
+            // User cancelled the input
             return;
         }
-        saveReviewToFile(filmTitle, review);
+
+        try {
+            int review = Integer.parseInt(input);
+            if (review < 1 || review > 10) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number between 1 and 10.");
+            } else {
+                saveReviewToFile(filmTitle, review);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number between 1 and 10.");
+        }
     }
 
     /**
      * Saves the user's review to the file.
      * 
-     * @param filmTitle The title of the film being reviewed.
+     * @param title The title of the film being reviewed.
      * @param newReview The user's review score for the film.
      * 
-     * This method reads the existing reviews from the file into a list. 
-     * If the film already has reviews, it updates the average review using the 
+     * This method reads the existing reviews from the file into a list.
+     * If the film already has reviews, it updates the average review using the
      * `updateAverageReview()` method. Otherwise, it adds a new review entry for the film.
      */
-    private static void saveReviewToFile(String filmTitle, int newReview) {
+    private static void saveReviewToFile(String title, int newReview) {
         try {
             List<String> lines = new ArrayList<>();
             if (Files.exists(Paths.get(REVIEW_FILE))) {
                 lines = Files.readAllLines(Paths.get(REVIEW_FILE)); 
             }
 
-            /**
-             * Check if the film already has reviews in the file.
-             * If it does, update the average review by calling `updateAverageReview()`.
-             * If not, add a new entry for the film and its review.
-             */
-            String filmLine = findFilmLine(lines, filmTitle);
+            String filmLine = findFilmLine(lines, title);
 
             if (filmLine == null) {
                 // If no existing reviews for this film, add a new entry with the current review.
-                lines.add(filmTitle + " - " + newReview + " (1 review)");
+                lines.add(title + " - " + newReview + " (1 review)");
             } else {
                 // Update the existing review entry with a new average review.
                 String updatedLine = updateAverageReview(filmLine, newReview);
@@ -74,9 +77,10 @@ public class FilmReview {
 
             // Write the updated list of reviews back to the file.
             Files.write(Paths.get(REVIEW_FILE), lines);
-            System.out.println("Review saved!");
+            JOptionPane.showMessageDialog(null, "Review saved!");
 
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving review: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -89,9 +93,9 @@ public class FilmReview {
      * 
      * @return The line containing the review information for the specified film, or null if not found.
      */
-    private static String findFilmLine(List<String> lines, String filmTitle) {
+    private static String findFilmLine(List<String> lines, String title) {
         for (String line : lines) {
-            if (line.startsWith(filmTitle)) {
+            if (line.startsWith(title)) {
                 return line;
             }
         }
@@ -106,7 +110,7 @@ public class FilmReview {
      * 
      * @return A new string representing the updated average review and the total number of reviews for the film.
      * 
-     * This method parses the current average review and the number of reviews from the existing review entry, 
+     * This method parses the current average review and the number of reviews from the existing review entry,
      * recalculates the average with the new review, and returns an updated review string.
      */
     private static String updateAverageReview(String filmLine, int newReview) {
