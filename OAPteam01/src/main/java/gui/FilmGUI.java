@@ -10,7 +10,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
+/**
+ * @author Erica Laub Varpe
+ */
 @SuppressWarnings("serial")
 public class FilmGUI extends JFrame {
     private JTextField genreTextField;
