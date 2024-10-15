@@ -84,4 +84,39 @@ public class FilmDAO {
         }
 		return films;
 	}
+	
+	/**
+	 * @return 
+	 */
+	public List<Film> getFilmByReleaseYear(int releaseYear){
+		
+		final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category " +
+	             "FROM film f " +
+	             "JOIN film_category fc ON f.film_id = fc.film_id " +
+	             "JOIN category c ON fc.category_id = c.category_id " +
+	             "WHERE f.release_year = ?";
+	
+	List<Film> films = new ArrayList<>();
+	
+	try (Connection connection = DatabaseConnection.getConnection();
+		PreparedStatement statement = connection.prepareStatement(sql)) {
+		
+		statement.setInt(1, releaseYear);
+		
+       try (ResultSet resultSet = statement.executeQuery()) {
+
+           while (resultSet.next()) {
+        	   String title = resultSet.getString("title");
+        	   String desc = resultSet.getString("description");
+        	   releaseYear = resultSet.getInt("release_year");
+        	   String genre = resultSet.getString("category");
+               
+               films.add(new Film(title, desc, releaseYear, genre));
+           }
+		}	
+	} catch (SQLException e) {
+       e.printStackTrace();
+   }
+	return films;
+	}
 }
