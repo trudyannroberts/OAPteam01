@@ -1,23 +1,30 @@
 package logic;
+
+import javax.swing.*;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
+ * ProfileManager class manages user profiles for the media streaming service application.
+ * It allows adding, loading, and selecting user profiles. Each user can have a maximum of
+ * five profiles, and the profiles are stored in a local text file.
+ * 
+ * The class provides methods for profile management, ensuring that profiles are
+ * loaded into memory upon initialization and that updates are saved back to the file.
+ * 
  * @author Trudy Ann Roberts
- * The ProfileManager class lets a user create up to five profiles, either an adult or children's profile.
- * The data is stored in a local file, and each profile is linked to a specific user via a userId.
  */
 public class ProfileManager {
-
-    private static final int MAX_PROFILES = 5;
+    private static final int MAX_PROFILES = 5; // Maximum number of profiles allowed
     private List<UserProfile> profiles = new ArrayList<>(); // To hold user profiles in memory
-    private int userId; // The ID of the user (fetched from database)
+    private int userId; // The ID of the user (fetched from the database)
 
     /**
-     * Initializes the ProfileManager for a specific user, using their userId.
-     * Profiles linked to this user are loaded from the file.
+     * Constructs a ProfileManager for the specified user.
+     * Loads existing profiles from a file upon initialization.
      *
-     * @param userId The userId of the user that is logged in. This is the staff_id from the database.
+     * @param userId The ID of the user whose profiles are to be managed.
      */
     public ProfileManager(int userId) {
         this.userId = userId;
@@ -25,30 +32,29 @@ public class ProfileManager {
     }
 
     /**
-     * Adds a new profile for the logged-in user. Users can create up to five profiles.
-     * If the profile is successfully added, it is saved to the local file.
+     * Adds a new profile for the logged-in user.
+     * If the user already has the maximum number of profiles, an error message is displayed.
      *
-     * @param profile The new profile that the user creates (either Adult or Children).
-     * @return true if the profile was successfully added and saved to the file, 
-     *         false if the maximum number of profiles has already been reached.
+     * @param profile The UserProfile object to be added.
+     * @return true if the profile was successfully added; false otherwise.
      */
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
-            saveProfilesToFile(); // Save the updated list to the file
+            saveProfilesToFile(); // Save updated profiles to file
             return true;
         } else {
-            System.out.println("Maximum number of profiles reached.");
+            JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
             return false;
         }
     }
 
     /**
-     * Saves the user's profiles to a local text file. 
-     * Each profile is associated with the userId of the current user, and duplicates are avoided.
+     * Saves all user profiles to a local text file associated with the user.
+     * Each profile is stored in CSV format (ProfileName, ProfileType, UserId).
      */
     private void saveProfilesToFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("profiles.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("profiles.txt"))) {
             for (UserProfile profile : profiles) {
                 String profileType = profile instanceof AdultProfile ? "Adult" : "Children";
                 String line = profile.getProfileName() + "," + profileType + "," + userId;
@@ -56,14 +62,15 @@ public class ProfileManager {
                 writer.newLine();
             }
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving profiles: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
      * Loads the profiles associated with this user from the local file.
-     * The file stores profiles in CSV format (ProfileName, ProfileType, UserId).
      * Only profiles that match the current userId are loaded into memory.
+     * The file stores profiles in CSV format (ProfileName, ProfileType, UserId).
      */
     private void loadProfilesFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("profiles.txt"))) {
@@ -84,30 +91,67 @@ public class ProfileManager {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Profile file not found, starting fresh.");
+            JOptionPane.showMessageDialog(null, "Profile file not found, starting fresh.");
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * Displays all the profiles currently loaded in memory for this user.
-     * It shows the profile index, profile name, and whether the profile can watch R-rated movies.
+     * Displays a dialog for the user to select one of their profiles.
+     *
+     * @return The name of the selected profile, or null if no profiles are available.
      */
-    public void displayProfiles() {
-        for (int i = 0; i < profiles.size(); i++) {
-            UserProfile profile = profiles.get(i);
-            System.out.println((i + 1) + ". Profile Name: " + profile.getProfileName() +
-                    " | Can watch R-rated: " + profile.canWatchRRated());
+    public String selectProfile() {
+        if (profiles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No profiles available.");
+            return null;
+        }
+
+        String[] profileNames = profiles.stream()
+                                        .map(UserProfile::getProfileName)
+                                        .toArray(String[]::new);
+
+        return (String) JOptionPane.showInputDialog(
+                null,
+                "Select a profile:",
+                "Profile Selection",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                profileNames,
+                profileNames[0]
+        );
+    }
+ // Saving viewing history to file
+    public void addToViewingHistory(UserProfile profile, String filmTitle, int filmId, int durationWatched) {
+        String fileName = "history_" + profile.getProfileName() + ".txt"; // Each profile has its own history file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) { // Append to file
+            String watchedOn = LocalDateTime.now().toString();
+            String line = filmTitle + "," + filmId + "," + watchedOn + "," + durationWatched;
+            writer.write(line);
+            writer.newLine();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving viewing history: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-    /**
-     * Returns the number of profiles that the user has created.
-     *
-     * @return The count of profiles currently associated with the userId.
-     */
-    public int getProfileCount() {
-        return profiles.size();
+    
+ // Retrieve viewing history from file
+    public List<String> getViewingHistory(UserProfile profile) {
+        String fileName = "history_" + profile.getProfileName() + ".txt";
+        List<String> history = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                history.add(line); // Add each line (record) to the history list
+            }
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "No viewing history found for profile: " + profile.getProfileName());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error loading viewing history: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return history;
     }
 }
