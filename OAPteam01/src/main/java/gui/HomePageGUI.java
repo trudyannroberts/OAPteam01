@@ -3,7 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
-/**
+/** 
  * The HomePageGUI class represents the main window of the streaming service.
  * It includes a navigation bar with buttons for Home, Browse, Account... ,
  * and a content panel that displays different pages based on user interaction. 

@@ -7,7 +7,7 @@ import java.util.List;
 import db.FilmDAO;
 import logic.Film;
 
-/** 
+/**
  * The BrowseMoviesPage class extends HomePageGUI and displays a custom page for browsing movies.
  * It includes functionality to show all movies, search movies by title, and filter by genre.
  * 
