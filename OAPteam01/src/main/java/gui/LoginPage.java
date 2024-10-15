@@ -1,5 +1,6 @@
 package gui;
 
+import logic.User;
 import logic.UserAuthenticator;
 
 import javax.swing.*;
@@ -55,25 +56,42 @@ public class LoginPage {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        UserAuthenticator.logInUser(username, password);
+        // Authenticate the user
+        User loggedInUser = UserAuthenticator.logInUser(username, password);
+
+        if (loggedInUser != null) {
+            // If login is successful, display the user's name
+            JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
+            // Proceed with other actions such as showing user-specific content or navigating to the main screen
+        } else {
+            // Handle login failure
+            JOptionPane.showMessageDialog(frame, "Invalid username or password.");
+        }
     }
 
     private void registerUser() {
+        // Collect user details via input dialogs
         String firstName = JOptionPane.showInputDialog(frame, "Enter First Name:");
         String lastName = JOptionPane.showInputDialog(frame, "Enter Last Name:");
         String email = JOptionPane.showInputDialog(frame, "Enter Email:");
         String username = JOptionPane.showInputDialog(frame, "Enter Username:");
         String password = JOptionPane.showInputDialog(frame, "Enter Password:");
 
-        // Log inputs for debugging
+        // Log inputs for debugging (optional)
         System.out.println("First Name: " + firstName);
         System.out.println("Last Name: " + lastName);
         System.out.println("Email: " + email);
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
 
-        if (UserAuthenticator.registerUser(firstName, lastName, email, username, password)) {
+        // Create a User object with the collected details
+        User newUser = new User(firstName, lastName, email, username, password);
+
+        // Register the user via the UserAuthenticator
+        if (UserAuthenticator.registerUser(newUser)) {
             JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
         }
     }
 
