@@ -2,6 +2,7 @@ package logic;
 
 import javax.swing.*;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -121,5 +122,36 @@ public class ProfileManager {
                 profileNames,
                 profileNames[0]
         );
+    }
+ // Saving viewing history to file
+    public void addToViewingHistory(UserProfile profile, String filmTitle, int filmId, int durationWatched) {
+        String fileName = "history_" + profile.getProfileName() + ".txt"; // Each profile has its own history file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) { // Append to file
+            String watchedOn = LocalDateTime.now().toString();
+            String line = filmTitle + "," + filmId + "," + watchedOn + "," + durationWatched;
+            writer.write(line);
+            writer.newLine();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error saving viewing history: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+ // Retrieve viewing history from file
+    public List<String> getViewingHistory(UserProfile profile) {
+        String fileName = "history_" + profile.getProfileName() + ".txt";
+        List<String> history = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                history.add(line); // Add each line (record) to the history list
+            }
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "No viewing history found for profile: " + profile.getProfileName());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error loading viewing history: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return history;
     }
 }
