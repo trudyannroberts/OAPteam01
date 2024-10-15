@@ -3,7 +3,7 @@ package gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import db.FilmDAO;
+import logic.FilmManager;
 import logic.Film;
 
 import java.awt.*;
@@ -22,10 +22,10 @@ public class FilmGUI extends JFrame {
     private JButton showAllButton;
     private JTable filmTable;
     private DefaultTableModel tableModel;
-    private FilmDAO filmDAO;
+    private FilmManager FilmManager;
     
     public FilmGUI() {
-    	filmDAO = new FilmDAO();
+    	FilmManager = new FilmManager();
         
         //Input panel (genre and button)
         JPanel inputPanel = new JPanel();
@@ -108,7 +108,7 @@ public class FilmGUI extends JFrame {
         tableModel.setRowCount(0);
 
         // Hent filmer fra DAO basert på sjanger
-        List<Film> films = filmDAO.getFilmByGenre(genre);
+        List<Film> films = FilmManager.getFilmByGenre(genre);
 
         // Legg til filmene i tabellen
         for (Film film : films) {
@@ -129,7 +129,7 @@ public class FilmGUI extends JFrame {
     // New method to get films based on release year and update the table
     private void updateFilmTableYear(int year) {
         tableModel.setRowCount(0); // Clear previous data
-        List<Film> films = filmDAO.getFilmByReleaseYear(year); // Get films from DAO by release year
+        List<Film> films = FilmManager.getFilmByReleaseYear(year); // Get films from DAO by release year
 
         for (Film film : films) {
             tableModel.addRow(new Object[]{
@@ -151,7 +151,7 @@ public class FilmGUI extends JFrame {
         tableModel.setRowCount(0);
 
         // Hent alle filmer fra DAO
-        List<Film> films = filmDAO.getAllFilms();
+        List<Film> films = FilmManager.getAllFilms();
 
         // Legg til filmene i tabellen
         for (Film film : films) {
