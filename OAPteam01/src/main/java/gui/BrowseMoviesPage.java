@@ -4,8 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import db.FilmDAO;
 import logic.Film;
+import logic.FilmManager;
 
 /**
  * The BrowseMoviesPage class extends HomePageGUI and displays a custom page for browsing movies.
@@ -15,7 +15,7 @@ import logic.Film;
  */
 public class BrowseMoviesPage extends HomePageGUI {
 
-    private FilmDAO filmDAO = new FilmDAO();
+    private FilmManager filmManager = new FilmManager();
     private JTable movieTable;
     private DefaultTableModel tableModel;
 
@@ -90,7 +90,7 @@ public class BrowseMoviesPage extends HomePageGUI {
      * Loads all films from the database and displays them in the JTable.
      */
     private void loadAllFilms() {
-        List<Film> films = filmDAO.getAllFilms();
+        List<Film> films = filmManager.getAllFilms();
         tableModel.setRowCount(0);
         for (Film film : films) {
             Object[] row = {film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()};
@@ -104,7 +104,7 @@ public class BrowseMoviesPage extends HomePageGUI {
      * @param searchQuery The title or partial title of the film to search for.
      */
     private void searchFilms(String searchQuery) {
-        List<Film> films = filmDAO.getAllFilms();
+        List<Film> films = filmManager.getAllFilms();
         tableModel.setRowCount(0);
         for (Film film : films) {
             if (film.getTitle().toLowerCase().contains(searchQuery.toLowerCase())) {
@@ -120,7 +120,7 @@ public class BrowseMoviesPage extends HomePageGUI {
      * @param genre The genre of films to load.
      */
     private void loadFilmsByGenre(String genre) {
-        List<Film> films = filmDAO.getFilmByGenre(genre);
+        List<Film> films = filmManager.getFilmByGenre(genre);
         tableModel.setRowCount(0);
         for (Film film : films) {
             Object[] row = {film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()};
