@@ -1,4 +1,4 @@
-package db;
+package logic;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,14 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.Film;
+import db.DatabaseConnection;
 
 /**
  * This class executes statements to the database
  * 
  * @author Erica Laub Varpe
  */
-public class FilmDAO {
+public class FilmManager {
 	/**
 	 * This method is used to get all the movies from the database
 	 * @return every film in the database
