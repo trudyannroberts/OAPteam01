@@ -11,7 +11,7 @@ import logic.Film;
  * The BrowseMoviesPage class extends HomePageGUI and displays a custom page for browsing movies.
  * It includes functionality to show all movies, search movies by title, and filter by genre.
  * 
- * @author Stine Andreassen Skrøder 
+ * @author Stine Andreassen Skrøder
  */
 public class BrowseMoviesPage extends HomePageGUI {
 
