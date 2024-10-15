@@ -8,7 +8,7 @@ import java.awt.*;
  * It includes a navigation bar with buttons for Home, Browse, Account... ,
  * and a content panel that displays different pages based on user interaction.
  * 
- * @author Stine Andreassen Skrøder
+ * @author Stine Andreassen Skrøder 
  */
 
 public class HomePageGUI extends JFrame {
