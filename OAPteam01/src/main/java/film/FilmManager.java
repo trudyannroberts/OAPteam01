@@ -16,8 +16,8 @@ import db.DatabaseConnection;
 
 /**
  * This class is responsible for executing SQL statements related to films 
- * in the database, such as retrieving films by title, genre, or release year.
- * It uses the DAO (Data Access Object) pattern to interact with the database.
+ * in the db, such as retrieving films by title, genre, or release year.
+ * It uses the DAO (Data Access Object) pattern to interact with the db.
  * It also initializes action listeners for the film search functionalities.
  * 
  * @author Erica Laub Varpe
@@ -90,9 +90,9 @@ public class FilmManager {
     }
     
     /**
-     * Retrieves all the films from the database.
+     * Retrieves all the films from the db.
      *
-     * @return a list of all films found in the database
+     * @return a list of all films found in the db
      */
 	public List<Film> getAllFilms(){
 		final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category "
@@ -199,7 +199,7 @@ public class FilmManager {
 	}
 	
     /**
-     * Retrieves films from the database that were released in the specified year.
+     * Retrieves films from the db that were released in the specified year.
      *
      * @param releaseYear the year to filter films by
      * @return a list of films released in the specified year
@@ -285,7 +285,7 @@ public class FilmManager {
 }
 
 	/**
-	 * Updates the film table with all films from the database.
+	 * Updates the film table with all films from the db.
 	 */
 	private void updateFilmTableAll() {
 	    tableModel.setRowCount(0); // Clear previous data
@@ -294,7 +294,7 @@ public class FilmManager {
 	        tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 	    }
 	    if (films.isEmpty()) {
-	        JOptionPane.showMessageDialog(null, "No films found in the database", "No results", JOptionPane.INFORMATION_MESSAGE);
+	        JOptionPane.showMessageDialog(null, "No films found in the db", "No results", JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
 }
