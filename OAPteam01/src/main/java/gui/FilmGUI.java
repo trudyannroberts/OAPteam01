@@ -80,6 +80,7 @@ public class FilmGUI extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         // Action listener for title search button
+        // TODO flyttes til FilmManager
         searchTitleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -93,6 +94,7 @@ public class FilmGUI extends JFrame {
         });
 
         // Action listener for genre search button
+     // TODO flyttes til FilmManager
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,6 +108,7 @@ public class FilmGUI extends JFrame {
         });
 
         // Action listener for release year search button
+     // TODO flyttes til FilmManager
         searchYearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,6 +127,7 @@ public class FilmGUI extends JFrame {
         });
 
         // Action listener for "Show all movies" button
+     // TODO flyttes til FilmManager
         showAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -137,6 +141,7 @@ public class FilmGUI extends JFrame {
      * 
      * @param title the title to search for
      */
+ // TODO flyttes til FilmManager
     private void updateFilmTableTitle(String title) {
         tableModel.setRowCount(0); // Clear previous data
         List<Film> films = filmManager.getFilmByTitle(title); // Get films based on title
@@ -153,6 +158,7 @@ public class FilmGUI extends JFrame {
      * 
      * @param genre the genre to search for
      */
+ // TODO flyttes til FilmManager
     private void updateFilmTableGenre(String genre) {
         tableModel.setRowCount(0); // Clear previous data
         List<Film> films = filmManager.getFilmByGenre(genre); // Get films based on genre
@@ -169,6 +175,7 @@ public class FilmGUI extends JFrame {
      * 
      * @param year the release year to search for
      */
+ // TODO flyttes til FilmManager
     private void updateFilmTableYear(int year) {
         tableModel.setRowCount(0); // Clear previous data
         List<Film> films = filmManager.getFilmByReleaseYear(year); // Get films based on release year
@@ -183,6 +190,7 @@ public class FilmGUI extends JFrame {
     /**
      * Updates the film table with all films from the database.
      */
+ // TODO flyttes til FilmManager
     private void updateFilmTableAll() {
         tableModel.setRowCount(0); // Clear previous data
         List<Film> films = filmManager.getAllFilms(); // Get all films
