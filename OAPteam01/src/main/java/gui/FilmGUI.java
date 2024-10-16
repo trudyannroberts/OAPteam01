@@ -2,168 +2,193 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import logic.FilmManager;
 import logic.Film;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
 /**
+ * This class represents the graphical user interface (GUI) for interacting with films.
+ * It allows the user to search for films by title, genre, or release year, and to display all films in the database.
+ * The results are shown in a table within the GUI.
+ * 
  * @author Erica Laub Varpe
  */
 @SuppressWarnings("serial")
 public class FilmGUI extends JFrame {
-    private JTextField genreTextField;
-    private JTextField yearTextField;
-    private JButton searchButton;
-    private JButton searchYearButton;
-    private JButton showAllButton;
-    private JTable filmTable;
-    private DefaultTableModel tableModel;
-    private FilmManager FilmManager;
     
+    private JTextField titleTextField; // Text field for searching by title
+    private JTextField genreTextField; // Text field for searching by genre
+    private JTextField yearTextField;  // Text field for searching by release year
+    
+    private JButton searchTitleButton; // Button for title search
+    private JButton searchButton;      // Button for genre search
+    private JButton searchYearButton;  // Button for release year search
+    private JButton showAllButton;     // Button to display all films
+    
+    private JTable filmTable;          // Table to display film data
+    private DefaultTableModel tableModel; // Model for the film table
+    private FilmManager filmManager;   // Manages film-related operations
+
+    /**
+     * Constructs the FilmGUI and sets up the user interface components.
+     */
     public FilmGUI() {
-    	FilmManager = new FilmManager();
+        filmManager = new FilmManager();
         
-        //Input panel (genre and button)
+        // Input panel for search fields and buttons
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout());
-        
+
+        // Title search components
+        JLabel titleLabel = new JLabel("Enter part of a title:");
+        titleTextField = new JTextField(15);
+        searchTitleButton = new JButton("Search by Title");
+
+        // Genre search components
         JLabel genreLabel = new JLabel("Enter a genre:");
         genreTextField = new JTextField(15);
         searchButton = new JButton("Search");
         showAllButton = new JButton("Show all movies");
-        
-        // Add components for release year search
+
+        // Release year search components
         JLabel yearLabel = new JLabel("Enter release year:");
         yearTextField = new JTextField(10);
         searchYearButton = new JButton("Search by Year");
-        
+
+        // Adding components to the input panel
+        inputPanel.add(titleLabel);
+        inputPanel.add(titleTextField);
+        inputPanel.add(searchTitleButton);
         inputPanel.add(genreLabel);
         inputPanel.add(genreTextField);
         inputPanel.add(searchButton);
         inputPanel.add(showAllButton);
-        
-        inputPanel.add(yearLabel); // Add label for year
-        inputPanel.add(yearTextField); // Add text field for year
-        inputPanel.add(searchYearButton); // Add search by year button
-        
-        add(inputPanel, BorderLayout.NORTH);    
-        
-        //Table to show the results
+        inputPanel.add(yearLabel);
+        inputPanel.add(yearTextField);
+        inputPanel.add(searchYearButton);
+
+        add(inputPanel, BorderLayout.NORTH);
+
+        // Table to display the results
         filmTable = new JTable();
-        tableModel = new DefaultTableModel(new Object[] {"Title", "Description", "Release Year", "Genre"},0);
+        tableModel = new DefaultTableModel(new Object[]{"Title", "Description", "Release Year", "Genre"}, 0);
         filmTable.setModel(tableModel);
         JScrollPane scrollPane = new JScrollPane(filmTable);
-        
         add(scrollPane, BorderLayout.CENTER);
-        
-        //action listener for search button
-        searchButton.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		String genre = genreTextField.getText();
-        		if(!genre.isEmpty()) {
-        			updateFilmTableGenre(genre);
-        		} else {
-        			JOptionPane.showMessageDialog(null, "Genre can't be empty", "wrong", JOptionPane.ERROR_MESSAGE);
-        		}
-        	}
-        }); 
-        
-    
-    // Action listener for searchYearButton (by release year)
-    searchYearButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String yearText = yearTextField.getText();
-            if (!yearText.isEmpty()) {
-                try {
-                    int year = Integer.parseInt(yearText); // Convert year to an integer
-                    updateFilmTableYear(year);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid year format", "Error", JOptionPane.ERROR_MESSAGE);
+
+        // Action listener for title search button
+        searchTitleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = titleTextField.getText();
+                if (!title.isEmpty()) {
+                    updateFilmTableTitle(title);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Title can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Year can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-    });
-    
-    
-    // Action listener for "Vis alle filmer" knappen
-    showAllButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            updateFilmTableAll();
-        }
-    });
+        });
+
+        // Action listener for genre search button
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String genre = genreTextField.getText();
+                if (!genre.isEmpty()) {
+                    updateFilmTableGenre(genre);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Genre can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Action listener for release year search button
+        searchYearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String yearText = yearTextField.getText();
+                if (!yearText.isEmpty()) {
+                    try {
+                        int year = Integer.parseInt(yearText); // Convert input to an integer
+                        updateFilmTableYear(year);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid year format", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Year can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Action listener for "Show all movies" button
+        showAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateFilmTableAll();
+            }
+        });
     }
-    
-    //Method to get films based on genre and update the table
-    private void updateFilmTableGenre(String genre) {
-        // Tøm tidligere data
-        tableModel.setRowCount(0);
 
-        // Hent filmer fra DAO basert på sjanger
-        List<Film> films = FilmManager.getFilmByGenre(genre);
-
-        // Legg til filmene i tabellen
+    /**
+     * Updates the film table with films that match the specified title.
+     * 
+     * @param title the title to search for
+     */
+    private void updateFilmTableTitle(String title) {
+        tableModel.setRowCount(0); // Clear previous data
+        List<Film> films = filmManager.getFilmByTitle(title); // Get films based on title
         for (Film film : films) {
-            tableModel.addRow(new Object[]{
-                    film.getTitle(),
-                    film.getDesc(),
-                    film.getReleaseYear(),
-                    film.getGenre()
-            });
+            tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
         }
+        if (films.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No films found with title: " + title, "No results", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
-        // Vis melding hvis ingen filmer ble funnet
+    /**
+     * Updates the film table with films that match the specified genre.
+     * 
+     * @param genre the genre to search for
+     */
+    private void updateFilmTableGenre(String genre) {
+        tableModel.setRowCount(0); // Clear previous data
+        List<Film> films = filmManager.getFilmByGenre(genre); // Get films based on genre
+        for (Film film : films) {
+            tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
+        }
         if (films.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No films found in genre: " + genre, "No results", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    // New method to get films based on release year and update the table
+
+    /**
+     * Updates the film table with films that were released in the specified year.
+     * 
+     * @param year the release year to search for
+     */
     private void updateFilmTableYear(int year) {
         tableModel.setRowCount(0); // Clear previous data
-        List<Film> films = FilmManager.getFilmByReleaseYear(year); // Get films from DAO by release year
-
+        List<Film> films = filmManager.getFilmByReleaseYear(year); // Get films based on release year
         for (Film film : films) {
-            tableModel.addRow(new Object[]{
-                    film.getTitle(),
-                    film.getDesc(),
-                    film.getReleaseYear(),
-                    film.getGenre()
-            });
+            tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
         }
-
         if (films.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No films found from the year: " + year, "No results", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    // Ny metode for å hente alle filmer og oppdatere tabellen
+
+    /**
+     * Updates the film table with all films from the database.
+     */
     private void updateFilmTableAll() {
-        // Tøm tidligere data
-        tableModel.setRowCount(0);
-
-        // Hent alle filmer fra DAO
-        List<Film> films = FilmManager.getAllFilms();
-
-        // Legg til filmene i tabellen
+        tableModel.setRowCount(0); // Clear previous data
+        List<Film> films = filmManager.getAllFilms(); // Get all films
         for (Film film : films) {
-            tableModel.addRow(new Object[]{
-            		film.getTitle(),
-                    film.getDesc(),
-                    film.getReleaseYear(),
-                    film.getGenre()
-            });
+            tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
         }
-
-        // Vis melding hvis ingen filmer ble funnet
         if (films.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No films found in the database", "No results", JOptionPane.INFORMATION_MESSAGE);
         }
