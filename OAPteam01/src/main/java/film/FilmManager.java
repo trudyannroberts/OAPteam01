@@ -17,12 +17,16 @@ import db.DatabaseConnection;
 /**
  * This class is responsible for executing SQL statements related to films 
  * in the database, such as retrieving films by title, genre, or release year.
- * It uses a DAO (Data Access Object) pattern to interact with the database.
+ * It uses the DAO (Data Access Object) pattern to interact with the database.
+ * It also initializes action listeners for the film search functionalities.
  * 
  * @author Erica Laub Varpe
  */
 public class FilmManager {
 	
+    /**
+     * Constructs a FilmManager and initializes action listeners for search buttons.
+     */
     public FilmManager() {
         initializeListeners();
     }
@@ -81,6 +85,7 @@ public class FilmManager {
             }
         });
     }
+    
     /**
      * Retrieves all the films from the database.
      *
@@ -111,8 +116,7 @@ public class FilmManager {
 				e.printStackTrace();
 			}
         
-        return films;
-        
+        return films;   
 		}
 	
     /**
