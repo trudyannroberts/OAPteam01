@@ -1,30 +1,32 @@
-package logic;
+package userProfile;
 
 import javax.swing.*;
+
+import userProfile.UserProfile.ProfileType;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * ProfileManager class manages user profiles for the media streaming service application.
- * It allows adding, loading, and selecting user profiles. Each user can have a maximum of
- * five profiles, and the profiles are stored in a local text file.
+ * Manages user profiles for a media streaming application. 
+ * Handles loading and saving profiles, as well as adding new profiles and storing viewing history.
  * 
- * The class provides methods for profile management, ensuring that profiles are
- * loaded into memory upon initialization and that updates are saved back to the file.
+ * Profiles are stored locally in a CSV file, where each profile is associated with a specific user by user ID.
+ * Each profile can have its own viewing history stored in separate files.
  * 
  * @author Trudy Ann Roberts
  */
 public class ProfileManager {
-    private static final int MAX_PROFILES = 5; // Maximum number of profiles allowed
-    private List<UserProfile> profiles = new ArrayList<>(); // To hold user profiles in memory
-    private int userId; // The ID of the user (fetched from the database)
+    private static final int MAX_PROFILES = 5; // Maximum number of profiles per user
+    private List<UserProfile> profiles = new ArrayList<>(); // In-memory storage of profiles
+    private int userId; // The ID of the user (retrieved from the database)
 
     /**
-     * Constructs a ProfileManager for the specified user.
-     * Loads existing profiles from a file upon initialization.
-     *
-     * @param userId The ID of the user whose profiles are to be managed.
+     * Constructor that initializes the ProfileManager for a specific user.
+     * It loads the profiles associated with this user from a local file.
+     * 
+     * @param userId The ID of the user whose profiles will be managed.
      */
     public ProfileManager(int userId) {
         this.userId = userId;
@@ -32,11 +34,11 @@ public class ProfileManager {
     }
 
     /**
-     * Adds a new profile for the logged-in user.
-     * If the user already has the maximum number of profiles, an error message is displayed.
-     *
-     * @param profile The UserProfile object to be added.
-     * @return true if the profile was successfully added; false otherwise.
+     * Adds a new profile for the user. The profile is saved locally to a file if successfully added.
+     * Displays an error message if the maximum number of profiles (5) is reached.
+     * 
+     * @param profile The {@link userProfile} to be added.
+     * @return true if the profile is added successfully, false if the maximum limit is reached.
      */
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
@@ -50,14 +52,13 @@ public class ProfileManager {
     }
 
     /**
-     * Saves all user profiles to a local text file associated with the user.
-     * Each profile is stored in CSV format (ProfileName, ProfileType, UserId).
+     * Saves all the user's profiles to a local text file ("profiles.txt").
+     * Each profile is stored in CSV format with the profile name, profile type (ADULT/CHILD), and user ID.
      */
-    private void saveProfilesToFile() {
+    public void saveProfilesToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("profiles.txt"))) {
             for (UserProfile profile : profiles) {
-                String profileType = profile instanceof AdultProfile ? "Adult" : "Children";
-                String line = profile.getProfileName() + "," + profileType + "," + userId;
+                String line = profile.getProfileName() + "," + profile.getProfileType() + "," + userId;
                 writer.write(line);
                 writer.newLine();
             }
@@ -68,9 +69,9 @@ public class ProfileManager {
     }
 
     /**
-     * Loads the profiles associated with this user from the local file.
-     * Only profiles that match the current userId are loaded into memory.
-     * The file stores profiles in CSV format (ProfileName, ProfileType, UserId).
+     * Loads the profiles associated with the current user from a local file ("profiles.txt").
+     * Only profiles matching the current user's ID are loaded into memory.
+     * The file stores profiles in CSV format: ProfileName, ProfileType, UserId.
      */
     private void loadProfilesFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("profiles.txt"))) {
@@ -78,16 +79,13 @@ public class ProfileManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(","); // Split the CSV line into components
                 String profileName = parts[0];
-                String profileType = parts[1];
+                String profileTypeStr = parts[1];
                 int storedUserId = Integer.parseInt(parts[2]);
 
                 // Load only profiles for the current user (matching userId)
                 if (storedUserId == userId) {
-                    if ("Adult".equals(profileType)) {
-                        profiles.add(new AdultProfile(profileName));
-                    } else {
-                        profiles.add(new ChildrenProfile(profileName));
-                    }
+                    ProfileType profileType = UserProfile.ProfileType.valueOf(profileTypeStr);
+                    profiles.add(new UserProfile(profileName, profileType)); // Create profile with type
                 }
             }
         } catch (FileNotFoundException e) {
@@ -97,10 +95,10 @@ public class ProfileManager {
             e.printStackTrace();
         }
     }
-
+    
     /**
-     * Displays a dialog for the user to select one of their profiles.
-     *
+     * Displays a GUI dialog allowing the user to select one of their profiles.
+     * 
      * @return The name of the selected profile, or null if no profiles are available.
      */
     public String selectProfile() {
@@ -123,7 +121,16 @@ public class ProfileManager {
                 profileNames[0]
         );
     }
- // Saving viewing history to file
+
+    /**
+     * Saves the viewing history of a profile to a specific file. 
+     * Each profile has its own history file named "history_<ProfileName>.txt".
+     * 
+     * @param profile The {@link userProfile} whose viewing history is being saved.
+     * @param filmTitle The title of the film being watched.
+     * @param filmId The unique ID of the film.
+     * @param durationWatched The duration the film was watched.
+     */
     public void addToViewingHistory(UserProfile profile, String filmTitle, int filmId, int durationWatched) {
         String fileName = "history_" + profile.getProfileName() + ".txt"; // Each profile has its own history file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) { // Append to file
@@ -136,8 +143,14 @@ public class ProfileManager {
             e.printStackTrace();
         }
     }
-    
- // Retrieve viewing history from file
+
+    /**
+     * Retrieves the viewing history of a profile from a specific file ("history_<ProfileName>.txt").
+     * Each line in the file represents a record of a film watched by the profile.
+     * 
+     * @param profile The {@link userProfile} whose viewing history is being retrieved.
+     * @return A list of strings representing the viewing history, with each entry being a record of a watched film.
+     */
     public List<String> getViewingHistory(UserProfile profile) {
         String fileName = "history_" + profile.getProfileName() + ".txt";
         List<String> history = new ArrayList<>();

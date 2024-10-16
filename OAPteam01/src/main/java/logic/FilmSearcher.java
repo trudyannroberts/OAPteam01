@@ -7,13 +7,15 @@ import db.DatabaseConnection;
 
 /**
  * @author Trudy Ann Roberts
- * 
- * TODO: Move to FilmDAO for cleaner code.
+ * @deprecated innhold flyttet og endret til FilmManager
+ * TODO: Move to FilmDAO for cleaner code. DONE :)
+ * Denne klassen kan nå fjernes
  * 
  * The FilmSearcher class provides functionality to search for a film title in the database
  * using its film_id. It connects to the database and executes a SQL query to fetch the 
  * title of the film based on the provided film_id.
  */
+
 public class FilmSearcher {
 
     /**
