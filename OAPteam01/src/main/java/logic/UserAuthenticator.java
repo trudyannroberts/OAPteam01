@@ -12,9 +12,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The UserAuthenticator class provides functionality for registering and logging in users.
+ * It handles user validation, interacts with the database for storing user information, and manages 
+ * profile loading from a file.
+ * 
+ * This class is integrated with a GUI using  JOptionPane for 
+ * error messages and user feedback.
+ * 
+ * TODO: Password must be hashed
+ * 
+ * @author Trudy Ann Roberts
+ */
 public class UserAuthenticator {
 
-    // Method for user registration via GUI (no System.out.println)
+    /**
+     * Registers a new user in the system by inserting their details into the database.
+     * 
+     * Before the user is registered, the email format and password strength are validated.
+     * If either validation fails, the registration process is aborted, and an error message 
+     * is displayed.
+     * 
+     * @param user the User object containing user details to be registered
+     * @return true if the registration was successful, or false otherwise
+     */
     public static boolean registerUser(User user) {
         // Validate email
         if (!isValidEmail(user.getEmail())) {
@@ -38,7 +59,7 @@ public class UserAuthenticator {
             pstmt.setString(2, user.getLastName());
             pstmt.setString(3, user.getEmail());
             pstmt.setString(4, user.getUsername());
-            pstmt.setString(5, user.getPassword()); // Consider hashing the password here
+            pstmt.setString(5, user.getPassword()); // TODO: hashing the password here
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
@@ -49,7 +70,16 @@ public class UserAuthenticator {
         }
     }
 
-    // Method for user login via GUI (no Scanner or System.out.println)
+    /**
+     * Logs in a user by validating their username and password against the records in the database.
+     * 
+     * If the login is successful, the user's profiles are loaded from a local file. If the user 
+     * has profiles, they are displayed in a dialog for the user to select one.
+     * 
+     * @param username the username provided for login
+     * @param password the password provided for login
+     * @return the User object if login is successful, or  null if login fails
+     */
     public static User logInUser(String username, String password) {
         // Ensure username and password are provided
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
@@ -105,7 +135,15 @@ public class UserAuthenticator {
         return user;
     }
 
-    // Load profiles for the user and return as a list
+    /**
+     * Loads the profiles associated with the given user ID from a local file and returns them as a list.
+     * 
+     * The method reads from a file, assuming the file contains comma-separated values where each 
+     * line represents a profile. The third field in each line is expected to be the user ID.
+     * 
+     * @param userId the ID of the user whose profiles are to be loaded
+     * @return a List of profile names associated with the user
+     */
     public static List<String> loadUserProfiles(String userId) {
         List<String> profiles = new ArrayList<>();
         String filePath = "profiles.txt"; // Assuming profiles are stored in this file
@@ -125,7 +163,15 @@ public class UserAuthenticator {
         return profiles;
     }
 
-    // Password validation
+    /**
+     * Validates the given password to ensure it meets the required criteria.
+     * 
+     * The password must be at least 8 characters long, contain at least one uppercase letter,
+     * and include at least one numeric digit.
+     * 
+     * @param password the password to validate
+     * @return true if the password is valid, or false otherwise
+     */
     public static boolean isValidPassword(String password) {
         if (password == null || password.isEmpty()) {
             return false; // Ensure password is not empty
@@ -135,7 +181,15 @@ public class UserAuthenticator {
                password.chars().anyMatch(Character::isDigit);
     }
 
-    // Email validation
+    /**
+     * Validates the format of the given email address.
+     * 
+     * The email is considered valid if it matches a regular expression that allows common 
+     * email formats.
+     * 
+     * @param email the email address to validate
+     * @return true if the email is valid, or false otherwise
+     */
     public static boolean isValidEmail(String email) {
         if (email == null || email.isEmpty()) {
             return false; // Ensure email is not empty

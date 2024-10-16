@@ -2,19 +2,39 @@ package gui;
 
 import logic.User;
 import logic.UserAuthenticator;
-
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The {@code LoginPage} class represents the GUI for the login page of a media streaming service.
+ * Users can either log in with their credentials or register for a new account. After logging in, 
+ * users should be able to select from a maximum of five profiles. If a user is new and has no profiles, 
+ * they will be prompted to create one.
+ * 
+ * <p>This class utilizes {@link UserAuthenticator} to manage user authentication and profile handling. 
+ * It makes use of Swing components for the graphical user interface.
+ * 
+ * <p><b>Note:</b> The profile selection feature is not yet implemented.
+ * 
+ * @author Trudy Ann Roberts
+ */
 public class LoginPage {
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;
 
+    /**
+     * Constructs a new {@code LoginPage} and initializes the GUI components.
+     */
     public LoginPage() {
         initialize();
     }
 
+    /**
+     * Initializes the graphical user interface components of the login page.
+     * This includes setting up the JFrame, adding text fields for username and password,
+     * and creating buttons for login and registration.
+     */
     private void initialize() {
         frame = new JFrame("Media Streaming Service");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,6 +72,12 @@ public class LoginPage {
         frame.setVisible(true);
     }
 
+    /**
+     * Handles the login action when the "Login" button is pressed. It retrieves the username and password 
+     * from the input fields and authenticates the user using the {@link UserAuthenticator}.
+     * If the login is successful, the user's first name is displayed in a welcome message.
+     * Otherwise, an error message is shown.
+     */
     private void logIn() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -62,13 +88,20 @@ public class LoginPage {
         if (loggedInUser != null) {
             // If login is successful, display the user's name
             JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
-            // Proceed with other actions such as showing user-specific content or navigating to the main screen
+            // TODO: Show user-specific content or navigate to the main screen
         } else {
             // Handle login failure
             JOptionPane.showMessageDialog(frame, "Invalid username or password.");
         }
     }
 
+    /**
+     * Handles the registration action when the "Register" button is pressed. It prompts the user 
+     * for their first name, last name, email, username, and password, and creates a new {@link User} object. 
+     * The user is then registered using the {@link UserAuthenticator}.
+     * If the registration is successful, a confirmation message is displayed.
+     * Otherwise, an error message is shown.
+     */
     private void registerUser() {
         // Collect user details via input dialogs
         String firstName = JOptionPane.showInputDialog(frame, "Enter First Name:");
@@ -76,13 +109,6 @@ public class LoginPage {
         String email = JOptionPane.showInputDialog(frame, "Enter Email:");
         String username = JOptionPane.showInputDialog(frame, "Enter Username:");
         String password = JOptionPane.showInputDialog(frame, "Enter Password:");
-
-        // Log inputs for debugging (optional)
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
-        System.out.println("Email: " + email);
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
 
         // Create a User object with the collected details
         User newUser = new User(firstName, lastName, email, username, password);
@@ -95,6 +121,11 @@ public class LoginPage {
         }
     }
 
+    /**
+     * The main method that launches the {@code LoginPage} GUI.
+     * 
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginPage::new);
     }

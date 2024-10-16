@@ -25,7 +25,6 @@ public class Payment {
      * Simulates the process of using Vipps for payment.
      * 
      * When this method is called, the user is prompted to open the Vipps app for payment. 
-     * This is useful for users who prefer mobile payment options.
      */
     public void vipps() {
         System.out.println("Please open Vipps to process payment...");
@@ -35,7 +34,6 @@ public class Payment {
      * Simulates generating an invoice for payment.
      * 
      * When this method is called, the system displays a message indicating that an invoice is being generated.
-     * The actual invoicing logic is not implemented, but it can be extended for real use cases.
      */
     public void invoice() {
         System.out.println("Generating invoice...");

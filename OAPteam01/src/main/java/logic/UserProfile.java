@@ -18,6 +18,7 @@ public class UserProfile {
     
     /**
      * @param profileName is the profileName the user has chosen.
+     * @param profileType is either adult or child.
      */
     public UserProfile(String profileName, ProfileType profileType) {
         this.profileName = profileName;
@@ -34,7 +35,10 @@ public class UserProfile {
     public String getProfileName() {
         return profileName;
     }
-    
+    /**
+     * 
+     * @return The profileType is returned
+     */
     public ProfileType getProfileType() {
     	return profileType;
     }
