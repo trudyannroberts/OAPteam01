@@ -23,6 +23,64 @@ import db.DatabaseConnection;
  */
 public class FilmManager {
 	
+    public FilmManager() {
+        initializeListeners();
+    }
+	
+    // Method to initialize all action listeners
+    private void initializeListeners() {
+        // Action listener for title search button
+        searchTitleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = titleTextField.getText();
+                if (!title.isEmpty()) {
+                    updateFilmTableTitle(title);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Title can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Action listener for genre search button
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String genre = genreTextField.getText();
+                if (!genre.isEmpty()) {
+                    updateFilmTableGenre(genre);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Genre can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Action listener for release year search button
+        searchYearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String yearText = yearTextField.getText();
+                if (!yearText.isEmpty()) {
+                    try {
+                        int year = Integer.parseInt(yearText);
+                        updateFilmTableYear(year);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid year format", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Year can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Action listener for "Show all movies" button
+        showAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateFilmTableAll();
+            }
+        });
+    }
     /**
      * Retrieves all the films from the database.
      *
@@ -170,69 +228,15 @@ public class FilmManager {
    }
 	return films;
 	}
-	
-	/*
-	 // Action listener for title search button
-    searchTitleButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String title = titleTextField.getText();
-            if (!title.isEmpty()) {
-                updateFilmTableTitle(title);
-            } else {
-                JOptionPane.showMessageDialog(null, "Title can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    });
-
-    // Action listener for genre search button
-    searchButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String genre = genreTextField.getText();
-            if (!genre.isEmpty()) {
-                updateFilmTableGenre(genre);
-            } else {
-                JOptionPane.showMessageDialog(null, "Genre can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    });
-
-    // Action listener for release year search button
-    searchYearButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String yearText = yearTextField.getText();
-            if (!yearText.isEmpty()) {
-                try {
-                    int year = Integer.parseInt(yearText); // Convert input to an integer
-                    updateFilmTableYear(year);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid year format", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Year can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    });
-
-    // Action listener for "Show all movies" button
-    showAllButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            updateFilmTableAll();
-        }
-    });
-}
 
 	/**
 	 * Updates the film table with films that match the specified title.
 	 * 
 	 * @param title the title to search for
-	 */ /*
+	 */
 	private void updateFilmTableTitle(String title) {
 		tableModel.setRowCount(0); // Clear previous data
-		List<Film> films = filmManager.getFilmByTitle(title); // Get films based on title
+		List<Film> films = getFilmByTitle(title); // Get films based on title
 		for (Film film : films) {
 			tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 		}
@@ -246,10 +250,9 @@ public class FilmManager {
 	 * 
 	 * @param genre the genre to search for
 	 */
-	/*
 	private void updateFilmTableGenre(String genre) {
 		tableModel.setRowCount(0); // Clear previous data
-		List<Film> films = filmManager.getFilmByGenre(genre); // Get films based on genre
+		List<Film> films = getFilmByGenre(genre); // Get films based on genre
 		for (Film film : films) {
 			tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 		}
@@ -263,10 +266,9 @@ public class FilmManager {
 	 * 
 	 * @param year the release year to search for
 	 */
-	/*
 	private void updateFilmTableYear(int year) {
 		tableModel.setRowCount(0); // Clear previous data
-		List<Film> films = filmManager.getFilmByReleaseYear(year); // Get films based on release year
+		List<Film> films = getFilmByReleaseYear(year); // Get films based on release year
 		for (Film film : films) {
 			tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 		}
@@ -278,7 +280,6 @@ public class FilmManager {
 	/**
 	 * Updates the film table with all films from the database.
 	 */
-	/*
 	private void updateFilmTableAll() {
 	    tableModel.setRowCount(0); // Clear previous data
 	    List<Film> films = getAllFilms(); // Get all films
@@ -288,5 +289,5 @@ public class FilmManager {
 	    if (films.isEmpty()) {
 	        JOptionPane.showMessageDialog(null, "No films found in the database", "No results", JOptionPane.INFORMATION_MESSAGE);
 	    }
-	} */
+	}
 }
