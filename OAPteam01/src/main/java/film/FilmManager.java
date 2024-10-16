@@ -31,7 +31,10 @@ public class FilmManager {
         initializeListeners();
     }
 	
-    // Method to initialize all action listeners
+    /** 
+     * Method to initialize all action listeners
+     */
+    // TODO Connect the listeners to GUI
     private void initializeListeners() {
         // Action listener for title search button
         searchTitleButton.addActionListener(new ActionListener() {

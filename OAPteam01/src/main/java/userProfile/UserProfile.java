@@ -1,6 +1,6 @@
-package logic;
+package userProfile;
 
-import logic.UserProfile.ProfileType;
+import userProfile.UserProfile.ProfileType;
 
 /**
  * @author Trudy Ann Roberts
