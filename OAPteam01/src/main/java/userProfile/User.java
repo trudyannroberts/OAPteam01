@@ -1,4 +1,4 @@
-package logic;
+package userProfile;
 
 /**
  * The User class represents a user in the media streaming service. 

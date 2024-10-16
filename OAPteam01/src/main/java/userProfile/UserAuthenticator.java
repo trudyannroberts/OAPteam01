@@ -1,7 +1,9 @@
-package logic;
+package userProfile;
 
 import db.DatabaseConnection;
+
 import javax.swing.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

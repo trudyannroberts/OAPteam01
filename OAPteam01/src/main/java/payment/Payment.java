@@ -1,4 +1,4 @@
-package logic;
+package payment;
 
 /**
  * Represents the payment options available in the media streaming service.
