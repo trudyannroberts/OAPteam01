@@ -1,3 +1,0 @@
-Trudy,Adult,3
-Trudy,Adult,3
-Elida,Children,3
