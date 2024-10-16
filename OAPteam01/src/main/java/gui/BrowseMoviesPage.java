@@ -89,7 +89,7 @@ public class BrowseMoviesPage extends HomePageGUI {
     }
 
     /**
-     * Loads all films from the database and displays them in the JTable.
+     * Loads all films from the db and displays them in the JTable.
      */
     private void loadAllFilms() {
         List<Film> films = filmManager.getAllFilms();

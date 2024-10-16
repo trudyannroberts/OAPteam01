@@ -163,7 +163,7 @@ public class FilmGUI extends JFrame {
 
         // Vis melding hvis ingen filmer ble funnet
         if (films.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No films found in the database", "No results", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No films found in the db", "No results", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

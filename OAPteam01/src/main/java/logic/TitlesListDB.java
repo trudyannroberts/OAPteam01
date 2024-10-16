@@ -13,7 +13,7 @@ public class TitlesListDB {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Connecting to database...");
+            System.out.println("Connecting to db...");
             conn = DriverManager.getConnection(dbUrl, user, pass);
             System.out.println("Connection established!");
 
@@ -46,12 +46,12 @@ public class TitlesListDB {
     }
 }
 
-	 /*   // Initialize the database connection
+	 /*   // Initialize the db connection
 	    public TitlesListDB(String dbUrl, String user, String pass) throws SQLException {
 	        conn = DriverManager.getConnection(dbUrl, user, pass);
 	    }
 
-	    // Fetch all film titles from the database
+	    // Fetch all film titles from the db
 	    public List<String> getFilmTitles() throws SQLException {
 	        List<String> filmTitles = new ArrayList<>();
 	        String query = "SELECT title FROM film";  // Replace 'films' with your actual table name
@@ -64,7 +64,7 @@ public class TitlesListDB {
 	        return filmTitles;
 	    }
 
-	    // Close the database connection
+	    // Close the db connection
 	    public void closeConnection() throws SQLException {
 	        if (conn != null) {
 	            conn.close();
