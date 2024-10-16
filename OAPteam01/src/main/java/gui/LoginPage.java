@@ -1,10 +1,9 @@
 package gui;
 
-import logic.User;
-
 import javax.swing.*;
 
-import controller.UserAuthenticator;
+import userProfile.User;
+import userProfile.UserAuthenticator;
 
 import java.awt.*;
 

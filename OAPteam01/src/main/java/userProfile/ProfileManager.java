@@ -1,9 +1,8 @@
-package controller;
+package userProfile;
 
 import javax.swing.*;
 
-import logic.UserProfile;
-import logic.UserProfile.ProfileType;
+import userProfile.UserProfile.ProfileType;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -38,7 +37,7 @@ public class ProfileManager {
      * Adds a new profile for the user. The profile is saved locally to a file if successfully added.
      * Displays an error message if the maximum number of profiles (5) is reached.
      * 
-     * @param profile The {@link UserProfile} to be added.
+     * @param profile The {@link userProfile} to be added.
      * @return true if the profile is added successfully, false if the maximum limit is reached.
      */
     public boolean addProfile(UserProfile profile) {
@@ -85,7 +84,7 @@ public class ProfileManager {
 
                 // Load only profiles for the current user (matching userId)
                 if (storedUserId == userId) {
-                    UserProfile.ProfileType profileType = UserProfile.ProfileType.valueOf(profileTypeStr);
+                    ProfileType profileType = UserProfile.ProfileType.valueOf(profileTypeStr);
                     profiles.add(new UserProfile(profileName, profileType)); // Create profile with type
                 }
             }
@@ -127,7 +126,7 @@ public class ProfileManager {
      * Saves the viewing history of a profile to a specific file. 
      * Each profile has its own history file named "history_<ProfileName>.txt".
      * 
-     * @param profile The {@link UserProfile} whose viewing history is being saved.
+     * @param profile The {@link userProfile} whose viewing history is being saved.
      * @param filmTitle The title of the film being watched.
      * @param filmId The unique ID of the film.
      * @param durationWatched The duration the film was watched.
@@ -149,7 +148,7 @@ public class ProfileManager {
      * Retrieves the viewing history of a profile from a specific file ("history_<ProfileName>.txt").
      * Each line in the file represents a record of a film watched by the profile.
      * 
-     * @param profile The {@link UserProfile} whose viewing history is being retrieved.
+     * @param profile The {@link userProfile} whose viewing history is being retrieved.
      * @return A list of strings representing the viewing history, with each entry being a record of a watched film.
      */
     public List<String> getViewingHistory(UserProfile profile) {
