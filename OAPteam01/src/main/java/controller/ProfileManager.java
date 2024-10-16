@@ -1,6 +1,10 @@
-package logic;
+package controller;
 
 import javax.swing.*;
+
+import logic.UserProfile;
+import logic.UserProfile.ProfileType;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -92,7 +96,7 @@ public class ProfileManager {
             e.printStackTrace();
         }
     }
-
+    
     /**
      * Displays a GUI dialog allowing the user to select one of their profiles.
      * 
