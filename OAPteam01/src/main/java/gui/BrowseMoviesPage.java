@@ -2,10 +2,12 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import film.Film;
+import film.FilmManager;
+
 import java.awt.*;
 import java.util.List;
-import logic.Film;
-import logic.FilmManager;
 
 /**
  * The BrowseMoviesPage class extends HomePageGUI and displays a custom page for browsing movies.

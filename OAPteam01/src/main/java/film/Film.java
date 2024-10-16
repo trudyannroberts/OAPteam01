@@ -1,4 +1,4 @@
-package logic;
+package film;
 
 /**
  * This class represents a film with attributes such as title, description, release year, and genre.

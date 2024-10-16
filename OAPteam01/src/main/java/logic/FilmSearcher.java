@@ -7,7 +7,7 @@ import db.DatabaseConnection;
 
 /**
  * @author Trudy Ann Roberts
- * 
+ * @deprecated innhold flyttet og endret til FilmManager
  * TODO: Move to FilmDAO for cleaner code. DONE :)
  * Denne klassen kan nå fjernes
  * 

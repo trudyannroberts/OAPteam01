@@ -1,4 +1,4 @@
-package logic;
+package film;
 
 import javax.swing.*;
 import java.io.IOException;
