@@ -3,10 +3,10 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
-/** 
+/**
  * The HomePageGUI class represents the main window of the streaming service.
  * It includes a navigation bar with buttons for Home, Browse, Account... ,
- * and a content panel that displays different pages based on user interaction. 
+ * and a content panel that displays different pages based on user interaction.
  * 
  * @author Stine Andreassen Skrøder
  */
@@ -63,8 +63,7 @@ public class HomePageGUI extends JFrame {
         JButton homeButton = new JButton("Home");
         JButton browseButton = new JButton("Browse");
         JButton accountButton = new JButton("Account");
-        JButton reviewButton = new JButton("Review");
-        JButton historyButton = new JButton("History");
+        
 
         // Style the buttons
         homeButton.setBackground(Color.WHITE);
@@ -73,24 +72,19 @@ public class HomePageGUI extends JFrame {
         browseButton.setForeground(new Color(70, 130, 180));
         accountButton.setBackground(Color.WHITE);
         accountButton.setForeground(new Color(70, 130, 180));
-        reviewButton.setBackground(Color.WHITE);
-        reviewButton.setForeground(new Color(70, 130, 180));
-        historyButton.setBackground(Color.WHITE);
-        historyButton.setForeground(new Color(70, 130, 180));
+        
 
         // Add action listeners to handle button clicks
         homeButton.addActionListener(e -> showDefaultPage());
         browseButton.addActionListener(e -> showBrowsePage());
         accountButton.addActionListener(e -> showAccountPage());
-        reviewButton.addActionListener(e -> showReviewPage());
-        historyButton.addActionListener(e -> showHistoryPage());
+        
 
         // Add buttons to the navigation panel
         panel.add(homeButton);
         panel.add(browseButton);
         panel.add(accountButton);
-        panel.add(reviewButton);
-        panel.add(historyButton);
+        
 
         return panel;
     }
@@ -134,29 +128,6 @@ public class HomePageGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    /**
-     * Displays the review page in the content panel. 
-     */
-    protected void showReviewPage() {
-        contentPanel.removeAll();
-        JLabel label = new JLabel("Review Movies", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); 
-        contentPanel.add(label, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    /**
-     * Displays the viewing history page in the content panel.
-     */
-    protected void showHistoryPage() {
-        contentPanel.removeAll();
-        JLabel label = new JLabel("Viewing History", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180)); 
-        contentPanel.add(label, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
 
     /**
      * The main method that launches the application by creating an instance of HomePageGUI.
