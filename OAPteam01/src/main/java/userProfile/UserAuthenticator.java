@@ -41,7 +41,7 @@ public class UserAuthenticator {
 
         // Validate password
         if (!isValidPassword(user.getPassword())) {
-            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter and one number.");
+            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter and one number.");
             return false;
         }
         
@@ -159,12 +159,35 @@ public class UserAuthenticator {
      * @return true if the password meets the criteria or false otherwise.
      */
     public static boolean isValidPassword(String password) {
-        if (password == null || password.isEmpty()) {
-            return false;
+    	boolean isValidPassword = false;
+
+        while (!isValidPassword) {
+            // Initialize counts for uppercase letters, lowercase letters, and digits
+            int uppercaseCount = 0;
+            int lowercaseCount = 0;
+            int digitCount = 0;
+
+            // Iterate over the characters of the password
+            for (int i = 0; i < password.length(); i++) {
+                char ch = password.charAt(i);
+                if (Character.isUpperCase(ch)) {
+                    uppercaseCount++;
+                } else if (Character.isLowerCase(ch)) {
+                    lowercaseCount++;
+                } else if (Character.isDigit(ch)) {
+                    digitCount++;
+                }
+            }
+
+            // Check if password meets the criteria
+            if (uppercaseCount >= 1 && lowercaseCount >= 1 && digitCount >= 1 && password.length() >= 8) {
+                return true;
+                
+            } else {
+                return false;
+            }
         }
-        return password.length() >= 8 &&
-               password.chars().anyMatch(Character::isUpperCase) &&
-               password.chars().anyMatch(Character::isDigit);
+		return isValidPassword;
     }
 
     /**
@@ -194,4 +217,3 @@ public class UserAuthenticator {
         return email.matches(emailRegex);
     }
 }
-
