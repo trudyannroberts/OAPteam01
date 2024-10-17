@@ -200,7 +200,7 @@ public class UserAuthenticator {
         if (email == null || email.isEmpty()) {
             return false;
         }
-        /* The EmailRegex checks whether the given email string matches the pattern defined by emailRegex. 
+        /* The emailValidation checks whether the given email string matches the pattern defined by emailValidation. 
         It returns true if the email is valid according to the pattern and false otherwise.
         
         ^: Start of the string.
@@ -209,11 +209,11 @@ public class UserAuthenticator {
         ._%+-]+ : accepts special characters.
         +@ : The plus ensures that the next literal character (@) is included.
         After the @ it accepts the same as before the @.
-        \\.: Matches a literal dot (.). The backslash is used to escape the dot, which is a special character in regex.
+        \\.: Matches a literal dot (.). The backslash is used to escape the dot.
         After the dot, only letters are accepted and it has to be between 2 - 6 characters long.
         $: End of string.
         */
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; 
-        return email.matches(emailRegex);
+        String emailValidation = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; 
+        return email.matches(emailValidation);
     }
 }
