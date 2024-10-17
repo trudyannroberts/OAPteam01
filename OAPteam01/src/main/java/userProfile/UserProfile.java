@@ -1,4 +1,7 @@
 package userProfile;
+import java.io.Serializable;
+
+import userProfile.UserProfile.ProfileType;
 
 /**
  * Represents a user profile in the media streaming service, which can either be an adult or child profile.
@@ -6,7 +9,7 @@ package userProfile;
  * 
  * @author Trudy Ann Roberts
  */
-public class UserProfile {
+public class UserProfile implements Serializable {
     
     /**
      * Enum representing the type of profile. Can either be an ADULT or a CHILD profile.
@@ -37,6 +40,14 @@ public class UserProfile {
      */
     public void setProfileName(String profileName) {
         this.profileName = profileName;
+    }
+    
+    /**
+     * Sets the profile type for this user profile.
+     * @param profileType The type of profile (either ADULT or CHILD).
+     */
+    public void setProfileType(ProfileType profileType) {
+        this.profileType = profileType;
     }
 
     /**
