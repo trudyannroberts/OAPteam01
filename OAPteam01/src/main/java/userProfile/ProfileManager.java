@@ -74,7 +74,7 @@ public class ProfileManager implements Serializable {
      * @throws IOException If there is an error reading the file.
      * @throws ClassNotFoundException If the serialized class is not found.
      */
-    @SuppressWarnings("unchecked") //To avoid unchecked cast"-warning.
+    @SuppressWarnings("unchecked") //To avoid "unchecked cast"-warning.
     private void loadProfilesFromFile() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("profiles.dat"))) {
             profiles = (List<UserProfile>) in.readObject(); // Deserialize the profiles list
