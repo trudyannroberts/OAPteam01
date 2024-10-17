@@ -61,6 +61,8 @@ public class ProfileManager implements Serializable {
         try (FileOutputStream fout = new FileOutputStream("profiles.dat");
              ObjectOutputStream out = new ObjectOutputStream(fout)) {
             out.writeObject(profiles);
+            out.flush();
+            out.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error saving profiles: " + e.getMessage());
             e.printStackTrace();
@@ -78,6 +80,7 @@ public class ProfileManager implements Serializable {
     private void loadProfilesFromFile() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("profiles.dat"))) {
             profiles = (List<UserProfile>) in.readObject(); // Deserialize the profiles list
+            in.close();
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Profile file not found, starting fresh.");
         } catch (IOException | ClassNotFoundException e) {
@@ -134,6 +137,14 @@ public class ProfileManager implements Serializable {
                 profileNames,
                 profileNames[0]
         );
+    }
+    
+    /**
+     * To be used in the ViewMyProfile class.
+     * @return the list of profiles
+     */
+    public List<UserProfile> getProfiles() {
+        return profiles; 
     }
 
     /**
