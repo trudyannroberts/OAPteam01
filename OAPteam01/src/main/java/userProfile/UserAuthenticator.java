@@ -33,21 +33,23 @@ public class UserAuthenticator {
      *         Displays an error message via the GUI if validation or registration fails.
      */
 	public static boolean registerUser(User user) {
-	    // Validate email and password as before
+	    // Validate email
 	    if (!isValidEmail(user.getEmail())) {
 	        JOptionPane.showMessageDialog(null, "Invalid email format.");
 	        return false;
 	    }
+	    // Validate password
 	    if (!isValidPassword(user.getPassword())) {
 	        JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
 	        return false;
 	    }
 
+	    // Proceed with registration
 	    String query = "INSERT INTO staff (first_name, last_name, address_id, email, store_id, active, username, password, last_update) " +
 	                   "VALUES (?, ?, 1, ?, 1, 1, ?, ?, NOW())";
-	    
+
 	    // Hash the password
-	    String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+	    String hashedPassword = PasswordHasher.hashPassword(user.getPassword());
 
 	    try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -66,6 +68,8 @@ public class UserAuthenticator {
 	        return false;
 	    }
 	}
+
+
 
     /**
      * Logs in a user by checking their username and password against the database.
@@ -94,7 +98,7 @@ public class UserAuthenticator {
 	        if (resultSet.next()) {
 	            String storedHashedPassword = resultSet.getString("password");
 
-	            // Check if the password matches the hashed password
+	            // Use BCrypt to check the plain password against the stored hashed password
 	            if (BCrypt.checkpw(password, storedHashedPassword)) {
 	                String firstName = resultSet.getString("first_name");
 	                String lastName = resultSet.getString("last_name");
@@ -131,6 +135,8 @@ public class UserAuthenticator {
 	}
 
 
+
+
     /**
      * Loads the profiles associated with a given user from a local file.
      * Each profile is identified by the user's ID and stored in a text file.
@@ -165,37 +171,40 @@ public class UserAuthenticator {
      * @param password The password to validate.
      * @return true if the password meets the criteria or false otherwise.
      */
+    /**
+     * Validates the format of a given password.
+     * The password must be at least 8 characters long and contain at least one uppercase letter and one digit.
+     *
+     * @param password The password to validate.
+     * @return true if the password meets the criteria or false otherwise.
+     */
     public static boolean isValidPassword(String password) {
-    	boolean isValidPassword = false;
+        // Check if the password is null or empty
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        
+        // Initialize counts for uppercase letters, lowercase letters, and digits
+        int uppercaseCount = 0;
+        int lowercaseCount = 0;
+        int digitCount = 0;
 
-        while (!isValidPassword) {
-            // Initialize counts for uppercase letters, lowercase letters, and digits
-            int uppercaseCount = 0;
-            int lowercaseCount = 0;
-            int digitCount = 0;
-
-            // Iterate over the characters of the password
-            for (int i = 0; i < password.length(); i++) {
-                char ch = password.charAt(i);
-                if (Character.isUpperCase(ch)) {
-                    uppercaseCount++;
-                } else if (Character.isLowerCase(ch)) {
-                    lowercaseCount++;
-                } else if (Character.isDigit(ch)) {
-                    digitCount++;
-                }
-            }
-
-            // Check if password meets the criteria
-            if (uppercaseCount >= 1 && lowercaseCount >= 1 && digitCount >= 1 && password.length() >= 8) {
-                return true;
-                
-            } else {
-                return false;
+        // Iterate over the characters of the password
+        for (int i = 0; i < password.length(); i++) {
+            char ch = password.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                uppercaseCount++;
+            } else if (Character.isLowerCase(ch)) {
+                lowercaseCount++;
+            } else if (Character.isDigit(ch)) {
+                digitCount++;
             }
         }
-		return isValidPassword;
+
+        // Check if password meets the criteria
+        return uppercaseCount >= 1 && lowercaseCount >= 1 && digitCount >= 1 && password.length() >= 8;
     }
+
 
     /**
      * Validates the format of a given email address using a regular expression.
