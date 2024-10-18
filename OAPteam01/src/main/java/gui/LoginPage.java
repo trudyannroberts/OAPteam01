@@ -2,9 +2,9 @@ package gui;
 
 import userProfile.User;
 import userProfile.UserAuthenticator;
-
 import javax.swing.*;
 import java.awt.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginPage {
     private JFrame frame;
@@ -56,15 +56,13 @@ public class LoginPage {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // Authenticate the user
+        // Authenticate the user by comparing the hashed password
         User loggedInUser = UserAuthenticator.logInUser(username, password);
 
         if (loggedInUser != null) {
-            // If login is successful, display the user's name
             JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
-            // Proceed with other actions such as showing user-specific content or navigating to the main screen
+            // Proceed with other actions such as showing user-specific content
         } else {
-            // Handle login failure
             JOptionPane.showMessageDialog(frame, "Invalid username or password.");
         }
     }
@@ -75,23 +73,27 @@ public class LoginPage {
         String lastName = JOptionPane.showInputDialog(frame, "Enter Last Name:");
         String email = JOptionPane.showInputDialog(frame, "Enter Email:");
         String username = JOptionPane.showInputDialog(frame, "Enter Username:");
-        String password = JOptionPane.showInputDialog(frame, "Enter Password:");
+        
+        // Prompt for password
+        JPasswordField passwordField = new JPasswordField(20);
+        int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String password = new String(passwordField.getPassword());
 
-        // Log inputs for debugging (optional)
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
-        System.out.println("Email: " + email);
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
+            // Hash the password
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        // Create a User object with the collected details
-        User newUser = new User(firstName, lastName, email, username, password);
+            // Create a User object with the collected details
+            User newUser = new User(firstName, lastName, email, username, hashedPassword);
 
-        // Register the user via the UserAuthenticator
-        if (UserAuthenticator.registerUser(newUser)) {
-            JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
+            // Register the user via the UserAuthenticator
+            if (UserAuthenticator.registerUser(newUser)) {
+                JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
+            }
         } else {
-            JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
+            JOptionPane.showMessageDialog(frame, "Registration cancelled.");
         }
     }
 

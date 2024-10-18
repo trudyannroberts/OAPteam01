@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.mindrot.jbcrypt.BCrypt;
 /**
  * The {@code UserAuthenticator} class is responsible for managing user authentication, 
  * registration, and profile loading operations. It acts as a controller by handling interactions 
@@ -32,40 +32,40 @@ public class UserAuthenticator {
      * @return true if the user was successfully registered or false otherwise.
      *         Displays an error message via the GUI if validation or registration fails.
      */
-    public static boolean registerUser(User user) {
-        // Validate email
-        if (!isValidEmail(user.getEmail())) {
-            JOptionPane.showMessageDialog(null, "Invalid email format.");
-            return false;
-        }
+	public static boolean registerUser(User user) {
+	    // Validate email and password as before
+	    if (!isValidEmail(user.getEmail())) {
+	        JOptionPane.showMessageDialog(null, "Invalid email format.");
+	        return false;
+	    }
+	    if (!isValidPassword(user.getPassword())) {
+	        JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
+	        return false;
+	    }
 
-        // Validate password
-        if (!isValidPassword(user.getPassword())) {
-            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter and one number.");
-            return false;
-        }
-        
-        // Because address:id, store_id, active and last_update are NOT NULL in the database, I have prefilled the valuess.
-        String query = "INSERT INTO staff (first_name, last_name, address_id, email, store_id, active, username, password, last_update) " +
-                       "VALUES (?, ?, 1, ?, 1, 1, ?, ?, NOW())";
+	    String query = "INSERT INTO staff (first_name, last_name, address_id, email, store_id, active, username, password, last_update) " +
+	                   "VALUES (?, ?, 1, ?, 1, 1, ?, ?, NOW())";
+	    
+	    // Hash the password
+	    String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            pstmt.setString(1, user.getFirstName());
-            pstmt.setString(2, user.getLastName());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getUsername());
-            pstmt.setString(5, user.getPassword()); 
+	        pstmt.setString(1, user.getFirstName());
+	        pstmt.setString(2, user.getLastName());
+	        pstmt.setString(3, user.getEmail());
+	        pstmt.setString(4, user.getUsername());
+	        pstmt.setString(5, hashedPassword); // Store hashed password
 
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
+	        int rowsAffected = pstmt.executeUpdate();
+	        return rowsAffected > 0;
+	    } catch (SQLException e) {
+	        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 
     /**
      * Logs in a user by checking their username and password against the database.
@@ -76,53 +76,60 @@ public class UserAuthenticator {
      * @return A  User object if the login is successful or null otherwise.
      *         Displays appropriate messages via the GUI for successful or failed login attempts.
      */
-    public static User logInUser(String username, String password) {
-        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Username and password must be provided.");
-            return null;
-        }
+	public static User logInUser(String username, String password) {
+	    if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "Username and password must be provided.");
+	        return null;
+	    }
 
-        String query = "SELECT * FROM staff WHERE username = ? AND password = ?";
-        User user = null;
+	    String query = "SELECT * FROM staff WHERE username = ?";
+	    User user = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
+	        pstmt.setString(1, username);
+	        ResultSet resultSet = pstmt.executeQuery();
 
-            ResultSet resultSet = pstmt.executeQuery();
-            if (resultSet.next()) {
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                String email = resultSet.getString("email");
-                String userId = resultSet.getString("staff_id");
+	        if (resultSet.next()) {
+	            String storedHashedPassword = resultSet.getString("password");
 
-                user = new User(firstName, lastName, email, username, password);
-                JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
+	            // Check if the password matches the hashed password
+	            if (BCrypt.checkpw(password, storedHashedPassword)) {
+	                String firstName = resultSet.getString("first_name");
+	                String lastName = resultSet.getString("last_name");
+	                String email = resultSet.getString("email");
+	                String userId = resultSet.getString("staff_id");
 
-                // Load and display user profiles
-                List<String> profiles = loadUserProfiles(userId);
-                if (!profiles.isEmpty()) {
-                    String selectedProfile = (String) JOptionPane.showInputDialog(
-                            null, "Select a profile:", "Profile Selection",
-                            JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
-                    );
-                    if (selectedProfile != null) {
-                        JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "No profiles found for this user.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Invalid username or password.");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return user;
-    }
+	                user = new User(firstName, lastName, email, username, storedHashedPassword);
+	                JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
+
+	                // Load and display user profiles
+	                List<String> profiles = loadUserProfiles(userId);
+	                if (!profiles.isEmpty()) {
+	                    String selectedProfile = (String) JOptionPane.showInputDialog(
+	                            null, "Select a profile:", "Profile Selection",
+	                            JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
+	                    );
+	                    if (selectedProfile != null) {
+	                        JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
+	                    }
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "No profiles found for this user.");
+	                }
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Invalid username or password.");
+	            }
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Invalid username or password.");
+	        }
+	    } catch (SQLException e) {
+	        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return user;
+	}
+
 
     /**
      * Loads the profiles associated with a given user from a local file.

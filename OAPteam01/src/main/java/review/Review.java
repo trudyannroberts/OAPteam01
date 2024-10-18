@@ -1,4 +1,4 @@
-package logic;
+package review;
 /**
  * @author Trudy Ann Roberts
  * The Review class is meant to let the user rate the film from 1-10. We need to connect the rating to a film, and therefore I also included film title.

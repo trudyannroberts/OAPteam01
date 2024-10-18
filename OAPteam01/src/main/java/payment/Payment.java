@@ -1,4 +1,4 @@
-package logic;
+package payment;
 
 /**
  * @author Trudy Ann Roberts
