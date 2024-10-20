@@ -2,9 +2,9 @@ package gui;
 
 import userProfile.User;
 import userProfile.UserAuthenticator;
-
 import javax.swing.*;
 import java.awt.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginPage {
     private JFrame frame;
@@ -56,15 +56,13 @@ public class LoginPage {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // Authenticate the user
+        // Authenticate the user by comparing the hashed password
         User loggedInUser = UserAuthenticator.logInUser(username, password);
 
         if (loggedInUser != null) {
-            // If login is successful, display the user's name
             JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
-            // Proceed with other actions such as showing user-specific content or navigating to the main screen
+            // Proceed with other actions such as showing user-specific content
         } else {
-            // Handle login failure
             JOptionPane.showMessageDialog(frame, "Invalid username or password.");
         }
     }
@@ -75,16 +73,33 @@ public class LoginPage {
         String lastName = JOptionPane.showInputDialog(frame, "Enter Last Name:");
         String email = JOptionPane.showInputDialog(frame, "Enter Email:");
         String username = JOptionPane.showInputDialog(frame, "Enter Username:");
-        String password = JOptionPane.showInputDialog(frame, "Enter Password:");
+        
+        String password = null;
+        boolean validPassword = false;
 
-        // Log inputs for debugging (optional)
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
-        System.out.println("Email: " + email);
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
+        // Repeat the password prompt until a valid password is entered
+        while (!validPassword) {
+            JPasswordField passwordField = new JPasswordField(20);
+            int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
 
-        // Create a User object with the collected details
+            if (option == JOptionPane.OK_OPTION) {
+                password = new String(passwordField.getPassword());
+
+                // Check if the password is valid
+                if (UserAuthenticator.isValidPassword(password)) {
+                    validPassword = true; // Exit the loop if the password is valid
+                } else {
+                    // Show message if the password is invalid and prompt again
+                    JOptionPane.showMessageDialog(frame, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
+                }
+            } else if (option == JOptionPane.CANCEL_OPTION) {
+                // If the user presses cancel, the registration is canceled
+                JOptionPane.showMessageDialog(frame, "Registration cancelled.");
+                return; // Exit the method if registration is canceled
+            }
+        }
+
+        // Create a User object with the collected details only if the password is valid
         User newUser = new User(firstName, lastName, email, username, password);
 
         // Register the user via the UserAuthenticator
