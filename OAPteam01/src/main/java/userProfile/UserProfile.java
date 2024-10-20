@@ -16,12 +16,10 @@ public class UserProfile implements Serializable {
 
     private String profileName;
     private ProfileType profileType;
-    private String password;
 
-    public UserProfile(String profileName, ProfileType profileType, String password) {
+    public UserProfile(String profileName, ProfileType profileType) {
         this.profileName = profileName;
         this.profileType = profileType;
-        this.password = password;
     }
 
     public void setProfileName(String profileName) {
@@ -31,10 +29,7 @@ public class UserProfile implements Serializable {
     public void setProfileType(ProfileType profileType) {
         this.profileType = profileType;
     }
-    
-    public void setPassword(String password) {
-    	this.password = password;
-    }
+
 
     public String getProfileName() {
         return profileName;
@@ -42,9 +37,6 @@ public class UserProfile implements Serializable {
 
     public ProfileType getProfileType() {
         return profileType;
-    }
-    public String getPassword() {
-        return password;
     }
 
     public boolean canWatchRRated() {

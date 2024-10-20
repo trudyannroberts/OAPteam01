@@ -5,8 +5,7 @@ public class User {
     private String lastName;
     private String email;
     private String username;
-    private String password; // You could also store a hashed version of the password
-
+    private String password;
     // Constructor
     public User(String firstName, String lastName, String email, String username, String password) {
         this.firstName = firstName;
@@ -34,7 +33,7 @@ public class User {
     }
 
     public String getPassword() {
-        return password; // In practice, you would return a hashed version or not expose this directly
+        return password;
     }
 
     // Setters

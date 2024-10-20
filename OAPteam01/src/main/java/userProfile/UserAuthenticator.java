@@ -1,6 +1,7 @@
 package userProfile;
 
 import db.DatabaseConnection;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,8 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.mindrot.jbcrypt.BCrypt;
-import gui.LoginPage;
 /**
  * The {@code UserAuthenticator} class is responsible for managing user authentication, 
  * registration, and profile loading operations. It acts as a controller by handling interactions 
@@ -41,6 +40,7 @@ public class UserAuthenticator {
 	    }
 	    // Validate password
 	    if (!isValidPassword(user.getPassword())) {
+	    	System.out.println(user.getPassword());
 	        JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
 	        return false;
 	    }
@@ -50,7 +50,12 @@ public class UserAuthenticator {
 	                   "VALUES (?, ?, 1, ?, 1, 1, ?, ?, NOW())";
 
 	    // Hash the password
-	    String hashedPassword = PasswordHasher.hashPassword(user.getPassword());
+	    String rawPassword = user.getPassword();
+	    System.out.println("Raw Password during Registration: " + rawPassword);
+	    String hashedPassword = PasswordHasher.hashPassword(rawPassword);
+	    System.out.println("Hashed Password during Registration: " + hashedPassword);
+	    System.out.println("Raw Password during Registration: " + user.getPassword()); // Print raw password
+	    System.out.println("Hashed Password during Registration: " + hashedPassword);
 
 	    try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -97,10 +102,16 @@ public class UserAuthenticator {
 	        ResultSet resultSet = pstmt.executeQuery();
 
 	        if (resultSet.next()) {
+	            // Retrieve stored hashed password from the database
 	            String storedHashedPassword = resultSet.getString("password");
 
-	            // Use BCrypt to check the plain password against the stored hashed password
-	            if (BCrypt.checkpw(password, storedHashedPassword)) {
+	            // Hash the entered password and compare
+	            String hashedInputPassword = PasswordHasher.hashPassword(password);
+	            System.out.println("Input password: " + password);
+	            System.out.println("Hashed Input Password during Login: " + hashedInputPassword);
+	            System.out.println("Stored Hashed Password: " + storedHashedPassword);
+
+	            if (hashedInputPassword.equals(storedHashedPassword)) {
 	                String firstName = resultSet.getString("first_name");
 	                String lastName = resultSet.getString("last_name");
 	                String email = resultSet.getString("email");
@@ -134,6 +145,9 @@ public class UserAuthenticator {
 	    }
 	    return user;
 	}
+
+
+
     /**
      * Loads the profiles associated with a given user from a local file.
      * Each profile is identified by the user's ID and stored in a text file.
@@ -144,7 +158,7 @@ public class UserAuthenticator {
      */
     public static List<String> loadUserProfiles(String userId) {
         List<String> profiles = new ArrayList<>();
-        String filePath = "profiles.txt"; // Path to the file storing user profiles
+        String filePath = "profiles.dat"; // Path to the file storing user profiles
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;

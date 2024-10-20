@@ -27,13 +27,6 @@
     	<artifactId>mysql-connector-java</artifactId>
     	<version>8.0.33</version> <!-- Use the latest version available -->
 	</dependency>
-	
-	<!-- This is BCrypt library, we need this for hashing the password -->
-	<dependency>
-   	 	<groupId>org.mindrot</groupId>
-    	<artifactId>jbcrypt</artifactId>
-    	<version>0.4</version>
-	</dependency>
 
   </dependencies>
   
