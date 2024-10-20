@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Manages user profiles, allowing saving and loading of profiles via serialization. 
@@ -41,21 +40,16 @@ public class ProfileManager implements Serializable {
      * @return true if the profile was added successfully, false if the maximum number 
      *         of profiles has been reached.
      */
-
-public boolean addProfile(UserProfile profile) {
-    // Hash the password before adding the profile
-    String hashedPassword = BCrypt.hashpw(profile.getPassword(), BCrypt.gensalt());
-    profile.setPassword(hashedPassword); // Update profile with hashed password
-
-    if (profiles.size() < MAX_PROFILES) {
-        profiles.add(profile);
-        saveProfilesToFile();
-        return true;
-    } else {
-        JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
-        return false;
+    public boolean addProfile(UserProfile profile) {
+        if (profiles.size() < MAX_PROFILES) {
+            profiles.add(profile);
+            saveProfilesToFile();
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
+            return false;
+        }
     }
-}
 
     /**
      * Saves the current list of profiles to a file using serialization. 
@@ -124,23 +118,25 @@ public boolean addProfile(UserProfile profile) {
      *
      * @return The name of the selected profile, or null if no profiles are available.
      */
-    public boolean logIn(String profileName, String enteredPassword) {
-        Optional<UserProfile> profileOpt = profiles.stream()
-                .filter(profile -> profile.getProfileName().equals(profileName))
-                .findFirst();
-
-        if (profileOpt.isPresent()) {
-            UserProfile profile = profileOpt.get();
-            if (verifyPassword(profile, enteredPassword)) {
-                return true; // Login successful
-            } else {
-                JOptionPane.showMessageDialog(null, "Invalid password.");
-                return false; // Incorrect password
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Profile not found.");
-            return false; // Profile not found
+    public String selectProfile() {
+        if (profiles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No profiles available.");
+            return null;
         }
+
+        String[] profileNames = profiles.stream()
+                                        .map(UserProfile::getProfileName)
+                                        .toArray(String[]::new);
+
+        return (String) JOptionPane.showInputDialog(
+                null,
+                "Select a profile:",
+                "Profile Selection",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                profileNames,
+                profileNames[0]
+        );
     }
     
     /**
@@ -149,11 +145,6 @@ public boolean addProfile(UserProfile profile) {
      */
     public List<UserProfile> getProfiles() {
         return profiles; 
-    }
-    
-    public boolean verifyPassword(UserProfile profile, String enteredPassword) {
-        // Verify the password using BCrypt
-        return BCrypt.checkpw(enteredPassword, profile.getPassword());
     }
 
     /**

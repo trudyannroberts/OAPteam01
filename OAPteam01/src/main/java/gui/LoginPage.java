@@ -4,7 +4,7 @@ import userProfile.User;
 import userProfile.UserAuthenticator;
 import javax.swing.*;
 import java.awt.*;
-import org.mindrot.jbcrypt.BCrypt;
+import userProfile.PasswordHasher;
 
 public class LoginPage {
     private JFrame frame;
@@ -74,41 +74,29 @@ public class LoginPage {
         String email = JOptionPane.showInputDialog(frame, "Enter Email:");
         String username = JOptionPane.showInputDialog(frame, "Enter Username:");
         
-        String password = null;
-        boolean validPassword = false;
+        // Prompt for password
+        JPasswordField passwordField = new JPasswordField(20);
+        int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String password = new String(passwordField.getPassword());
 
-        // Repeat the password prompt until a valid password is entered
-        while (!validPassword) {
-            JPasswordField passwordField = new JPasswordField(20);
-            int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
+            // Hash the password using MD5
+           // String hashedPassword = PasswordHasher.hashPassword(password);
 
-            if (option == JOptionPane.OK_OPTION) {
-                password = new String(passwordField.getPassword());
+            // Create a User object with the collected details
+            User newUser = new User(firstName, lastName, email, username, password);
 
-                // Check if the password is valid
-                if (UserAuthenticator.isValidPassword(password)) {
-                    validPassword = true; // Exit the loop if the password is valid
-                } else {
-                    // Show message if the password is invalid and prompt again
-                    JOptionPane.showMessageDialog(frame, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
-                }
-            } else if (option == JOptionPane.CANCEL_OPTION) {
-                // If the user presses cancel, the registration is canceled
-                JOptionPane.showMessageDialog(frame, "Registration cancelled.");
-                return; // Exit the method if registration is canceled
+            // Register the user via the UserAuthenticator
+            if (UserAuthenticator.registerUser(newUser)) {
+                JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
             }
-        }
-
-        // Create a User object with the collected details only if the password is valid
-        User newUser = new User(firstName, lastName, email, username, password);
-
-        // Register the user via the UserAuthenticator
-        if (UserAuthenticator.registerUser(newUser)) {
-            JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
         } else {
-            JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
+            JOptionPane.showMessageDialog(frame, "Registration cancelled.");
         }
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginPage::new);
