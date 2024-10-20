@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
+import gui.LoginPage;
 /**
  * The {@code UserAuthenticator} class is responsible for managing user authentication, 
  * registration, and profile loading operations. It acts as a controller by handling interactions 
@@ -133,10 +134,6 @@ public class UserAuthenticator {
 	    }
 	    return user;
 	}
-
-
-
-
     /**
      * Loads the profiles associated with a given user from a local file.
      * Each profile is identified by the user's ID and stored in a text file.
@@ -163,14 +160,6 @@ public class UserAuthenticator {
         
         return profiles;
     }
-
-    /**
-     * Validates the format of a given password.
-     * The password must be at least 8 characters long and contain at least one uppercase letter and one digit.
-     *
-     * @param password The password to validate.
-     * @return true if the password meets the criteria or false otherwise.
-     */
     /**
      * Validates the format of a given password.
      * The password must be at least 8 characters long and contain at least one uppercase letter and one digit.
@@ -204,8 +193,6 @@ public class UserAuthenticator {
         // Check if password meets the criteria
         return uppercaseCount >= 1 && lowercaseCount >= 1 && digitCount >= 1 && password.length() >= 8;
     }
-
-
     /**
      * Validates the format of a given email address using a regular expression.
      *

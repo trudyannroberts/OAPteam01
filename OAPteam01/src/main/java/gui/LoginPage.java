@@ -74,26 +74,39 @@ public class LoginPage {
         String email = JOptionPane.showInputDialog(frame, "Enter Email:");
         String username = JOptionPane.showInputDialog(frame, "Enter Username:");
         
-        // Prompt for password
-        JPasswordField passwordField = new JPasswordField(20);
-        int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            String password = new String(passwordField.getPassword());
+        String password = null;
+        boolean validPassword = false;
 
-            // Hash the password
-            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        // Repeat the password prompt until a valid password is entered
+        while (!validPassword) {
+            JPasswordField passwordField = new JPasswordField(20);
+            int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
 
-            // Create a User object with the collected details
-            User newUser = new User(firstName, lastName, email, username, hashedPassword);
+            if (option == JOptionPane.OK_OPTION) {
+                password = new String(passwordField.getPassword());
 
-            // Register the user via the UserAuthenticator
-            if (UserAuthenticator.registerUser(newUser)) {
-                JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
-            } else {
-                JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
+                // Check if the password is valid
+                if (UserAuthenticator.isValidPassword(password)) {
+                    validPassword = true; // Exit the loop if the password is valid
+                } else {
+                    // Show message if the password is invalid and prompt again
+                    JOptionPane.showMessageDialog(frame, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
+                }
+            } else if (option == JOptionPane.CANCEL_OPTION) {
+                // If the user presses cancel, the registration is canceled
+                JOptionPane.showMessageDialog(frame, "Registration cancelled.");
+                return; // Exit the method if registration is canceled
             }
+        }
+
+        // Create a User object with the collected details only if the password is valid
+        User newUser = new User(firstName, lastName, email, username, password);
+
+        // Register the user via the UserAuthenticator
+        if (UserAuthenticator.registerUser(newUser)) {
+            JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
         } else {
-            JOptionPane.showMessageDialog(frame, "Registration cancelled.");
+            JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
         }
     }
 
