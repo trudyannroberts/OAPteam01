@@ -2,6 +2,8 @@ package film;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import db.DatabaseConnection;
+
+// TODO Connect the listeners to GUI
 
 /**
  * This class is responsible for executing SQL statements related to films 
@@ -34,8 +38,28 @@ public class FilmManager {
     /** 
      * Method to initialize all action listeners
      */
-    // TODO Connect the listeners to GUI
     private void initializeListeners() {
+    	// MouseListener to be able to click on the film
+        filmTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = filmTable.getSelectedRow();
+                if (row != -1) {
+                    String filmTittel = filmTable.getValueAt(row, 0).toString(); // "Title" is at index 0
+
+                    int valg = JOptionPane.showConfirmDialog(
+                        null,
+                        "Do you want to watch " + filmTittel + "?",
+                        "Confirm",
+                        JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (valg == JOptionPane.YES_OPTION) {
+                        JOptionPane.showMessageDialog(null, filmTittel + " is playing!");
+                    }
+                }
+            }
+        });
         // Action listener for title search button
         searchTitleButton.addActionListener(new ActionListener() {
             @Override
