@@ -22,7 +22,7 @@ import db.DatabaseConnection;
  * This class is responsible for executing SQL statements related to films 
  * in the db, such as retrieving films by title, genre, or release year.
  * It uses the DAO (Data Access Object) pattern to interact with the db.
- * It also initializes action listeners for the film search functionalities.
+ * It also initializes action listeners for the film search functionalities and to watch films.
  * 
  * @author Erica Laub Varpe
  */
@@ -39,7 +39,8 @@ public class FilmManager {
      * Method to initialize all action listeners
      */
     private void initializeListeners() {
-    	// MouseListener to be able to click on the film
+    	
+    	// MouseListener to be able to click on the film you want to watch
         filmTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -60,6 +61,7 @@ public class FilmManager {
                 }
             }
         });
+        
         // Action listener for title search button
         searchTitleButton.addActionListener(new ActionListener() {
             @Override
