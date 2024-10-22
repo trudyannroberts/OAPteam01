@@ -128,15 +128,4 @@ public class HomePageGUI extends JFrame {
         contentPanel.repaint();
     }
 
-
-    /**
-     * The main method that launches the application by creating an instance of HomePageGUI.
-     * 
-     * @param args command line arguments (not used in this application).
-     */
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new HomePageGUI(); 
-        });
-    }
 }
