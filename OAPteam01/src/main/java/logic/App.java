@@ -3,6 +3,11 @@ package logic;
 import javax.swing.SwingUtilities;
 import gui.HomePageGUI;
 
+/**
+ * 
+ * @author Stine Andreassen Skrøder
+ */
+
 public class App {
 
     /**
