@@ -158,7 +158,7 @@ public class UserAuthenticator {
      */
     public static List<String> loadUserProfiles(String userId) {
         List<String> profiles = new ArrayList<>();
-        String filePath = "profiles.txt"; // Path to the file storing user profiles
+        String filePath = "profiles.dat"; // Path to the file storing user profiles
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;

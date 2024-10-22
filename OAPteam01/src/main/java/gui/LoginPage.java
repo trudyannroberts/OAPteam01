@@ -4,7 +4,6 @@ import userProfile.User;
 import userProfile.UserAuthenticator;
 import javax.swing.*;
 import java.awt.*;
-import userProfile.PasswordHasher;
 
 public class LoginPage {
     private JFrame frame;
@@ -79,9 +78,6 @@ public class LoginPage {
         int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             String password = new String(passwordField.getPassword());
-
-            // Hash the password using MD5
-           // String hashedPassword = PasswordHasher.hashPassword(password);
 
             // Create a User object with the collected details
             User newUser = new User(firstName, lastName, email, username, password);

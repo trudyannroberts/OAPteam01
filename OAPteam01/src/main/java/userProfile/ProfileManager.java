@@ -11,7 +11,7 @@ import java.util.Optional;
  * Manages user profiles, allowing saving and loading of profiles via serialization. 
  * It also handles profile selection, deletion, and managing viewing history for each profile.
  * 
- * This class supports storing up to five user profiles on a local file.
+ * This class supports storing up to five user profiles for a specific user ID on a local file.
  * 
  * @author Trudy Ann Roberts
  */
@@ -23,27 +23,24 @@ public class ProfileManager implements Serializable {
 
     /**
      * Constructs a ProfileManager for the given user. 
-     * Loads any previously saved profiles from file.
+     * Loads any previously saved profiles from file associated with the user ID.
      * 
      * @param userId The unique identifier for the user.
      */
     public ProfileManager(int userId) {
         this.userId = userId;
-        loadProfilesFromFile();
+        loadProfilesFromFile(); // Load profiles specific to this user
+        System.out.println("Loaded profiles for user ID: " + userId + ". Profiles count: " + profiles.size()); // Debug statement
     }
 
-    /**
-     * Adds a new profile to the profile list, provided the maximum number 
-     * of profiles (5) has not been reached.
-     * 
-     * @param profile The profile to be added.
-     * @return true if the profile was added successfully, false if the maximum number 
-     *         of profiles has been reached.
-     */
+    private String getFileName() {
+        return "profiles_" + userId + ".dat"; // Use user ID to differentiate files
+    }
+
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
-            saveProfilesToFile();
+            saveProfilesToFile(); // Save profiles after adding a new one
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
@@ -51,44 +48,28 @@ public class ProfileManager implements Serializable {
         }
     }
 
-    /**
-     * Saves the current list of profiles to a file using serialization. 
-     * Profiles are saved in a binary format to the file "profiles.dat".
-     * 
-     * @throws IOException If there is an error during the file writing process.
-     */
     public void saveProfilesToFile() {
-        try (FileOutputStream fout = new FileOutputStream("profiles.dat");
+        try (FileOutputStream fout = new FileOutputStream(getFileName());
              ObjectOutputStream out = new ObjectOutputStream(fout)) {
             out.writeObject(profiles);
             out.flush();
-            out.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error saving profiles: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    /**
-     * Loads profiles from the "profiles.dat" file using deserialization. 
-     * If the file is not found, the profiles list remains empty.
-     * 
-     * @throws IOException If there is an error reading the file.
-     * @throws ClassNotFoundException If the serialized class is not found.
-     */
-    @SuppressWarnings("unchecked") //To avoid "unchecked cast"-warning.
-    private void loadProfilesFromFile() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("profiles.dat"))) {
+    @SuppressWarnings("unchecked")
+    void loadProfilesFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getFileName()))) {
             profiles = (List<UserProfile>) in.readObject(); // Deserialize the profiles list
-            in.close();
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Profile file not found, starting fresh.");
+            System.out.println("Profile file not found for user ID " + userId + ", starting fresh.");
         } catch (IOException | ClassNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
     /**
      * Deletes a profile by name. If the profile is found and successfully deleted, 
      * the profiles file is updated accordingly.
