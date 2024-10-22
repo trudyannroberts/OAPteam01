@@ -1,7 +1,7 @@
 package film;
 
 /**
- * @author Erica Laub Varpe
+ * @author Stian
  */
 public class WatchlistManager {
 	
