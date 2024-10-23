@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class BrowseMoviesPage extends HomePageGUI {
 
-    private FilmManager filmManager = new FilmManager();
-    private JTable movieTable;
-    private DefaultTableModel tableModel;
+    public FilmManager filmManager = new FilmManager();
+    public JTable movieTable;
+    public DefaultTableModel tableModel;
     
     public JPanel topPanel;
     public JButton showAllButton;
