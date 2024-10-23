@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import db.DatabaseConnection;
+import gui.BrowseMoviesPage;
 
 // TODO Connect the listeners to GUI
 
@@ -41,12 +42,12 @@ public class FilmManager {
     private void initializeListeners() {
     	
     	// MouseListener to be able to click on the film you want to watch
-        filmTable.addMouseListener(new MouseAdapter() {
+    	BrowseMoviesPage.movieTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int row = filmTable.getSelectedRow();
+                int row = BrowseMoviesPage.movieTable.getSelectedRow();
                 if (row != -1) {
-                    String filmTittel = filmTable.getValueAt(row, 0).toString(); // "Title" is at index 0
+                    String filmTittel = BrowseMoviesPage.movieTable.getValueAt(row, 0).toString(); // "Title" is at index 0
 
                     int valg = JOptionPane.showConfirmDialog(
                         null,
@@ -63,7 +64,7 @@ public class FilmManager {
         });
         
         // Action listener for title search button
-        searchTitleButton.addActionListener(new ActionListener() {
+        BrowseMoviesPage.searchTitleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String title = titleTextField.getText();
@@ -76,7 +77,7 @@ public class FilmManager {
         });
 
         // Action listener for genre search button
-        searchButton.addActionListener(new ActionListener() {
+        BrowseMoviesPage.searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String genre = genreTextField.getText();
@@ -89,7 +90,7 @@ public class FilmManager {
         });
 
         // Action listener for release year search button
-        searchYearButton.addActionListener(new ActionListener() {
+        BrowseMoviesPage.searchYearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String yearText = yearTextField.getText();
@@ -107,7 +108,7 @@ public class FilmManager {
         });
 
         // Action listener for "Show all movies" button
-        showAllButton.addActionListener(new ActionListener() {
+        BrowseMoviesPage.showAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateFilmTableAll();
