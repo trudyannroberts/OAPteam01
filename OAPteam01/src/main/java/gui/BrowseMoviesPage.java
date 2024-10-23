@@ -20,6 +20,12 @@ public class BrowseMoviesPage extends HomePageGUI {
     private FilmManager filmManager = new FilmManager();
     private JTable movieTable;
     private DefaultTableModel tableModel;
+    
+    public JPanel topPanel;
+    public JButton showAllButton;
+    public JLabel browseLabel;
+    public JTextField searchBar;
+    public JButton searchButton;
 
     /**
      * Constructs a BrowseMoviesPage object and displays the browse page.
