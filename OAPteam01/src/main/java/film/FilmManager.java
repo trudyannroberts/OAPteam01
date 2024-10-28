@@ -64,7 +64,7 @@ public class FilmManager {
         });
         
         // Action listener for title search button
-        BrowseMoviesPage.searchTitleButton.addActionListener(new ActionListener() {
+        BrowseMoviesPage.searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String title = titleTextField.getText();
