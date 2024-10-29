@@ -67,7 +67,7 @@ public class FilmManager {
         BrowseMoviesPage.searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String title = titleTextField.getText();
+                String title = BrowseMoviesPage.searchBar.getText();
                 if (!title.isEmpty()) {
                     updateFilmTableTitle(title);
                 } else {
@@ -80,7 +80,7 @@ public class FilmManager {
         BrowseMoviesPage.searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String genre = genreTextField.getText();
+                String genre = BrowseMoviesPage.searchBar.getText();
                 if (!genre.isEmpty()) {
                     updateFilmTableGenre(genre);
                 } else {
@@ -90,10 +90,10 @@ public class FilmManager {
         });
 
         // Action listener for release year search button
-        BrowseMoviesPage.searchYearButton.addActionListener(new ActionListener() {
+        BrowseMoviesPage.searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String yearText = yearTextField.getText();
+                String yearText = BrowseMoviesPage.searchBar.getText();
                 if (!yearText.isEmpty()) {
                     try {
                         int year = Integer.parseInt(yearText);
@@ -269,10 +269,10 @@ public class FilmManager {
 	 * @param title the title to search for
 	 */
 	private void updateFilmTableTitle(String title) {
-		tableModel.setRowCount(0); // Clear previous data
+		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 		List<Film> films = getFilmByTitle(title); // Get films based on title
 		for (Film film : films) {
-			tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
+			BrowseMoviesPage.movieTable.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 		}
 		if (films.isEmpty()) {
         JOptionPane.showMessageDialog(null, "No films found with title: " + title, "No results", JOptionPane.INFORMATION_MESSAGE);
@@ -285,10 +285,10 @@ public class FilmManager {
 	 * @param genre the genre to search for
 	 */
 	private void updateFilmTableGenre(String genre) {
-		tableModel.setRowCount(0); // Clear previous data
+		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 		List<Film> films = getFilmByGenre(genre); // Get films based on genre
 		for (Film film : films) {
-			tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
+			BrowseMoviesPage.movieTable.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 		}
 		if (films.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No films found in genre: " + genre, "No results", JOptionPane.INFORMATION_MESSAGE);
@@ -301,10 +301,10 @@ public class FilmManager {
 	 * @param year the release year to search for
 	 */
 	private void updateFilmTableYear(int year) {
-		tableModel.setRowCount(0); // Clear previous data
+		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 		List<Film> films = getFilmByReleaseYear(year); // Get films based on release year
 		for (Film film : films) {
-			tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
+			BrowseMoviesPage.movieTable.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 		}
 		if (films.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No films found from the year: " + year, "No results", JOptionPane.INFORMATION_MESSAGE);
@@ -315,10 +315,10 @@ public class FilmManager {
 	 * Updates the film table with all films from the db.
 	 */
 	private void updateFilmTableAll() {
-	    tableModel.setRowCount(0); // Clear previous data
+		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 	    List<Film> films = getAllFilms(); // Get all films
 	    for (Film film : films) {
-	        tableModel.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
+	    	BrowseMoviesPage.movieTable.addRow(new Object[]{film.getTitle(), film.getDesc(), film.getReleaseYear(), film.getGenre()});
 	    }
 	    if (films.isEmpty()) {
 	        JOptionPane.showMessageDialog(null, "No films found in the db", "No results", JOptionPane.INFORMATION_MESSAGE);
