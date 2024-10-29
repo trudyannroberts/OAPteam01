@@ -18,14 +18,14 @@ import java.util.List;
 public class BrowseMoviesPage extends HomePageGUI {
 
     public FilmManager filmManager = new FilmManager();
-    public JTable movieTable;
+    public static JTable movieTable;
     public DefaultTableModel tableModel;
     
     public JPanel topPanel;
-    public JButton showAllButton;
+    public static JButton showAllButton;
     public JLabel browseLabel;
-    public JTextField searchBar;
-    public JButton searchButton;
+    public static JTextField searchBar;
+    public static JButton searchButton;
 
     /**
      * Constructs a BrowseMoviesPage object and displays the browse page.
