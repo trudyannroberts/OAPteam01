@@ -17,6 +17,12 @@ import javax.swing.plaf.basic.BasicSliderUI;
 import javax.swing.border.EmptyBorder;
 import javax.swing.Timer;
 
+/**
+ * the movie player serves as a bare bones representation for how playing movies trough the application might look like
+ *  
+ *  @author August Monen
+ *  
+ *  */
 
 
 
