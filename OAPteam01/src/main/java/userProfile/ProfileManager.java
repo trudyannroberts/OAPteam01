@@ -1,6 +1,9 @@
 package userProfile;
 
 import javax.swing.*;
+
+import userProfile.UserProfile.ProfileType; //importing the enum for use in edit profile.
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +150,52 @@ public class ProfileManager implements Serializable {
                 profileNames[0]
         );
     }
+    
+    /**
+     * Edits an existing profile by updating its name and type. 
+     * If the profile is found, the method updates its attributes 
+     * and saves the updated list to file.
+     *
+     * @param oldProfileName The current name of the profile to be edited.
+     * @param newProfileName The new name to assign to the profile.
+     * @param newProfileType The new type to assign to the profile.
+     * @return true if the profile was successfully edited, false if not found.
+     */
+    /**
+     * Edits an existing profile by updating its name and type. 
+     * If the profile is found, the method updates its attributes 
+     * and saves the updated list to file.
+     *
+     * @param oldProfileName The current name of the profile to be edited.
+     * @param newProfileName The new name to assign to the profile.
+     * @param newProfileType The new type to assign to the profile (either "ADULT" or "CHILD").
+     * @return true if the profile was successfully edited, false if not found.
+     */
+    public boolean editProfile(String oldProfileName, String newProfileName, String newProfileType) {
+        Optional<UserProfile> profileToEdit = profiles.stream()
+                .filter(profile -> profile.getProfileName().equals(oldProfileName))
+                .findFirst();
+
+        if (profileToEdit.isPresent()) {
+            UserProfile profile = profileToEdit.get();
+            profile.setProfileName(newProfileName); // Update profile name
+            
+            try {
+                ProfileType type = ProfileType.valueOf(newProfileType.toUpperCase()); // Convert String to ProfileType enum
+                profile.setProfileType(type); // Update profile type
+                saveProfilesToFile(); // Persist the updated profile list
+                JOptionPane.showMessageDialog(null, "Profile '" + oldProfileName + "' updated to '" + newProfileName + "'.");
+                return true;
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, "Invalid profile type. Use 'ADULT' or 'CHILD'.");
+                return false;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Profile '" + oldProfileName + "' not found.");
+            return false;
+        }
+    }
+
     
     /**
      * Retrieves the list of profiles managed by this ProfileManager.
