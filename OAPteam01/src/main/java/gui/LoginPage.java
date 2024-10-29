@@ -9,8 +9,10 @@ public class LoginPage {
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private Runnable onLoginSuccess;
 
-    public LoginPage() {
+    public LoginPage(Runnable onLoginSuccess) {
+    	this.onLoginSuccess = onLoginSuccess;
         initialize();
     }
 
@@ -50,7 +52,7 @@ public class LoginPage {
 
         frame.setVisible(true);
     }
-
+    
     private void logIn() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -60,6 +62,8 @@ public class LoginPage {
 
         if (loggedInUser != null) {
             JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
+            frame.dispose(); // Close the login window
+            onLoginSuccess.run();
             // Proceed with other actions such as showing user-specific content
         } else {
             JOptionPane.showMessageDialog(frame, "Invalid username or password.");
@@ -92,9 +96,5 @@ public class LoginPage {
             JOptionPane.showMessageDialog(frame, "Registration cancelled.");
         }
     }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(LoginPage::new);
-    }
+    
 }
