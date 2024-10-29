@@ -34,44 +34,20 @@ public class UserAuthenticator {
 	public static boolean registerUser(User user) {
 	    /**
 	     * Calls the isValidEmail method to validate email.
-	     * @boolean isValidEmail is used in the while loop that will continue to prompt the user to enter an 
-	     * email as long as the email is invalid.
 	     * @return false is the email is not valid.
 	     */
-		boolean isValidEmail = false;
-		boolean isValidPassword = false;
-		
-	    while (!isValidEmail) {
-	        if (!isValidEmail(user.getEmail())) {
-	            JOptionPane.showMessageDialog(null, "Invalid email format.");
-	            String newEmail = JOptionPane.showInputDialog("Please enter a valid email:");
-	            if (newEmail == null) {
-	                JOptionPane.showMessageDialog(null, "Registration cancelled.");
-	                return false; // Exit if the user cancels
-	            }
-	            user.setEmail(newEmail); // Update the user email and re-validate
-	        } else {
-	            isValidEmail = true;
-	        }
+	    if (!isValidEmail(user.getEmail())) {
+	        JOptionPane.showMessageDialog(null, "Invalid email format.");
+	        return false;
 	    }
 	    /**
 	     * Calls the isValidPassword method to validate password.
-	     * @boolean isValidPassword is used in the while loop that will continue to prompt the user to enter  
-	     * a password as long as the password is invalid.
 	     * @return false if the password is not valid.
 	     */
-	    while (!isValidPassword) {
-	        if (!isValidPassword(user.getPassword())) {
-	            JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
-	            String newPassword = JOptionPane.showInputDialog("Please enter a valid password:");
-	            if (newPassword == null) {
-	                JOptionPane.showMessageDialog(null, "Registration cancelled.");
-	                return false; // Exit if the user cancels
-	            }
-	            user.setPassword(newPassword); // Update the user password and re-validate
-	        } else {
-	            isValidPassword = true;
-	        }
+	    if (!isValidPassword(user.getPassword())) {
+	    	System.out.println(user.getPassword());
+	        JOptionPane.showMessageDialog(null, "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one number.");
+	        return false;
 	    }
 
 	    /**

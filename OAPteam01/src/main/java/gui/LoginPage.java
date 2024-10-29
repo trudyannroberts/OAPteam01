@@ -19,8 +19,6 @@ public class LoginPage {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLayout(new GridLayout(5, 1));
-        frame.setLocationRelativeTo(null); //to make sure the window is in the middle!
-        frame.setVisible(true);
 
         // Username field
         JPanel usernamePanel = new JPanel();
