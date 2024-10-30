@@ -13,10 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * The {@code UserAuthenticator} class is responsible for managing user authentication, 
- * registration, and profile loading operations. It acts as a controller by handling interactions 
- * between the GUI and the database.
- * 
+ * The UserAuthenticator class is responsible for managing user authentication, 
+ * registration, and profile loading operations. 
+ *  
  * The class provides methods to register users, log them in, validate email and password formats, 
  * and load user profiles from a local file.
  * 
@@ -75,18 +74,34 @@ public class UserAuthenticator {
 	        }
 	    }
 
-	    // Proceed with registration
+	    /**
+	     * @param query inserts the User information into the database.
+	     * The values that have been prefilled, are NOT NULL in the database, but I didn't see the point 
+	     * of a user filling in this information.
+	     */
 	    String query = "INSERT INTO staff (first_name, last_name, address_id, email, store_id, active, username, password, last_update) " +
 	                   "VALUES (?, ?, 1, ?, 1, 1, ?, ?, NOW())";
 
-	    // Hash the password
+	    /**
+	     * Using the hashPassword() method from the PasswordHasher class to hash the password.
+	     *TODO: Remove DEBUGGING when done.
+	     *@param rawPassword is the palin-text password the user enteres.
+	     *@param hashedPassword is the user's password after it's been hashed.
+	     */
 	    String rawPassword = user.getPassword();
-	    System.out.println("Raw Password during Registration: " + rawPassword);
-	    String hashedPassword = PasswordHasher.hashPassword(rawPassword);
-	    System.out.println("Hashed Password during Registration: " + hashedPassword);
-	    System.out.println("Raw Password during Registration: " + user.getPassword()); // Print raw password
-	    System.out.println("Hashed Password during Registration: " + hashedPassword);
+	    System.out.println("Raw Password during Registration: " + rawPassword); //DEBUGGING. 
+	    String hashedPassword = PasswordHasher.hashPassword(rawPassword); //Hashes the passord
+	    System.out.println("Hashed Password during Registration: " + hashedPassword);//DEBUGGING 
+	    System.out.println("Raw Password during Registration: " + user.getPassword()); // DEBUGGING
+	    System.out.println("Hashed Password during Registration: " + hashedPassword); //DEBUGGING
 	    
+	    /**
+	     *  Connects to the database using the getConnection() method from the DatabaseConnection class 
+	     *  and inserts the data into the database.
+	     *  @param rowsAffected is the result of executeUpdate() and shows the number of rows that has been addded.
+	     *  @return rowsAffected returns the number of new records added to the database.
+	     *  @return false if the there has been a catch.
+	     */
 	    try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -94,10 +109,10 @@ public class UserAuthenticator {
 	        pstmt.setString(2, user.getLastName());
 	        pstmt.setString(3, user.getEmail());
 	        pstmt.setString(4, user.getUsername());
-	        pstmt.setString(5, hashedPassword); // Store hashed password
+	        pstmt.setString(5, hashedPassword); // Store hashed password, not plain-textpassword.
 
-	        int rowsAffected = pstmt.executeUpdate();
-	        return rowsAffected > 0;
+	        int rowsAffected = pstmt.executeUpdate(); //executeUpdate() is in this instance INSERT, so it will insert the values stated above.
+	        return rowsAffected > 0; 
 	    } catch (SQLException e) {
 	        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
 	        e.printStackTrace();
@@ -123,23 +138,29 @@ public class UserAuthenticator {
 	    }
 
 	    String query = "SELECT * FROM staff WHERE username = ?";
-	    User user = null;
+	    User user = null; //User is set to null because a user hasn't been authenticated yet, but I have to declare a user.
 
 	    try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-	        pstmt.setString(1, username);
+	        pstmt.setString(1, username); // replaces the ? in the query with the username .
 	        ResultSet resultSet = pstmt.executeQuery();
 
 	        if (resultSet.next()) {
-	            // Retrieve stored hashed password from the database
+	            //Retrieve stored hashed password from the database
+	             
 	            String storedHashedPassword = resultSet.getString("password");
 
-	            // Hash the entered password and compare
+	            /**
+	             * Using the hashPassword() method from the PassordHasher class to hash the plain-text password.
+	             *  @param hashedInputPassword is the hashed password.
+	             *  If the user types the correct password, it will be hashed the same way and identical to the database password.
+	             *  @TODO: Remove DEBUGGING when done.
+	             */
 	            String hashedInputPassword = PasswordHasher.hashPassword(password);
-	            System.out.println("Input password: " + password);
-	            System.out.println("Hashed Input Password during Login: " + hashedInputPassword);
-	            System.out.println("Stored Hashed Password: " + storedHashedPassword);
+	            System.out.println("Input password: " + password); //DEBUGGING
+	            System.out.println("Hashed Input Password during Login: " + hashedInputPassword);//DEBUGGING
+	            System.out.println("Stored Hashed Password: " + storedHashedPassword);//DEBUGGING
 
 	            if (hashedInputPassword.equals(storedHashedPassword)) {
 	                String firstName = resultSet.getString("first_name");
@@ -148,62 +169,44 @@ public class UserAuthenticator {
 	                String userId = resultSet.getString("staff_id");
 
 	                user = new User(firstName, lastName, email, username, storedHashedPassword);
-	                JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
+	               JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
 
-	                // Load and display user profiles
-	                List<String> profiles = loadUserProfiles(userId);
-	                if (!profiles.isEmpty()) {
-	                    String selectedProfile = (String) JOptionPane.showInputDialog(
-	                            null, "Select a profile:", "Profile Selection",
-	                            JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
-	                    );
-	                    if (selectedProfile != null) {
-	                        JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
-	                    }
-	                } else {
-	                    JOptionPane.showMessageDialog(null, "No profiles found for this user.");
-	                }
-	            } else {
-	                JOptionPane.showMessageDialog(null, "Invalid username or password.");
-	            }
-	        } else {
-	            JOptionPane.showMessageDialog(null, "Invalid username or password.");
-	        }
-	    } catch (SQLException e) {
-	        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-	    return user;
-	}
+	                /**
+	                 * Load and display user profiles (this should be implemented in the GUI after an existing user has logged in)
+	                 * @param userId is the staff_id from the database table Staff
+	                 * 
+	                 */
+                    ProfileManager profileManager = new ProfileManager(Integer.parseInt(userId));
 
-
-
-    /**
-     * Loads the profiles associated with a given user from a local file.
-     * Each profile is identified by the user's ID and stored in a text file.
-     *
-     * @param userId The unique ID of the user.
-     * @return A list of profile names associated with the user.
-     *         Displays an error message via the GUI if file reading fails.
-     */
-    public static List<String> loadUserProfiles(String userId) {
-        List<String> profiles = new ArrayList<>();
-        String filePath = "profiles.dat"; // Path to the file storing user profiles
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 3 && parts[2].trim().equals(userId)) {
-                    profiles.add(parts[0].trim()); // Add the profile name to the list
+                    // Load and display user profiles using ProfileManager
+                    List<String> profiles = profileManager.getProfiles().stream()
+                                                    .map(UserProfile::getProfileName)
+                                                    .toList();
+                    // if profiles are not empty, select a profile.
+                    if (!profiles.isEmpty()) {
+                        String selectedProfile = (String) JOptionPane.showInputDialog(
+                                null, "Select a profile:", "Profile Selection",
+                                JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
+                        );
+                        if (selectedProfile != null) {
+                            JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No profiles found for this user.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username or password.");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid username or password.");
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error reading profiles: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace();
         }
-        
-        return profiles;
+        return user;
     }
+
     /**
      * Validates the format of a given password.
      * The password must be at least 8 characters long and contain at least one uppercase letter and one digit.
