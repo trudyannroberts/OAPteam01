@@ -54,6 +54,7 @@ public class FilmManager {
                         "Do you want to watch " + filmTittel + "?",
                         "Confirm",
                         JOptionPane.YES_NO_OPTION
+                        // TODO sett inn at movie player åpnes her. 
                     );
 
                     if (valg == JOptionPane.YES_OPTION) {
