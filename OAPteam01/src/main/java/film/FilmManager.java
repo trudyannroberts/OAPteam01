@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import db.DatabaseConnection;
 import gui.BrowseMoviesPage;
+import gui.MoviePlayerUI;
 
 // TODO Connect the listeners to GUI
 
@@ -54,11 +55,13 @@ public class FilmManager {
                         "Do you want to watch " + filmTittel + "?",
                         "Confirm",
                         JOptionPane.YES_NO_OPTION
-                        // TODO sett inn at movie player åpnes her. 
+               
                     );
 
                     if (valg == JOptionPane.YES_OPTION) {
-                        JOptionPane.showMessageDialog(null, filmTittel + " is playing!");
+                       // JOptionPane.showMessageDialog(null, filmTittel + " is playing!");
+                        MoviePlayerUI playerUI = new MoviePlayerUI();
+                        playerUI.setVisible(true);
                     }
                 }
             }

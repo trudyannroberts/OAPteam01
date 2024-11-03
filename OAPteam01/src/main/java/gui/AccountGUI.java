@@ -8,7 +8,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-/*
+/**
  * @author Stian Sahlsten Rosvald
  */
 
