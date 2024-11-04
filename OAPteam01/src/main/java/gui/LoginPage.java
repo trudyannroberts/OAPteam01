@@ -26,21 +26,21 @@ public class LoginPage {
 
         // Main Panel with AliceBlue Background
         JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
+        mainPanel.setBackground(new Color(255, 255, 255)); //  background
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around main panel
         mainPanel.setLayout(new GridLayout(5, 1, 10, 10)); // Spacing between elements
 
         // Title Label
         JLabel titleLabel = new JLabel("Login to Streaming Service", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setForeground(new Color(0x4682B4)); // SteelBlue text
+        titleLabel.setForeground(new Color(0x4682B4)); //  text
         mainPanel.add(titleLabel);
 
         // Username field
         JPanel usernamePanel = new JPanel();
-        usernamePanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
+        usernamePanel.setBackground(new Color(255, 255, 255)); //  background
         JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setForeground(new Color(0x4682B4)); // SteelBlue color for labels
+        usernameLabel.setForeground(new Color(0x4682B4)); //  color for labels
         usernameField = new JTextField(20);
         usernamePanel.add(usernameLabel);
         usernamePanel.add(usernameField);
@@ -48,9 +48,9 @@ public class LoginPage {
 
         // Password field
         JPanel passwordPanel = new JPanel();
-        passwordPanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
+        passwordPanel.setBackground(new Color(255, 255, 255)); //  background
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setForeground(new Color(0x4682B4)); // SteelBlue color for labels
+        passwordLabel.setForeground(new Color(0x4682B4)); // color for labels
         passwordField = new JPasswordField(20);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
@@ -58,17 +58,17 @@ public class LoginPage {
 
         // Buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
+        buttonPanel.setBackground(new Color(255, 255, 255)); 
         JButton loginButton = new JButton("Login");
         JButton registerButton = new JButton("Register");
 
         // Style buttons with background similar to AliceBlue and SteelBlue text
-        loginButton.setBackground(new Color(0xE0F2FF)); // Light blue background for buttons
-        loginButton.setForeground(new Color(0x4682B4)); // SteelBlue text
+        loginButton.setBackground(new Color(0x4682B4)); 
+        loginButton.setForeground(new Color(255, 255, 255)); 
         loginButton.setFocusPainted(false);
 
-        registerButton.setBackground(new Color(0xE0F2FF)); // Light blue background for buttons
-        registerButton.setForeground(new Color(0x4682B4)); // SteelBlue text
+        registerButton.setBackground(new Color(0x4682B4)); 
+        registerButton.setForeground(new Color(255, 255, 255)); 
         registerButton.setFocusPainted(false);
 
         buttonPanel.add(loginButton);
