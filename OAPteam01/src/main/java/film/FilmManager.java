@@ -16,30 +16,21 @@ import javax.swing.JOptionPane;
 
 import db.DatabaseConnection;
 import gui.BrowseMoviesPage;
-import gui.MoviePlayerUI;
 
-// TODO Connect the listeners to GUI
 
 /**
  * This class is responsible for executing SQL statements related to films 
- * in the db, such as retrieving films by title, genre, or release year.
- * It uses the DAO (Data Access Object) pattern to interact with the db.
- * It also initializes action listeners for the film search functionalities and to watch films.
+ * in the database, such as retrieving films by title, genre, or release year.
+ * It uses the DAO (Data Access Object) pattern to interact with the database.
  * 
  * @author Erica Laub Varpe
  */
 public class FilmManager {
-	
-    /**
-     * Constructs a FilmManager and initializes action listeners for search buttons.
-     */
-    
-	
     
     /**
-     * Retrieves all the films from the db.
+     * Retrieves all the films from the database.
      *
-     * @return a list of all films found in the db
+     * @return a list of all films found in the database
      */
 	public List<Film> getAllFilms(){
 		final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category "
@@ -73,7 +64,7 @@ public class FilmManager {
      * Searches for films based on a partial title. The user can input a part of the film's title,
      * and the method will return all matching films that contain the search term.
      *
-     * @param partialTitle a substring of the title to search for
+     * @param partialTitle is a substring of the title to search for
      * @return a list of films whose titles contain the specified search term
      */
 	public List<Film> getFilmByTitle(String partialTitle) {
@@ -146,7 +137,7 @@ public class FilmManager {
 	}
 	
     /**
-     * Retrieves films from the db that were released in the specified year.
+     * Retrieves films from the database that were released in the specified year.
      *
      * @param releaseYear the year to filter films by
      * @return a list of films released in the specified year
@@ -232,7 +223,7 @@ public class FilmManager {
 }
 
 	/**
-	 * Updates the film table with all films from the db.
+	 * Updates the film table with all films from the database.
 	 */
 	private void updateFilmTableAll() {
 		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
