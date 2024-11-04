@@ -59,14 +59,15 @@ public class ProfileManager implements Serializable {
      */
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
-            profiles.add(profile); // Adds the profile to the list
-            saveProfilesToFile(); // Persist the updated list to file
+            profiles.add(profile);
+            saveProfilesToFile();  // Immediately save after adding
             return true;
         } else {
-            JOptionPane.showMessageDialog(null, "Maximum number of profiles reached."); // Alert user if limit is reached
+            JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
             return false;
         }
     }
+
 
     /**
      * Saves the current list of profiles to the user's profile file using serialization.
@@ -75,28 +76,23 @@ public class ProfileManager implements Serializable {
     public void saveProfilesToFile() {
         try (FileOutputStream fout = new FileOutputStream(getFileName());
              ObjectOutputStream out = new ObjectOutputStream(fout)) {
-            out.writeObject(profiles); // Serializes the profiles list and saves it to the file
-            out.flush(); // Ensures data is written to the file
+            out.writeObject(profiles);
+            out.flush();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error saving profiles: " + e.getMessage()); // Displays error to user
-            e.printStackTrace(); // Prints the stack trace for debugging purposes
+            JOptionPane.showMessageDialog(null, "Error saving profiles: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Loads the list of profiles from the user's profile file using deserialization.
-     * If the file does not exist, a new empty list is created. 
-     * If an error occurs while loading, an error message is displayed.
-     */
     @SuppressWarnings("unchecked")
     public void loadProfilesFromFile() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getFileName()))) {
-            profiles = (List<UserProfile>) in.readObject(); // Deserializes the profiles list from file
+            profiles = (List<UserProfile>) in.readObject();
         } catch (FileNotFoundException e) {
-            System.out.println("Profile file not found for user ID " + userId + ", starting fresh."); // No profiles yet for this user
+            System.out.println("Profile file not found for user ID " + userId + ", starting fresh.");
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage()); // Displays error to user
-            e.printStackTrace(); // Prints the stack trace for debugging purposes
+            JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
