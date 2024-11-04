@@ -127,7 +127,7 @@ public class UserAuthenticator {
 	                profileManager.addProfile(defaultProfile);  // Save profile immediately
 	            }
 
-	            JOptionPane.showMessageDialog(null, "Registration successful! You can now log in.");
+	            //JOptionPane.showMessageDialog(null, "Registration successful! You can now log in.");
 	            return true;
 	        } else {
 	            JOptionPane.showMessageDialog(null, "Registration failed. Please try again.");
@@ -189,7 +189,7 @@ public class UserAuthenticator {
 	                String userId = resultSet.getString("staff_id");
 
 	                user = new User(firstName, lastName, email, username, storedHashedPassword);
-	               JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
+	               //JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
 
 	                /**
 	                 * Load and display user profiles (this should be implemented in the GUI after an existing user has logged in)
