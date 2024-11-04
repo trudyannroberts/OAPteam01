@@ -12,46 +12,75 @@ public class LoginPage {
     private Runnable onLoginSuccess;
 
     public LoginPage(Runnable onLoginSuccess) {
-    	this.onLoginSuccess = onLoginSuccess;
+        this.onLoginSuccess = onLoginSuccess;
         initialize();
     }
 
     private void initialize() {
+        // Frame setup
         frame = new JFrame("Media Streaming Service");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
-        frame.setLayout(new GridLayout(5, 1));
-        frame.setLocationRelativeTo(null); //to make sure the window is in the middle!
-        frame.setVisible(true);
+        frame.setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null); // to make sure the window is in the middle!
+
+        // Main Panel with AliceBlue Background
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around main panel
+        mainPanel.setLayout(new GridLayout(5, 1, 10, 10)); // Spacing between elements
+
+        // Title Label
+        JLabel titleLabel = new JLabel("Login to Streaming Service", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(0x4682B4)); // SteelBlue text
+        mainPanel.add(titleLabel);
 
         // Username field
         JPanel usernamePanel = new JPanel();
+        usernamePanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
         JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setForeground(new Color(0x4682B4)); // SteelBlue color for labels
         usernameField = new JTextField(20);
         usernamePanel.add(usernameLabel);
         usernamePanel.add(usernameField);
-        frame.add(usernamePanel);
+        mainPanel.add(usernamePanel);
 
         // Password field
         JPanel passwordPanel = new JPanel();
+        passwordPanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
         JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(new Color(0x4682B4)); // SteelBlue color for labels
         passwordField = new JPasswordField(20);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
-        frame.add(passwordPanel);
+        mainPanel.add(passwordPanel);
 
         // Buttons
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(0xF0F8FF)); // AliceBlue background
         JButton loginButton = new JButton("Login");
         JButton registerButton = new JButton("Register");
+
+        // Style buttons with background similar to AliceBlue and SteelBlue text
+        loginButton.setBackground(new Color(0xE0F2FF)); // Light blue background for buttons
+        loginButton.setForeground(new Color(0x4682B4)); // SteelBlue text
+        loginButton.setFocusPainted(false);
+
+        registerButton.setBackground(new Color(0xE0F2FF)); // Light blue background for buttons
+        registerButton.setForeground(new Color(0x4682B4)); // SteelBlue text
+        registerButton.setFocusPainted(false);
+
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
-        frame.add(buttonPanel);
+        mainPanel.add(buttonPanel);
 
         // Button actions
         loginButton.addActionListener(e -> logIn());
         registerButton.addActionListener(e -> registerUser());
 
+        // Add the main panel to the frame
+        frame.add(mainPanel, BorderLayout.CENTER);
         frame.setVisible(true);
     }
     
@@ -98,5 +127,4 @@ public class LoginPage {
             JOptionPane.showMessageDialog(frame, "Registration cancelled.");
         }
     }
-    
 }
