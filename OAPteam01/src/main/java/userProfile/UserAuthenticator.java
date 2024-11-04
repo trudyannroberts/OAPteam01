@@ -85,8 +85,6 @@ public class UserAuthenticator {
 	    
 	    /**
 	     * Using the hashPassword() method from the PasswordHasher class to hash the password.
-	     *TODO: Remove DEBUGGING when done.
-	     *@param rawPassword is the palin-text password the user enteres.
 	     *@param hashedPassword is the user's password after it's been hashed.
 	     */
 
@@ -192,7 +190,7 @@ public class UserAuthenticator {
 	               //JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
 
 	                /**
-	                 * Load and display user profiles (this should be implemented in the GUI after an existing user has logged in)
+	                 * Load and display user profiles
 	                 * @param userId is the staff_id from the database table Staff
 	                 * 
 	                 */

@@ -20,7 +20,7 @@ import java.util.Optional;
  * 
  * @author Trudy Ann Roberts
  */
-public class ProfileManager implements Serializable {
+public class ProfileManager implements ProfileHandler {
    
     private static final int MAX_PROFILES = 5; // The maximum number of profiles a user can create
     private List<UserProfile> profiles = new ArrayList<>(); // Stores the user profiles in memory
@@ -46,7 +46,7 @@ public class ProfileManager implements Serializable {
      * @return The file name for storing the user's profiles.
      */
     private String getFileName() {
-        return "profiles_" + userId + ".dat"; // Returns a unique file name based on user ID
+        return "profiles_" + userId + ".dat"; 
     }
 
     /**
@@ -60,7 +60,7 @@ public class ProfileManager implements Serializable {
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
-            saveProfilesToFile();  // Immediately save after adding
+            saveProfilesToFile(); 
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
@@ -125,16 +125,6 @@ public class ProfileManager implements Serializable {
      *
      * @param oldProfileName The current name of the profile to be edited.
      * @param newProfileName The new name to assign to the profile.
-     * @param newProfileType The new type to assign to the profile.
-     * @return true if the profile was successfully edited, false if not found.
-     */
-    /**
-     * Edits an existing profile by updating its name and type. 
-     * If the profile is found, the method updates its attributes 
-     * and saves the updated list to file.
-     *
-     * @param oldProfileName The current name of the profile to be edited.
-     * @param newProfileName The new name to assign to the profile.
      * @param newProfileType The new type to assign to the profile (either "ADULT" or "CHILD").
      * @return true if the profile was successfully edited, false if not found.
      */
@@ -161,8 +151,6 @@ public class ProfileManager implements Serializable {
             return false;
         }
     }
-
-
     /**
      * Displays a dialog to the user to select a profile from the available profiles.
      * If no profiles are available, a message is displayed to the user.
