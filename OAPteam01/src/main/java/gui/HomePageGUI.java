@@ -5,105 +5,54 @@ import java.awt.*;
 
 /**
  * The HomePageGUI class represents the main window of the streaming service.
- * It includes a navigation bar with buttons for Home, Browse, Account... ,
- * and a content panel that displays different pages based on user interaction.
+ * It extends BaseGUI and adds specific functionality for the home page.
  * 
  * Author: Stine Andreassen Skrøder
  */
-public class HomePageGUI extends JFrame {
-	
-    protected JPanel contentPanel;
+public class HomePageGUI extends BaseGUI {
+
+    private static final Color NAV_BAR_COLOR = new Color(70, 130, 180); // Same color as navigation bar
 
     /**
-     * Constructs a new HomePageGUI object, setting up the window properties, 
-     * navigation bar, and default content.
+     * Constructs a new HomePageGUI object, setting up the window properties
+     * and displaying the default content.
      */
     public HomePageGUI() {
-        setTitle("Streaming Service Home");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 700);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
-
-     // Create and add the navigation panel
-        JPanel navPanel = createNavPanel();
-        add(navPanel, BorderLayout.NORTH);
-
-     // Initialize and configure the content panel
-        contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBackground(new Color(240, 248, 255));
-        add(contentPanel, BorderLayout.CENTER);
-
-     // Display the default home page initially
-        showDefaultPage();
+        super("Streaming Service Home");
+        initializeHomePageContent();
         setVisible(true);
-        
     }
 
-    /**
-     * Creates the navigation panel, which contains buttons for different pages
-     * such as Home, Browse, Account...
-     * 
-     * @return the constructed JPanel object for the navigation bar.
-     */
-    protected JPanel createNavPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        panel.setBackground(new Color(70, 130, 180)); 
+    private void initializeHomePageContent() {
+        JPanel homePanel = new JPanel(new BorderLayout());
+        homePanel.setBackground(new Color(240, 248, 255)); // Set background color
 
-        // Create buttons for the navigation panel
-        JButton homeButton = new JButton("Home");
-        JButton browseButton = new JButton("Browse");
-        JButton accountButton = new JButton("Account");
+        // Create a welcome label
+        JLabel welcomeLabel = new JLabel("Welcome to the streaming service");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        welcomeLabel.setForeground(NAV_BAR_COLOR); // Set text color to match navigation bar
+        welcomeLabel.setHorizontalAlignment(JLabel.CENTER); // Center the text horizontally
 
-        // Style the buttons
-        homeButton.setBackground(Color.WHITE);
-        homeButton.setForeground(new Color(70, 130, 180));
-        browseButton.setBackground(Color.WHITE);
-        browseButton.setForeground(new Color(70, 130, 180));
-        accountButton.setBackground(Color.WHITE);
-        accountButton.setForeground(new Color(70, 130, 180));
+        // Add some padding around the label
+        JPanel paddingPanel = new JPanel(new BorderLayout());
+        paddingPanel.setOpaque(false); // Make it transparent
+        paddingPanel.add(welcomeLabel, BorderLayout.CENTER);
 
-        // Add action listeners to handle button clicks
-        homeButton.addActionListener(e -> showDefaultPage());
-        browseButton.addActionListener(e -> showBrowsePage());
-        //accountButton.addActionListener(e -> showAccountGUI());
+        // Use a panel with GridBagLayout to center the paddingPanel
+        JPanel centeringPanel = new JPanel(new GridBagLayout());
+        centeringPanel.setOpaque(false); // Make it transparent
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        centeringPanel.add(paddingPanel, gbc);
 
-        // Add buttons to the navigation panel
-        panel.add(homeButton);
-        panel.add(browseButton);
-        panel.add(accountButton);
+        homePanel.add(centeringPanel, BorderLayout.CENTER);
 
-        return panel;
+        updateContentPanel(homePanel);
     }
 
-    /**
-     * Displays the default home page in the content panel. The default page contains
-     * a welcome message.
-     */
-    protected void showDefaultPage() {
-        contentPanel.removeAll();
-        JLabel label = new JLabel("Welcome to the Streaming Service", SwingConstants.CENTER);
-        label.setForeground(new Color(70, 130, 180));
-        contentPanel.add(label, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    /**
-     * Displays the browse movies page in the content panel.
-     */
-    protected void showBrowsePage() {
-        new BrowseMoviesPage(this);
-    }
-    
-
-    /**
-     * Displays the account management page in the content panel.
-     */
-   // protected void showAccountPage() {
-   //     new AccountGUI(this);
-  //  }
-
+   
 }
