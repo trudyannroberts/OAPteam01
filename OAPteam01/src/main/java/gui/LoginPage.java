@@ -62,13 +62,13 @@ public class LoginPage {
         JButton loginButton = new JButton("Login");
         JButton registerButton = new JButton("Register");
 
-        // Style buttons with background similar to AliceBlue and SteelBlue text
-        loginButton.setBackground(new Color(0x4682B4)); 
-        loginButton.setForeground(new Color(255, 255, 255)); 
+        // Style buttons with background similar to Steelblue and SteelBlue text
+        loginButton.setBackground(new Color(255, 255, 255)); 
+        loginButton.setForeground(new Color(0x4682B4)); 
         loginButton.setFocusPainted(false);
 
-        registerButton.setBackground(new Color(0x4682B4)); 
-        registerButton.setForeground(new Color(255, 255, 255)); 
+        registerButton.setBackground(new Color(255, 255, 255)); 
+        registerButton.setForeground(new Color(0x4682B4)); 
         registerButton.setFocusPainted(false);
 
         buttonPanel.add(loginButton);
