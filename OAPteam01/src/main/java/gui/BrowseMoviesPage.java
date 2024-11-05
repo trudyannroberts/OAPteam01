@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import film.Film;
@@ -13,13 +15,18 @@ public class BrowseMoviesPage extends BaseGUI {
     private JTextField searchBar;
     private JButton searchButton;
     private JButton showAllButton;
-    public JTable movieTable;
+    public static DefaultTableModel movieTable; // Changed to static DefaultTableModel
     private JComboBox<String> searchTypeComboBox;
+    private FilmHandler filmHandler;
 
     public BrowseMoviesPage() {
         super("Browse Movies");
-        initializeBrowseMoviesPanel(); // Initialize UI components
-        showAllMovies(); // Load all movies initially
+        filmHandler = new FilmManager();
+        initializeBrowseMoviesPanel();
+        initializeListeners();
+        
+        filmHandler.updateFilmTableAll();
+        
         setVisible(true);
     }
 
@@ -39,78 +46,76 @@ public class BrowseMoviesPage extends BaseGUI {
         JPanel searchPanel = new JPanel();
         searchPanel.add(new JLabel("Search:"));
         searchPanel.add(searchBar);
-        searchPanel.add(searchTypeComboBox); // Add combo box here
+        searchPanel.add(searchTypeComboBox);
         searchPanel.add(searchButton);
         searchPanel.add(showAllButton);
 
-        // Add action listeners after initialization
-        searchButton.addActionListener(e -> performSearch());
-        showAllButton.addActionListener(e -> showAllMovies());
-
         browsePanel.add(searchPanel, BorderLayout.NORTH);
         
-        String[] columnNames = {"Title","Description", "Release Year", "Genre"};
-        movieTable = new JTable(new DefaultTableModel(columnNames, 0));
+        String[] columnNames = {"Title", "Description", "Release Year", "Genre"};
+        movieTable = new DefaultTableModel(columnNames, 0);
+        JTable table = new JTable(movieTable);
         
-        browsePanel.add(new JScrollPane(movieTable), BorderLayout.CENTER);
+        browsePanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
-         /**
-         * Opens movie player when you click on film title
-         *
-         * @author Erica Laub Varpe 
-         */
-         movieTable.addMouseListener(new MouseAdapter() {
-             @Override
-             public void mouseClicked(MouseEvent e) {
-                 int row = movieTable.getSelectedRow();
-                 if (row != -1) {
-                     String filmTitle = movieTable.getValueAt(row, 0).toString();
-                     int choice = JOptionPane.showConfirmDialog(
-                         null,
-                         "Do you want to watch " + filmTitle + "?",
-                         "Confirm",
-                         JOptionPane.YES_NO_OPTION
-                     );
-                     if (choice == JOptionPane.YES_OPTION) {
-                         MoviePlayerUI moviePlayer = new MoviePlayerUI(filmTitle);
-                         moviePlayer.setVisible(true);
-                     }
-                 }
-             }
-         });
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.getSelectedRow();
+                if (row != -1) {
+                    String filmTitle = table.getValueAt(row, 0).toString();
+                    int choice = JOptionPane.showConfirmDialog(
+                        null,
+                        "Do you want to watch " + filmTitle + "?",
+                        "Confirm",
+                        JOptionPane.YES_NO_OPTION
+                    );
+                    if (choice == JOptionPane.YES_OPTION) {
+                        MoviePlayerUI moviePlayer = new MoviePlayerUI(filmTitle);
+                        moviePlayer.setVisible(true);
+                    }
+                }
+            }
+        });
         
-         updateContentPanel(browsePanel); // Update content panel with browse panel
+        updateContentPanel(browsePanel);
     }
+        
+    private void initializeListeners() {
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchBar.getText();
+                String searchType = (String) searchTypeComboBox.getSelectedItem();
+                
+                if (!searchText.isEmpty()) {
+                    switch (searchType) {
+                        case "Title":
+                            filmHandler.updateFilmTableTitle(searchText);
+                            break;
+                        case "Genre":
+                            filmHandler.updateFilmTableGenre(searchText);
+                            break;
+                        case "Year":
+                            try {
+                                int year = Integer.parseInt(searchText);
+                                filmHandler.updateFilmTableYear(year);
+                            } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(null, "Invalid year format", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Search text can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
-    private void performSearch() {
-         String searchText = searchBar.getText().trim();
-         String searchType = (String) searchTypeComboBox.getSelectedItem();
-
-         if (!searchText.isEmpty()) {
-             switch (searchType) {
-                 case "Title":
-                     FilmHandler.updateFilmTableTitle(movieTable, searchText);
-                     break;
-                 case "Genre":
-                	 FilmHandler.updateFilmTableGenre(movieTable, searchText);
-                     break;
-                 case "Year":
-                     try {
-                         int year = Integer.parseInt(searchText);
-                         FilmHandler.updateFilmTableYear(movieTable, year);
-                     } catch (NumberFormatException e) {
-                         JOptionPane.showMessageDialog(this, "Please enter a valid year.", "Invalid Year", JOptionPane.ERROR_MESSAGE);
-                     }
-                     break;
-                 default:
-                     break;
-             }
-         } else {
-             JOptionPane.showMessageDialog(this, "Please enter a search term.", "Search Error", JOptionPane.ERROR_MESSAGE);
-         }
-    }
-
-    private void showAllMovies() {
-    	FilmHandler.updateFilmTableAll(movieTable); // Fetch and display all films
+        showAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filmHandler.updateFilmTableAll();
+            }
+        });
     }
 }
