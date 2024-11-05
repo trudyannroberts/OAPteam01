@@ -6,19 +6,18 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import film.Film;
+import film.FilmHandler;
 import film.FilmManager;
 
 public class BrowseMoviesPage extends BaseGUI {
     private JTextField searchBar;
     private JButton searchButton;
     private JButton showAllButton;
-    private JTable movieTable;
-    private FilmManager filmManager;
+    public JTable movieTable;
     private JComboBox<String> searchTypeComboBox;
 
     public BrowseMoviesPage() {
         super("Browse Movies");
-        filmManager = new FilmManager(); // Initialize FilmManager
         initializeBrowseMoviesPanel(); // Initialize UI components
         showAllMovies(); // Load all movies initially
         setVisible(true);
@@ -90,15 +89,15 @@ public class BrowseMoviesPage extends BaseGUI {
          if (!searchText.isEmpty()) {
              switch (searchType) {
                  case "Title":
-                     filmManager.updateFilmTableTitle(movieTable, searchText);
+                     FilmHandler.updateFilmTableTitle(movieTable, searchText);
                      break;
                  case "Genre":
-                     filmManager.updateFilmTableGenre(movieTable, searchText);
+                	 FilmHandler.updateFilmTableGenre(movieTable, searchText);
                      break;
                  case "Year":
                      try {
                          int year = Integer.parseInt(searchText);
-                         filmManager.updateFilmTableYear(movieTable, year);
+                         FilmHandler.updateFilmTableYear(movieTable, year);
                      } catch (NumberFormatException e) {
                          JOptionPane.showMessageDialog(this, "Please enter a valid year.", "Invalid Year", JOptionPane.ERROR_MESSAGE);
                      }
@@ -112,6 +111,6 @@ public class BrowseMoviesPage extends BaseGUI {
     }
 
     private void showAllMovies() {
-         filmManager.updateFilmTableAll(movieTable); // Fetch and display all films
+    	FilmHandler.updateFilmTableAll(movieTable); // Fetch and display all films
     }
 }
