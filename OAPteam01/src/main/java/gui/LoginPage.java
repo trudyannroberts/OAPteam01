@@ -74,7 +74,10 @@ public class LoginPage {
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
         mainPanel.add(buttonPanel);
-
+        
+        // Set loginButton as default when Enter is pressed
+        frame.getRootPane().setDefaultButton(loginButton);
+        
         // Button actions
         loginButton.addActionListener(e -> logIn());
         registerButton.addActionListener(e -> registerUser());
