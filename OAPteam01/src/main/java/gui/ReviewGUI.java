@@ -88,7 +88,7 @@ public class ReviewGUI extends BaseGUI {
                     
                     Review review = new Review(rating, filmTitle);
                     review.displayReview();
-                    showBrowsePage(); // Navigate back to browse page after submission
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(ReviewGUI.this, "Please select a rating before submitting.", "No Rating Selected", JOptionPane.WARNING_MESSAGE);
                 }
