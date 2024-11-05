@@ -3,6 +3,9 @@ package gui;
 import userProfile.User;
 import userProfile.UserAuthenticator;
 import javax.swing.*;
+
+import userProfile.Session;
+
 import java.awt.*;
 
 public class LoginPage {
@@ -95,6 +98,7 @@ public class LoginPage {
         User loggedInUser = UserAuthenticator.logInUser(username, password);
 
         if (loggedInUser != null) {
+        	 Session.setCurrentUser(loggedInUser); // Set the current user
             JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
             frame.dispose(); // Close the login window
             onLoginSuccess.run();
