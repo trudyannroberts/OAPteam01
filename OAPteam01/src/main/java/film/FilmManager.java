@@ -25,13 +25,10 @@ import gui.BrowseMoviesPage;
  * 
  * @author Erica Laub Varpe
  */
-public class FilmManager {
+public class FilmManager implements FilmHandler {
     
-    /**
-     * Retrieves all the films from the database.
-     *
-     * @return a list of all films found in the database
-     */
+
+	@Override
 	public List<Film> getAllFilms(){
 		final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category "
 				+ "FROM film f "
@@ -60,13 +57,8 @@ public class FilmManager {
         return films;   
 		}
 	
-    /**
-     * Searches for films based on a partial title. The user can input a part of the film's title,
-     * and the method will return all matching films that contain the search term.
-     *
-     * @param partialTitle is a substring of the title to search for
-     * @return a list of films whose titles contain the specified search term
-     */
+
+	@Override
 	public List<Film> getFilmByTitle(String partialTitle) {
 	    final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category " +
 	             "FROM film f " +
@@ -98,12 +90,7 @@ public class FilmManager {
 	    return films;
 	}
 	
-    /**
-     * Retrieves films based on a specific genre provided by the user.
-     *
-     * @param genre the genre to filter films by
-     * @return a list of films belonging to the specified genre
-     */
+	@Override
 	public List<Film> getFilmByGenre(String genre){
 		
 		final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category " +
@@ -136,12 +123,7 @@ public class FilmManager {
 		return films;
 	}
 	
-    /**
-     * Retrieves films from the database that were released in the specified year.
-     *
-     * @param releaseYear the year to filter films by
-     * @return a list of films released in the specified year
-     */
+	@Override
 	public List<Film> getFilmByReleaseYear(int releaseYear){
 		
 		final String sql = "SELECT f.film_id, f.title, f.description, f.release_year, c.name AS category " +
@@ -174,12 +156,8 @@ public class FilmManager {
 	return films;
 	}
 
-	/**
-	 * Updates the film table with films that match the specified title.
-	 * 
-	 * @param title the title to search for
-	 */
-	private void updateFilmTableTitle(String title) {
+	@Override
+	public void updateFilmTableTitle(String title) {
 		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 		List<Film> films = getFilmByTitle(title); // Get films based on title
 		for (Film film : films) {
@@ -190,12 +168,8 @@ public class FilmManager {
     }
 }
 
-	/**
-	 * Updates the film table with films that match the specified genre.
-	 * 
-	 * @param genre the genre to search for
-	 */
-	private void updateFilmTableGenre(String genre) {
+	@Override
+	public void updateFilmTableGenre(String genre) {
 		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 		List<Film> films = getFilmByGenre(genre); // Get films based on genre
 		for (Film film : films) {
@@ -206,12 +180,9 @@ public class FilmManager {
     }
 }
 
-	/**
-	 * Updates the film table with films that were released in the specified year.
-	 * 
-	 * @param year the release year to search for
-	 */
-	private void updateFilmTableYear(int year) {
+
+	@Override
+	public void updateFilmTableYear(int year) {
 		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 		List<Film> films = getFilmByReleaseYear(year); // Get films based on release year
 		for (Film film : films) {
@@ -222,10 +193,9 @@ public class FilmManager {
     }
 }
 
-	/**
-	 * Updates the film table with all films from the database.
-	 */
-	private void updateFilmTableAll() {
+
+	@Override
+	public void updateFilmTableAll() {
 		BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
 	    List<Film> films = getAllFilms(); // Get all films
 	    for (Film film : films) {
