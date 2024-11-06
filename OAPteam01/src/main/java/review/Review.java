@@ -11,7 +11,7 @@ public class Review {
 	/**
 	 * @param review is a constructor that allows a user to enter a rating when a film ends.
 	 * @return review returns the value
-	 * @raturn filmTitle returns the value
+	 * @return filmTitle returns the value
 	 */
 	public Review (int review, String filmTitle) {
 		this.review = review;
@@ -24,6 +24,6 @@ public class Review {
 		return filmTitle;
 	}	
 	public void displayReview() {
-		System.out.println("You've rated " + filmTitle + review + "/10");
+		System.out.println("You've rated " + filmTitle + review + " /10");
 	}
 }
