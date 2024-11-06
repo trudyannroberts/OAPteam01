@@ -8,11 +8,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import film.Film;
 import film.FilmHandler;
 import film.FilmManager;
 import review.ReviewManager;
 
+/**
+ * The BrowseMoviesPage class represents the GUI for browsing and searching movies.
+ * It extends BaseGUI and provides functionality for searching movies, displaying movie information,
+ * and showing reviews.
+ * 
+ * @author Stine Andreassen Skrøder
+ */
 public class BrowseMoviesPage extends BaseGUI {
     private JTextField searchBar;
     private JButton searchButton;
@@ -23,6 +29,9 @@ public class BrowseMoviesPage extends BaseGUI {
     private FilmHandler filmHandler;
 	private ReviewManager reviewManager;
 
+	/**
+     * Constructs a new BrowseMoviesPage, initializing the UI components and setting up event listeners.
+     */
     public BrowseMoviesPage() {
         super("Browse Movies");
         filmHandler = new FilmManager();
@@ -34,7 +43,10 @@ public class BrowseMoviesPage extends BaseGUI {
         
         setVisible(true);
     }
-
+    
+    /**
+     * Initializes the main panel for browsing movies, including search bar, buttons, and movie table.
+     */
     private void initializeBrowseMoviesPanel() {
         JPanel browsePanel = new JPanel(new BorderLayout());
 
@@ -87,7 +99,10 @@ public class BrowseMoviesPage extends BaseGUI {
         
         updateContentPanel(browsePanel);
     }
-        
+    
+    /**
+     * Sets up event listeners for the search button, show all button, and show all reviews button.
+     */    
     private void initializeListeners() {
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -132,7 +147,11 @@ public class BrowseMoviesPage extends BaseGUI {
             }
         });
     }
-
+    /**
+     * Loads and displays all reviews in a separate dialog.
+     * If no reviews are available, displays an information message.
+     * If an error occurs while loading reviews, displays an error message.
+     */
     private void loadAllReviews() {
         try {
             List<String> reviews = reviewManager.loadAllReviews();

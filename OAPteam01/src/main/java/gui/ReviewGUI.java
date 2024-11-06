@@ -10,16 +10,23 @@ import review.ReviewManager;
 import java.io.IOException;
 
 /**
- * The ReviewGUI allows users to rate a movie after watching it.
- * It extends BaseGUI to include common GUI elements.
+ * The ReviewGUI class represents a graphical user interface for rating movies.
+ * It extends BaseGUI to include common GUI elements and provides functionality
+ * for users to submit ratings for films they have watched.
  * 
  * @author Stine Andreassen Skrøder
  */
 public class ReviewGUI extends BaseGUI {
+	
     private JButton submitButton;
     private String filmTitle;
     private ReviewHandler reviewHandler;
 
+    /**
+     * Constructs a new ReviewGUI for a specific film.
+     * 
+     * @param filmTitle The title of the film to be rated
+     */
     public ReviewGUI(String filmTitle) {
         super("Rate the Movie");
         this.filmTitle = filmTitle;
@@ -33,12 +40,21 @@ public class ReviewGUI extends BaseGUI {
         
         setVisible(true);
     }
-
+    /**
+     * Overrides the createNavPanel method from BaseGUI.
+     * This GUI does not require a navigation panel.
+     * 
+     * @return An empty JPanel
+     */
     @Override
     protected JPanel createNavPanel() {
         return new JPanel(); // No navigation bar for this GUI
     }
-
+    /**
+     * Initializes the review panel with rating options and a submit button.
+     * This method sets up the layout, creates radio buttons for ratings,
+     * and adds a submit button with its action listener.
+     */
     private void initializeReviewPanel() {
         contentPanel.removeAll();
         

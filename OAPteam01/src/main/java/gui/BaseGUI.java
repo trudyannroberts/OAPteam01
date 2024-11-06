@@ -7,14 +7,17 @@ import java.awt.*;
  * The BaseGUI class represents the base structure for GUI pages in the streaming service.
  * It includes common elements like the window setup and navigation bar.
  * 
- * @Author Stine Andreassen Skrøder
+ * @author Stine Andreassen Skrøder
  */
 public class BaseGUI extends JFrame {
     
+	/** The panel that holds the main content of the GUI. */
     protected JPanel contentPanel;
 
     /**
      * Constructs a new BaseGUI object, setting up the window properties and navigation bar.
+     * 
+     * @param title The title of the window
      */
     public BaseGUI(String title) {
         setTitle(title);
@@ -39,7 +42,7 @@ public class BaseGUI extends JFrame {
     /**
      * Creates the navigation panel, which contains buttons for the different pages: Home, Browse and Account.
      * 
-     * @return the constructed JPanel object for the navigation bar.
+     * @return JPanel The constructed JPanel object for the navigation bar
      */
     protected JPanel createNavPanel() {
         JPanel panel = new JPanel();
@@ -64,33 +67,51 @@ public class BaseGUI extends JFrame {
 
         return panel;
     }
-
+    /**
+     * Applies a consistent style to a button in the navigation panel.
+     * 
+     * @param button The JButton to be styled
+     */
     protected void styleButton(JButton button) {
         button.setBackground(Color.WHITE);
         button.setForeground(new Color(70, 130, 180));
     }
-
+    /**
+     * Displays the Home page of the application.
+     * If the current page is not already the Home page, it creates a new HomePageGUI and disposes of the current window.
+     */
     protected void showHomePage() {
         if (!(this instanceof HomePageGUI)) {
             new HomePageGUI().setVisible(true);
             this.dispose();
         }
     }
-
+    /**
+     * Displays the Browse page of the application.
+     * If the current page is not already the Browse page, it creates a new BrowseMoviesPage and disposes of the current window.
+     */
     protected void showBrowsePage() {
         if (!(this instanceof BrowseMoviesPage)) {
             new BrowseMoviesPage().setVisible(true);
             this.dispose();
         }
     }
-
+    /**
+     * Displays the Account page of the application.
+     * If the current page is not already the Account page, it creates a new AccountGUI and disposes of the current window.
+     */
     protected void showAccountPage() {
     	if (!(this instanceof AccountGUI)) {
     			new AccountGUI().setVisible(true);
     			this.dispose();
  }
     }
-
+    /**
+     * Updates the content panel with new content.
+     * This method removes all components from the content panel, adds the new content, and refreshes the display.
+     * 
+     * @param newContent The new JPanel to be displayed in the content area
+     */
     protected void updateContentPanel(JPanel newContent) {
         contentPanel.removeAll();
         contentPanel.add(newContent, BorderLayout.CENTER);

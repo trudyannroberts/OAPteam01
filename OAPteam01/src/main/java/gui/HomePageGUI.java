@@ -7,10 +7,11 @@ import java.awt.*;
  * The HomePageGUI class represents the main window of the streaming service.
  * It extends BaseGUI and adds specific functionality for the home page.
  * 
- * Author: Stine Andreassen Skrøder
+ * @author Stine Andreassen Skrøder
  */
 public class HomePageGUI extends BaseGUI {
 
+	 /** The color used for the navigation bar and welcome text. */
     private static final Color NAV_BAR_COLOR = new Color(70, 130, 180); // Same color as navigation bar
 
     /**
@@ -22,7 +23,12 @@ public class HomePageGUI extends BaseGUI {
         initializeHomePageContent();
         setVisible(true);
     }
-
+    
+    /**
+     * Initializes the content for the home page.
+     * This method sets up the layout, creates a welcome message,
+     * and centers it on the page.
+     */
     private void initializeHomePageContent() {
         JPanel homePanel = new JPanel(new BorderLayout());
         homePanel.setBackground(new Color(240, 248, 255)); // Set background color
