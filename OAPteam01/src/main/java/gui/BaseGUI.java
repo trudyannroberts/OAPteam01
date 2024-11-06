@@ -85,12 +85,10 @@ public class BaseGUI extends JFrame {
     }
 
     protected void showAccountPage() {
-        // Implement account page navigation when ready
-        // For example:
-        // if (!(this instanceof AccountPage)) {
-        //     new AccountPage().setVisible(true);
-        //     this.dispose();
-        // }
+    	if (!(this instanceof AccountGUI)) {
+    			new AccountGUI().setVisible(true);
+    			this.dispose();
+ }
     }
 
     protected void updateContentPanel(JPanel newContent) {
