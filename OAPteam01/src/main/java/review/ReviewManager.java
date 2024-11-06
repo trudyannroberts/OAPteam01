@@ -1,6 +1,7 @@
 package review;
 
 import javax.swing.*;
+import film.FilmManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,37 +12,8 @@ import java.util.List;
  * @author Trudy Ann Roberts
  * This class creates a file to store the reviews and film title.
  */
-public class ReviewManager implements ReviewHandler{
-
+public class ReviewManager implements ReviewHandler {
     private static final String REVIEW_FILE = "film_reviews.txt";  // File to store reviews
-    
-    /**
-     * Prompts the user to review a film between 1 - 10.
-     * If the user enters a number smaller than 1 or larger than 10, a message will inform the user of the invalid input.
-     * If the review is valid, it will call the saveReviewToFile() method.
-     * 
-     * @param filmTitle The film the user has chosen. 
-     */
-    public void promptForReview(String filmTitle) {
-        String input = JOptionPane.showInputDialog(null, "Please rate the film '" + filmTitle + "' (1-10):");
-
-        if (input != null) { // Ensure the user didn't cancel the dialog
-            try {
-                int review = Integer.parseInt(input);
-
-                if (review < 1 || review > 10) {
-                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number between 1 and 10.");
-                    return;
-                }
-
-                saveReviewToFile(filmTitle, review);
-                JOptionPane.showMessageDialog(null, "Review saved!");
-
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
-            }
-        }
-    }
 
     /**
      * Saves the film review to a file.
