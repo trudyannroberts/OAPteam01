@@ -35,4 +35,10 @@ public interface ReviewHandler {
      * @return The updated line reflecting the new average score and review count.
      */
     String updateAverageReview(String filmLine, int newReview);
+    
+    /**
+     * Loads the reviews from the file.
+     * @return a list of all reviews
+     */
+    public List<String> loadAllReviews();
 }

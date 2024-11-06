@@ -18,9 +18,6 @@ public class ReviewManager implements ReviewHandler {
     /**
      * Saves the film review to a file.
      * If the film already has reviews, the new review will update the average score.
-     * 
-     * @param filmTitle The film title to save.
-     * @param newReview The review given by the user.
      */
     public void saveReviewToFile(String filmTitle, int newReview) {
         try {
@@ -53,10 +50,6 @@ public class ReviewManager implements ReviewHandler {
 
     /**
      * Finds the line in the file for the given film title.
-     * 
-     * @param lines The list of lines from the file.
-     * @param filmTitle The film title to search for.
-     * @return The line containing the film's review, or null if not found.
      */
     public String findFilmLine(List<String> lines, String filmTitle) {
         for (String line : lines) {
@@ -69,10 +62,6 @@ public class ReviewManager implements ReviewHandler {
 
     /**
      * Updates the average review for a film.
-     * 
-     * @param filmLine The line containing the film's current review information.
-     * @param newReview The new review to add.
-     * @return The updated review line.
      */
     public String updateAverageReview(String filmLine, int newReview) {
         try {
