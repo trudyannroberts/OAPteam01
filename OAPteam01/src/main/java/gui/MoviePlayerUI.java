@@ -15,9 +15,6 @@ import javax.swing.Timer;
  * 
  * @author August Monen
  */
- 
- 
- 
 public class MoviePlayerUI extends JFrame {
 
     private JButton playPauseButton;
