@@ -37,8 +37,9 @@ public interface ReviewHandler {
     String updateAverageReview(String filmLine, int newReview);
     
     /**
-     * Loads the reviews from the file.
-     * @return a list of all reviews
+     * Loads all reviews from the review file.
+     * 
+     * @return a list of reviews
      */
-    public List<String> loadAllReviews();
+    List<String> loadAllReviews();
 }
