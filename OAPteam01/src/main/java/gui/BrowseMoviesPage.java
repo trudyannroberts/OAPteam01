@@ -7,21 +7,26 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import film.Film;
 import film.FilmHandler;
 import film.FilmManager;
+import review.ReviewManager;
 
 public class BrowseMoviesPage extends BaseGUI {
     private JTextField searchBar;
     private JButton searchButton;
     private JButton showAllButton;
-    public static DefaultTableModel movieTable; // Changed to static DefaultTableModel
+    private JButton showAllReviewsButton;
+    public static DefaultTableModel movieTable;
     private JComboBox<String> searchTypeComboBox;
     private FilmHandler filmHandler;
+	private ReviewManager reviewManager;
 
     public BrowseMoviesPage() {
         super("Browse Movies");
         filmHandler = new FilmManager();
+        this.reviewManager = new ReviewManager();
         initializeBrowseMoviesPanel();
         initializeListeners();
         
@@ -37,6 +42,7 @@ public class BrowseMoviesPage extends BaseGUI {
         searchBar = new JTextField(20);
         searchButton = new JButton("Search");
         showAllButton = new JButton("Show All Movies");
+        showAllReviewsButton = new JButton("Show All Reviews");
 
         // Initialize search type combo box
         String[] searchTypes = {"Title", "Genre", "Year"};
@@ -49,6 +55,7 @@ public class BrowseMoviesPage extends BaseGUI {
         searchPanel.add(searchTypeComboBox);
         searchPanel.add(searchButton);
         searchPanel.add(showAllButton);
+        searchPanel.add(showAllReviewsButton);
 
         browsePanel.add(searchPanel, BorderLayout.NORTH);
         
@@ -117,5 +124,43 @@ public class BrowseMoviesPage extends BaseGUI {
                 filmHandler.updateFilmTableAll();
             }
         });
+        
+        showAllReviewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadAllReviews();
+            }
+        });
+    }
+
+    private void loadAllReviews() {
+        try {
+            List<String> reviews = reviewManager.loadAllReviews();
+            
+            if (reviews.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No reviews available.", "Reviews", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            
+            JTextArea reviewsArea = new JTextArea(20, 40);
+            reviewsArea.setEditable(false);
+            
+            for (String review : reviews) {
+                reviewsArea.append(review + "\n\n");
+            }
+            
+            JScrollPane scrollPane = new JScrollPane(reviewsArea);
+            
+            JDialog dialog = new JDialog(this, "All Reviews", true);
+            dialog.setLayout(new BorderLayout());
+            dialog.add(scrollPane, BorderLayout.CENTER);
+            dialog.pack();
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading reviews: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    
     }
 }
