@@ -86,4 +86,33 @@ public class ReviewManager implements ReviewHandler {
             return filmLine;  // Return the original line in case of an error
         }
     }
+    
+    /**
+     * Loads all reviews from the film_reviews.txt file.
+     * Each review is represented by a line in the file.
+     */
+    /**
+     * Loads all reviews from the review file.
+     * 
+     * @return a list of reviews
+     */
+    public List<String> loadAllReviews() {
+        List<String> reviews = new ArrayList<>();
+
+        try {
+            // Check if the review file exists before attempting to read it
+            if (Files.exists(Paths.get(REVIEW_FILE))) {
+                // Read all lines from the file
+                reviews = Files.readAllLines(Paths.get(REVIEW_FILE));
+            } else {
+                // File does not exist, notify the user or handle accordingly
+                JOptionPane.showMessageDialog(null, "No reviews found. The file does not exist.");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error loading reviews: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return reviews;
+    }
 }
