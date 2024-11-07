@@ -68,17 +68,22 @@ public class ProfileManager implements ProfileHandler {
     /**
      * Loads profiles from the user's profile file. Initializes an empty list if the file is not found.
      */
-    @SuppressWarnings("unchecked")
     public void loadProfilesFromFile() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getFileName()))) {
+        File profileFile = new File(getFileName());
+        if (!profileFile.exists()) {
+            // If the profile file does not exist, initialize with an empty list
+            profiles = new ArrayList<>();
+            return; // No need to try to load from the file
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(profileFile))) {
             profiles = (List<UserProfile>) in.readObject();
-        } catch (FileNotFoundException e) {
-        	JOptionPane.showMessageDialog(null,"Profile file not found for user ID");
         } catch (IOException | ClassNotFoundException e) {
             JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
     /**
      * Deletes a profile by name, if it exists, and updates the profiles file.

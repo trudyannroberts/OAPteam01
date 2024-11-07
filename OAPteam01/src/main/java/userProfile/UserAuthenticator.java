@@ -119,11 +119,9 @@ public class UserAuthenticator {
 
 	            // Initialize ProfileManager and add a default profile if no profiles exist
 	            ProfileManager profileManager = new ProfileManager(newUserId);
-	            
-	            if (profileManager.getProfiles().isEmpty()) {  // Only create if no profiles exist for this user
-	                UserProfile defaultProfile = new UserProfile(user.getFirstName(), UserProfile.ProfileType.ADULT);
-	                profileManager.addProfile(defaultProfile);  // Save profile immediately
-	            }
+                UserProfile defaultProfile = new UserProfile(user.getFirstName(), UserProfile.ProfileType.ADULT);
+                profileManager.addProfile(defaultProfile);  // Save the default profile
+
 
 	            //JOptionPane.showMessageDialog(null, "Registration successful! You can now log in.");
 	            return true;
