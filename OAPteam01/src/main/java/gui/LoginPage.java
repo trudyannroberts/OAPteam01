@@ -20,6 +20,7 @@ public class LoginPage {
     }
 
     private void initialize() {
+    	
         // Frame setup
         frame = new JFrame("Media Streaming Service");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,6 +33,7 @@ public class LoginPage {
         mainPanel.setBackground(new Color(255, 255, 255)); //  background
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around main panel
         mainPanel.setLayout(new GridLayout(5, 1, 10, 10)); // Spacing between elements
+        
 
         // Title Label
         JLabel titleLabel = new JLabel("Login to Streaming Service", SwingConstants.CENTER);
@@ -109,29 +111,89 @@ public class LoginPage {
     }
 
     private void registerUser() {
-        // Collect user details via input dialogs
-        String firstName = JOptionPane.showInputDialog(frame, "Enter First Name:");
-        String lastName = JOptionPane.showInputDialog(frame, "Enter Last Name:");
-        String email = JOptionPane.showInputDialog(frame, "Enter Email:");
-        String username = JOptionPane.showInputDialog(frame, "Enter Username:");
-        
-        // Prompt for password
-        JPasswordField passwordField = new JPasswordField(20);
-        int option = JOptionPane.showConfirmDialog(frame, passwordField, "Enter Password:", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            String password = new String(passwordField.getPassword());
+        // Create a new JFrame for registration
+        JFrame registrationFrame = new JFrame("Register New User");
+        registrationFrame.setSize(400, 400);
+        registrationFrame.setLayout(new BorderLayout());
+        registrationFrame.setLocationRelativeTo(frame); // Center relative to the login frame
+
+        // Main Panel with AliceBlue Background
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(255, 255, 255));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        // Title Label
+        JLabel titleLabel = new JLabel("Register New Account", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(0x4682B4));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(titleLabel);
+        mainPanel.add(Box.createVerticalStrut(20)); // Spacer
+
+        // Method to create aligned fields
+        mainPanel.add(createFieldPanel("First Name:", new JTextField(20)));
+        mainPanel.add(createFieldPanel("Last Name:", new JTextField(20)));
+        mainPanel.add(createFieldPanel("Email:", new JTextField(20)));
+        mainPanel.add(createFieldPanel("Username:", new JTextField(20)));
+        mainPanel.add(createFieldPanel("Password:", new JPasswordField(20)));
+
+        // Buttons panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(255, 255, 255));
+        JButton submitButton = new JButton("Submit");
+        JButton cancelButton = new JButton("Cancel");
+
+        // Style buttons to match the login page
+        submitButton.setBackground(new Color(255, 255, 255));
+        submitButton.setForeground(new Color(0x4682B4));
+        submitButton.setFocusPainted(false);
+
+        cancelButton.setBackground(new Color(255, 255, 255));
+        cancelButton.setForeground(new Color(0x4682B4));
+        cancelButton.setFocusPainted(false);
+
+        // Button actions
+        submitButton.addActionListener(e -> {
+            // Collect input data
+            String firstName = ((JTextField) ((JPanel) mainPanel.getComponent(2)).getComponent(1)).getText();
+            String lastName = ((JTextField) ((JPanel) mainPanel.getComponent(3)).getComponent(1)).getText();
+            String email = ((JTextField) ((JPanel) mainPanel.getComponent(4)).getComponent(1)).getText();
+            String username = ((JTextField) ((JPanel) mainPanel.getComponent(5)).getComponent(1)).getText();
+            String password = new String(((JPasswordField) ((JPanel) mainPanel.getComponent(6)).getComponent(1)).getPassword());
 
             // Create a User object with the collected details
             User newUser = new User(firstName, lastName, email, username, password);
 
             // Register the user via the UserAuthenticator
             if (UserAuthenticator.registerUser(newUser)) {
-                JOptionPane.showMessageDialog(frame, "Registration successful! You can now log in.");
+                JOptionPane.showMessageDialog(registrationFrame, "Registration successful! You can now log in.");
+                registrationFrame.dispose(); // Close the registration window
             } else {
-                JOptionPane.showMessageDialog(frame, "Registration failed. Please try again.");
+                JOptionPane.showMessageDialog(registrationFrame, "Registration failed. Please try again.");
             }
-        } else {
-            JOptionPane.showMessageDialog(frame, "Registration cancelled.");
-        }
+        });
+
+        cancelButton.addActionListener(e -> registrationFrame.dispose());
+
+        buttonPanel.add(submitButton);
+        buttonPanel.add(cancelButton);
+        mainPanel.add(buttonPanel);
+
+        // Add main panel to registration frame
+        registrationFrame.add(mainPanel, BorderLayout.CENTER);
+        registrationFrame.setVisible(true);
+    }
+
+    // Helper method to create field panels
+    private JPanel createFieldPanel(String labelText, JTextField field) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.setBackground(new Color(255, 255, 255));
+        JLabel label = new JLabel(labelText);
+        label.setForeground(new Color(0x4682B4));
+        label.setPreferredSize(new Dimension(100, 20)); // Ensure labels have the same width
+        panel.add(label);
+        panel.add(field);
+        return panel;
     }
 }
