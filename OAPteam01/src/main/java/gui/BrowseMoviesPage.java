@@ -71,7 +71,7 @@ public class BrowseMoviesPage extends BaseGUI {
 
         browsePanel.add(searchPanel, BorderLayout.NORTH);
         
-        String[] columnNames = {"Title", "Description", "Release Year", "Genre"};
+        String[] columnNames = {"Title", "Release Year", "Genre", "Description"};
         movieTable = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(movieTable);
         
