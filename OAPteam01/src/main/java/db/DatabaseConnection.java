@@ -15,7 +15,7 @@ public class DatabaseConnection {
 	 */
     private static final String DB_URL = "jdbc:mysql://localhost:3306/sakila";
     private static final String DB_USER = "root"; 
-    private static final String DB_PASSWORD = "DITT_PASSORD_HER"; 
+    private static final String DB_PASSWORD = "Disneylanderkjempegoy86"; 
     /**
      *  The Connection method is public so that we can access it from other classes.
      *  It can be called directly using the class name. It connects with the db through an API (JDBC). 
