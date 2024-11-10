@@ -22,12 +22,12 @@ public interface ProfileHandler {
     /**
      * Saves the current list of profiles to file.
      */
-    void saveProfilesToFile();
+    void saveProfiles();
 
     /**
      * Loads the profiles from file into memory.
      */
-    void loadProfilesFromFile();
+    void loadProfiles();
 
     /**
      * Deletes a profile by name.

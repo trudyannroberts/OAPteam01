@@ -27,7 +27,7 @@ public class ProfileManager implements ProfileHandler {
      */
     public ProfileManager(int userId) {
         this.userId = userId;
-        loadProfilesFromFile();
+        loadProfiles();
     }
 
     /**
@@ -44,7 +44,7 @@ public class ProfileManager implements ProfileHandler {
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
-            saveProfilesToFile();
+            saveProfiles();
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
@@ -55,7 +55,7 @@ public class ProfileManager implements ProfileHandler {
     /**
      * Saves the current list of profiles to the user's profile file via serialization.
      */
-    public void saveProfilesToFile() {
+    public void saveProfiles() {
         try (FileOutputStream fout = new FileOutputStream(getFileName());
              ObjectOutputStream out = new ObjectOutputStream(fout)) {
             out.writeObject(profiles);
@@ -68,7 +68,7 @@ public class ProfileManager implements ProfileHandler {
     /**
      * Loads profiles from the user's profile file. Initializes an empty list if the file is not found.
      */
-    public void loadProfilesFromFile() {
+    public void loadProfiles() {
         File profileFile = new File(getFileName());
         if (!profileFile.exists()) {
             // If the profile file does not exist, initialize with an empty list
@@ -95,7 +95,7 @@ public class ProfileManager implements ProfileHandler {
 
         if (profileToRemove.isPresent()) {
             profiles.remove(profileToRemove.get());
-            saveProfilesToFile();
+            saveProfiles();
             JOptionPane.showMessageDialog(null, "Profile '" + profileName + "' deleted.");
             return true;
         } else {
@@ -119,7 +119,7 @@ public class ProfileManager implements ProfileHandler {
             try {
                 ProfileType type = ProfileType.valueOf(newProfileType.toUpperCase());
                 profile.setProfileType(type);
-                saveProfilesToFile();
+                saveProfiles();
                 JOptionPane.showMessageDialog(null, "Profile '" + oldProfileName + "' updated to '" + newProfileName + "'.");
                 return true;
             } catch (IllegalArgumentException e) {

@@ -97,7 +97,7 @@ public class ReviewGUI extends BaseGUI {
                     int rating = Integer.parseInt(group.getSelection().getActionCommand());
                     
                     try {
-                        reviewHandler.saveReviewToFile(filmTitle, rating); // Use ReviewHandler interface
+                        reviewHandler.saveReview(filmTitle, rating); // Use ReviewHandler interface
                         
                         JOptionPane.showMessageDialog(ReviewGUI.this,
                                 "You rated \"" + filmTitle + "\" " + rating + "/10.",

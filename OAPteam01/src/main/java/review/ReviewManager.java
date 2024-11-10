@@ -19,7 +19,7 @@ public class ReviewManager implements ReviewHandler {
      * Saves the film review to a file.
      * If the film already has reviews, the new review will update the average score.
      */
-    public void saveReviewToFile(String filmTitle, int newReview) {
+    public void saveReview(String filmTitle, int newReview) {
         try {
             List<String> lines = new ArrayList<>();
             if (Files.exists(Paths.get(REVIEW_FILE))) {

@@ -16,7 +16,7 @@ public interface ReviewHandler {
      * @param newReview The new rating provided by the user.
      * @throws IOException If there is an error during the file writing process.
      */
-    void saveReviewToFile(String filmTitle, int newReview) throws IOException;
+    void saveReview(String filmTitle, int newReview) throws IOException;
 
     /**
      * Finds the line in the review file associated with the specified film title.
