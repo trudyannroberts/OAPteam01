@@ -11,6 +11,10 @@ public class Session {
         return currentUser;
     }
 
+    public static int getCurrentUserId() {
+        return currentUser != null ? currentUser.getUserId() : -1;  // Return -1 if no user is logged in
+    }
+
     public static void clearUser() {
         currentUser = null;
     }

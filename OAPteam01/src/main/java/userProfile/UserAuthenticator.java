@@ -3,14 +3,10 @@ package userProfile;
 import db.DatabaseConnection;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 /**
  * The UserAuthenticator class is responsible for managing user authentication, 
@@ -154,29 +150,17 @@ public class UserAuthenticator {
 	    }
 
 	    String query = "SELECT * FROM staff WHERE username = ?";
-	    User user = null; //User is set to null because a user hasn't been authenticated yet, but I have to declare a user.
+	    User user = null;
 
 	    try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-	        pstmt.setString(1, username); // replaces the ? in the query with the username .
+	        pstmt.setString(1, username);
 	        ResultSet resultSet = pstmt.executeQuery();
 
 	        if (resultSet.next()) {
-	            //Retrieve stored hashed password from the database
-	             
 	            String storedHashedPassword = resultSet.getString("password");
-
-	            /**
-	             * Using the hashPassword() method from the PassordHasher class to hash the plain-text password.
-	             *  @param hashedInputPassword is the hashed password.
-	             *  If the user types the correct password, it will be hashed the same way and identical to the database password.
-	             *  @TODO: Remove DEBUGGING when done.
-	             */
 	            String hashedInputPassword = PasswordHasher.hashPassword(password);
-	            System.out.println("Input password: " + password); //DEBUGGING
-	            System.out.println("Hashed Input Password during Login: " + hashedInputPassword);//DEBUGGING
-	            System.out.println("Stored Hashed Password: " + storedHashedPassword);//DEBUGGING
 
 	            if (hashedInputPassword.equals(storedHashedPassword)) {
 	                String firstName = resultSet.getString("first_name");
@@ -184,44 +168,41 @@ public class UserAuthenticator {
 	                String email = resultSet.getString("email");
 	                String userId = resultSet.getString("staff_id");
 
-	                user = new User(firstName, lastName, email, username, storedHashedPassword);
-	               //JOptionPane.showMessageDialog(null, "Login successful! Welcome, " + user.getFirstName() + "!");
+	                user = new User(Integer.parseInt(userId), firstName, lastName, email, username, storedHashedPassword);
+	          
+	                Session.setCurrentUser(user); 
 
-	                /**
-	                 * Load and display user profiles
-	                 * @param userId is the staff_id from the database table Staff
-	                 * 
-	                 */
-                    ProfileManager profileManager = new ProfileManager(Integer.parseInt(userId));
 
-                    // Load and display user profiles using ProfileManager
-                    List<String> profiles = profileManager.getProfiles().stream()
-                                                    .map(UserProfile::getProfileName)
-                                                    .toList();
-                    // if profiles are not empty, select a profile.
-                    if (!profiles.isEmpty()) {
-                        String selectedProfile = (String) JOptionPane.showInputDialog(
-                                null, "Select a profile:", "Profile Selection",
-                                JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
-                        );
-                        if (selectedProfile != null) {
-                            JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No profiles found for this user.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Invalid username or password.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Invalid username or password.");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return user;
-    }
+	                // Load and display user profiles
+	                ProfileManager profileManager = new ProfileManager(Integer.parseInt(userId));
+	                List<String> profiles = profileManager.getProfiles().stream()
+	                        .map(UserProfile::getProfileName)
+	                        .toList();
+
+	                if (!profiles.isEmpty()) {
+	                    String selectedProfile = (String) JOptionPane.showInputDialog(
+	                            null, "Select a profile:", "Profile Selection",
+	                            JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
+	                    );
+	                    if (selectedProfile != null) {
+	                        JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
+	                    }
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "No profiles found for this user.");
+	                }
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Invalid username or password.");
+	            }
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Invalid username or password.");
+	        }
+	    } catch (SQLException e) {
+	        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return user;
+	}
+
 
     /**
      * Validates the format of a given password.

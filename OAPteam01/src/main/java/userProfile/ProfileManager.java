@@ -1,46 +1,27 @@
+// userProfile/ProfileManager.java
 package userProfile;
 
 import javax.swing.*;
-import userProfile.UserProfile.ProfileType;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * The ProfileManager class manages user profiles, including saving and loading profiles 
- * via serialization, as well as handling profile selection, deletion, and viewing history.
- * Supports storing up to five user profiles for a specific user ID in a local file.
- * Profiles are saved to a file named "profiles_{userId}.dat" in serialized format.
- * 
- * @author Trudy Ann Roberts
- */
 public class ProfileManager implements ProfileHandler {
 
-    private static final int MAX_PROFILES = 5; // Maximum number of profiles per user
-    private List<UserProfile> profiles = new ArrayList<>(); // In-memory list of user profiles
-    private int userId; // Unique ID of the user owning the profiles
+    private static final int MAX_PROFILES = 5;
+    private List<UserProfile> profiles = new ArrayList<>();
+    private int userId;
 
-    /**
-     * Constructs a ProfileManager for a specific user ID. 
-     * Loads any saved profiles from the user's profile file.
-     */
     public ProfileManager(int userId) {
         this.userId = userId;
         loadProfilesFromFile();
     }
 
-    /**
-     * Generates the file name for storing the user's profiles.
-     */
     private String getFileName() {
-        return "profiles_" + userId + ".dat"; 
+        return "profiles_" + userId + ".dat";
     }
 
-    /**
-     * Adds a new profile if the maximum limit has not been reached.
-     * Saves the updated profile list to the file.
-     */
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
@@ -52,9 +33,6 @@ public class ProfileManager implements ProfileHandler {
         }
     }
 
-    /**
-     * Saves the current list of profiles to the user's profile file via serialization.
-     */
     public void saveProfilesToFile() {
         try (FileOutputStream fout = new FileOutputStream(getFileName());
              ObjectOutputStream out = new ObjectOutputStream(fout)) {
@@ -64,30 +42,36 @@ public class ProfileManager implements ProfileHandler {
             e.printStackTrace();
         }
     }
+    
+    public void loadProfilesForCurrentUser() {
+        int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
+        if (userId != -1) {
+            loadProfilesFromFile(); // Assuming you pass userId to the file-loading method
+        } else {
+            JOptionPane.showMessageDialog(null, "No user is logged in.");
+        }
+    }
 
-    /**
-     * Loads profiles from the user's profile file. Initializes an empty list if the file is not found.
-     */
-    public void loadProfilesFromFile() {
+    @SuppressWarnings("unchecked")
+	public void loadProfilesFromFile() {
         File profileFile = new File(getFileName());
         if (!profileFile.exists()) {
-            // If the profile file does not exist, initialize with an empty list
             profiles = new ArrayList<>();
-            return; // No need to try to load from the file
+            return;
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(profileFile))) {
             profiles = (List<UserProfile>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error loading profiles: " + e.getMessage() + "\nInitializing empty profile list.");
+            profiles = new ArrayList<>();  // Initialize empty list if file is corrupted
+            if (!profileFile.delete()) {  // Try deleting corrupted file
+                JOptionPane.showMessageDialog(null, "Failed to delete corrupted profile file.");
+            }
             e.printStackTrace();
         }
     }
 
-
-    /**
-     * Deletes a profile by name, if it exists, and updates the profiles file.
-     */
     public boolean deleteProfile(String profileName) {
         Optional<UserProfile> profileToRemove = profiles.stream()
                 .filter(profile -> profile.getProfileName().equals(profileName))
@@ -104,9 +88,6 @@ public class ProfileManager implements ProfileHandler {
         }
     }
 
-    /**
-     * Edits an existing profile by updating its name and type, then saves changes to file.
-     */
     public boolean editProfile(String oldProfileName, String newProfileName, String newProfileType) {
         Optional<UserProfile> profileToEdit = profiles.stream()
                 .filter(profile -> profile.getProfileName().equals(oldProfileName))
@@ -117,7 +98,7 @@ public class ProfileManager implements ProfileHandler {
             profile.setProfileName(newProfileName);
 
             try {
-                ProfileType type = ProfileType.valueOf(newProfileType.toUpperCase());
+                UserProfile.ProfileType type = UserProfile.ProfileType.valueOf(newProfileType.toUpperCase());
                 profile.setProfileType(type);
                 saveProfilesToFile();
                 JOptionPane.showMessageDialog(null, "Profile '" + oldProfileName + "' updated to '" + newProfileName + "'.");
@@ -132,9 +113,6 @@ public class ProfileManager implements ProfileHandler {
         }
     }
 
-    /**
-     * Displays a dialog to the user for selecting a profile from available profiles.
-     */
     public String selectProfile() {
         if (profiles.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No profiles available.");
@@ -142,8 +120,8 @@ public class ProfileManager implements ProfileHandler {
         }
 
         String[] profileNames = profiles.stream()
-                                        .map(UserProfile::getProfileName)
-                                        .toArray(String[]::new);
+                .map(UserProfile::getProfileName)
+                .toArray(String[]::new);
 
         return (String) JOptionPane.showInputDialog(
                 null,
@@ -155,11 +133,8 @@ public class ProfileManager implements ProfileHandler {
                 profileNames[0]
         );
     }
-    
-    /**
-     * Retrieves the list of profiles managed by this ProfileManager.
-     */
+
     public List<UserProfile> getProfiles() {
-        return profiles; 
+        return profiles;
     }
 }

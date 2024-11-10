@@ -53,6 +53,8 @@ public interface ProfileHandler {
      * @return The name of the selected profile, or null if no profiles are available.
      */
     String selectProfile();
+    
+   void loadProfilesForCurrentUser();
 
     /**
      * Retrieves the list of profiles.

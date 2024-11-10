@@ -19,6 +19,7 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private int userId;
 
     /**
      * Constructs a User instance with the specified details.
@@ -29,6 +30,14 @@ public class User {
      * @param username the user's chosen username
      * @param password the user's password
      */
+    public User(int userId, String firstName, String lastName, String email, String username, String password) {
+    	this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
     public User(String firstName, String lastName, String email, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,7 +45,6 @@ public class User {
         this.username = username;
         this.password = password;
     }
-
     // Getters
     /**
      * Returns the first name of the user.
@@ -81,6 +89,10 @@ public class User {
      */
     public String getPassword() {
         return password;
+    }
+    
+    public int getUserId() {
+    	return userId;
     }
 
     // Setters
