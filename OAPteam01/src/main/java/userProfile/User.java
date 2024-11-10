@@ -2,13 +2,9 @@ package userProfile;
 
 /**
  * The User class represents a user in the media streaming service application.
- * It encapsulates the user's information (private parameters), including their personal details and credentials.
+ * It encapsulates the user's information, including their personal details and credentials.
  * This class is used to create and manage user instances, primarily during the 
  * registration and authentication processes.
- * 
- * Each user has a first name, last name, email address, username, and password.
- * 
- * Note: The password here is not hashed, but will be hashed in the UserAuthenticator class.
  * 
  * @author Trudy Ann Roberts
  */
@@ -19,6 +15,7 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private int userId;
 
     /**
      * Constructs a User instance with the specified details.
@@ -30,6 +27,24 @@ public class User {
      * @param password the user's password
      */
     public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+    /**
+     * 
+     * @param userId is the auto-incremented userId (staff_id) created in the database
+    * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param email the user's email address
+     * @param username the user's chosen username
+     * @param password the user's password
+     */
+    
+    public User(int userId, String firstName, String lastName, String email, String username, String password) {
+    	this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -77,10 +92,19 @@ public class User {
     /**
      * Returns the password of the user.
      * 
-     * @return the password (considered sensitive information)
+     * @return the password
      */
     public String getPassword() {
         return password;
+    }
+    
+    /**
+     * Returns the user id
+     * 
+     * @return the user id
+     */
+    public int getUserId() {
+    	return userId;
     }
 
     // Setters

@@ -131,6 +131,18 @@ public class ProfileManager implements ProfileHandler {
             return false;
         }
     }
+    
+    /**
+     * Loads profiles for the user that is currently logged in.
+     */
+    public void loadProfilesForCurrentUser() {
+        int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
+        if (userId != -1) {
+            loadProfiles(); // Assuming you pass userId to the file-loading method
+        } else {
+            JOptionPane.showMessageDialog(null, "No user is logged in.");
+        }
+    }
 
     /**
      * Displays a dialog to the user for selecting a profile from available profiles.
