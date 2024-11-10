@@ -6,25 +6,20 @@ import userProfile.ProfilePanel;
 import userProfile.UserProfile;
 import userProfile.Session;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class AccountGUI extends BaseGUI {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private ProfileManager profileManager;
+    private static final long serialVersionUID = 1L;
+    private ProfileManager profileManager;
     private JList<String> profileList;
 
     public AccountGUI() {
         super("Manage Account");
-        
+
         // Initialize ProfileManager with the current user's ID
         int userId = Session.getCurrentUserId();
         profileManager = new ProfileManager(userId);
-        
+
         contentPanel.setLayout(new BorderLayout());
 
         // Load profiles and display them in the GUI
@@ -34,10 +29,10 @@ public class AccountGUI extends BaseGUI {
         JPanel buttonPanel = new JPanel();
         JButton btnAddProfile = new JButton("Add Profile");
         btnAddProfile.addActionListener(e -> showCreateProfileDialog());
-        
+
         JButton btnEditProfile = new JButton("Edit Profile");
         btnEditProfile.addActionListener(e -> showEditProfileDialog());
-        
+
         JButton btnDeleteProfile = new JButton("Delete Profile");
         btnDeleteProfile.addActionListener(e -> deleteSelectedProfile());
 
@@ -45,7 +40,6 @@ public class AccountGUI extends BaseGUI {
         buttonPanel.add(btnEditProfile);
         buttonPanel.add(btnDeleteProfile);
 
-        contentPanel.add(new JScrollPane(profileList), BorderLayout.CENTER);
         contentPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 
@@ -55,7 +49,16 @@ public class AccountGUI extends BaseGUI {
         for (UserProfile profile : profiles) {
             listModel.addElement(profile.getProfileName());
         }
-        profileList = new JList<>(listModel);
+        
+        if (profileList == null) {
+            profileList = new JList<>(listModel);
+            contentPanel.add(new JScrollPane(profileList), BorderLayout.CENTER);
+        } else {
+            profileList.setModel(listModel); // Update list model if profileList is already initialized
+        }
+
+        contentPanel.revalidate(); // Refresh the content panel
+        contentPanel.repaint();
     }
 
     private void showCreateProfileDialog() {
@@ -76,8 +79,7 @@ public class AccountGUI extends BaseGUI {
 
             boolean added = profileManager.addProfile(newProfile);
             if (added) {
-                JOptionPane.showMessageDialog(this, "Profile created successfully.");
-                loadProfiles();
+                loadProfiles(); // Reload profiles to reflect changes
             }
         }
     }
@@ -104,8 +106,7 @@ public class AccountGUI extends BaseGUI {
             String profileType = isAdult ? "ADULT" : "CHILD";
             boolean edited = profileManager.editProfile(selectedProfileName, newProfileName, profileType);
             if (edited) {
-                JOptionPane.showMessageDialog(this, "Profile edited successfully.");
-                loadProfiles();
+                loadProfiles(); // Reload profiles to reflect changes
             }
         }
     }
@@ -127,8 +128,7 @@ public class AccountGUI extends BaseGUI {
         if (confirmation == JOptionPane.YES_OPTION) {
             boolean deleted = profileManager.deleteProfile(selectedProfileName);
             if (deleted) {
-                JOptionPane.showMessageDialog(this, "Profile deleted successfully.");
-                loadProfiles();
+                loadProfiles(); // Reload profiles to reflect changes
             }
         }
     }

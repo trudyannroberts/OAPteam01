@@ -15,7 +15,7 @@ public class ProfileManager implements ProfileHandler {
 
     public ProfileManager(int userId) {
         this.userId = userId;
-        loadProfilesFromFile();
+        loadProfiles();
     }
 
     private String getFileName() {
@@ -25,7 +25,7 @@ public class ProfileManager implements ProfileHandler {
     public boolean addProfile(UserProfile profile) {
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
-            saveProfilesToFile();
+            saveProfiles();
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "Maximum number of profiles reached.");
@@ -33,7 +33,7 @@ public class ProfileManager implements ProfileHandler {
         }
     }
 
-    public void saveProfilesToFile() {
+    public void saveProfiles() {
         try (FileOutputStream fout = new FileOutputStream(getFileName());
              ObjectOutputStream out = new ObjectOutputStream(fout)) {
             out.writeObject(profiles);
@@ -46,14 +46,14 @@ public class ProfileManager implements ProfileHandler {
     public void loadProfilesForCurrentUser() {
         int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
         if (userId != -1) {
-            loadProfilesFromFile(); // Assuming you pass userId to the file-loading method
+            loadProfiles(); // Assuming you pass userId to the file-loading method
         } else {
             JOptionPane.showMessageDialog(null, "No user is logged in.");
         }
     }
 
     @SuppressWarnings("unchecked")
-	public void loadProfilesFromFile() {
+	public void loadProfiles() {
         File profileFile = new File(getFileName());
         if (!profileFile.exists()) {
             profiles = new ArrayList<>();
@@ -79,7 +79,7 @@ public class ProfileManager implements ProfileHandler {
 
         if (profileToRemove.isPresent()) {
             profiles.remove(profileToRemove.get());
-            saveProfilesToFile();
+            saveProfiles();
             JOptionPane.showMessageDialog(null, "Profile '" + profileName + "' deleted.");
             return true;
         } else {
@@ -100,7 +100,7 @@ public class ProfileManager implements ProfileHandler {
             try {
                 UserProfile.ProfileType type = UserProfile.ProfileType.valueOf(newProfileType.toUpperCase());
                 profile.setProfileType(type);
-                saveProfilesToFile();
+                saveProfiles();
                 JOptionPane.showMessageDialog(null, "Profile '" + oldProfileName + "' updated to '" + newProfileName + "'.");
                 return true;
             } catch (IllegalArgumentException e) {
