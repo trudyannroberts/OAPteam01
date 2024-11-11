@@ -3,9 +3,7 @@ package gui;
 import userProfile.User;
 import userProfile.UserAuthenticator;
 import javax.swing.*;
-
 import userProfile.Session;
-
 import java.awt.*;
 
 public class LoginPage {
@@ -101,7 +99,7 @@ public class LoginPage {
 
         if (loggedInUser != null) {
         	 Session.setCurrentUser(loggedInUser); // Set the current user
-            JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
+            //JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
             frame.dispose(); // Close the login window
             onLoginSuccess.run();
             // Proceed with other actions such as showing user-specific content
@@ -167,7 +165,7 @@ public class LoginPage {
 
             // Register the user via the UserAuthenticator
             if (UserAuthenticator.registerUser(newUser)) {
-                JOptionPane.showMessageDialog(registrationFrame, "Registration successful! You can now log in.");
+               JOptionPane.showMessageDialog(registrationFrame, "Registration successful! You can now log in.");
                 registrationFrame.dispose(); // Close the registration window
             } else {
                 JOptionPane.showMessageDialog(registrationFrame, "Registration failed. Please try again.");
