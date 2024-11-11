@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class UserProfile implements Serializable {
 	/**
      * Enum representing the type of user profile, which can be either ADULT or CHILD.
+     * This has not been implemented, but the idea is that in the future
      * ADULT profiles can watch R-rated films, while CHILD profiles cannot.
      */
     public enum ProfileType {
