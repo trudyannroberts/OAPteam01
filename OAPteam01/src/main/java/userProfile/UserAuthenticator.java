@@ -5,19 +5,19 @@ import db.UserDAO;
 import java.util.List;
 
 /**
- * The UserAuthenticator class is responsible for managing user authentication, 
- * registration, and profile loading operations.
- *  
- * The class provides methods to register users, log them in, validate email and password formats, 
- * and load user profiles from a local file.
+ * The UserAuthenticator class manages user authentication, registration, and profile loading operations.
+ * This includes validating user details, registering new users, logging in, and loading user profiles.
+ * 
+ * Upon registration, user details are stored in the database after validation. On successful login,
+ * user profiles are loaded and selected. This class interacts with the database through the UserDAO class.
  * 
  * @author Trudy
  */
 public class UserAuthenticator {
 
     /**
-     * Registers a new user in the system by inserting their information into the database.
-     * It validates the user's email and password before proceeding.
+     * Registers a new user in the system by validating the email and password,
+     * ensuring a unique username, and inserting their information into the database.
      *
      * @param user The User object containing the user's registration details.
      * @return true if the user was successfully registered, false otherwise.
@@ -28,6 +28,9 @@ public class UserAuthenticator {
 
         boolean isValidPassword = validatePassword(user);
         if (!isValidPassword) return false;
+        
+        boolean isUniqueUsername = validateUser(user);
+        if (!isUniqueUsername) return false;
 
         String hashedPassword = PasswordHasher.hashPassword(user.getPassword());
         int userId = UserDAO.insertUserIntoDatabase(user, hashedPassword);
@@ -45,7 +48,8 @@ public class UserAuthenticator {
     }
 
     /**
-     * Logs in a user by checking their username and password against the database.
+     * Logs in a user by verifying their username and password against stored credentials in the database.
+     * If login is successful, the user’s profiles are loaded and can be selected.
      *
      * @param username The username provided by the user for login.
      * @param password The password provided by the user for login.
@@ -72,9 +76,9 @@ public class UserAuthenticator {
     }
 
     /**
-     * Loads user profiles and prompts the user to select one.
+     * Loads user profiles associated with the given user and prompts the user to select one.
      *
-     * @param user The logged-in user.
+     * @param user The logged-in user whose profiles are to be loaded.
      */
     private static void loadUserProfile(User user) {
         ProfileManager profileManager = new ProfileManager(user.getUserId());
@@ -96,7 +100,10 @@ public class UserAuthenticator {
     }
 
     /**
-     * Validates the user's email using a regular expression.
+     * Validates the user's email format using a regular expression.
+     *
+     * @param user The User object whose email is to be validated.
+     * @return true if the email format is valid, false otherwise.
      */
     private static boolean validateEmail(User user) {
         while (!isValidEmail(user.getEmail())) {
@@ -112,7 +119,10 @@ public class UserAuthenticator {
     }
 
     /**
-     * Validates the user's password to meet security requirements.
+     * Validates the user's password to ensure it meets the security requirements.
+     *
+     * @param user The User object whose password is to be validated.
+     * @return true if the password meets the security criteria, false otherwise.
      */
     private static boolean validatePassword(User user) {
         while (!isValidPassword(user.getPassword())) {
@@ -127,6 +137,42 @@ public class UserAuthenticator {
         return true;
     }
 
+    /**
+     * Ensures that the username for the user is unique by checking against existing usernames in the database.
+     *
+     * @param user The User object containing the username to be validated.
+     * @return true if the username is unique, false if it already exists.
+     */
+    private static boolean validateUser(User user) {
+        while (!isUniqueUsername(user.getUsername())) {
+            JOptionPane.showMessageDialog(null, "Username is not available.");
+            String newUsername = JOptionPane.showInputDialog("Please enter a different username:");
+            if (newUsername == null || newUsername.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Registration cancelled.");
+                return false;
+            }
+            user.setUsername(newUsername);
+        }
+        return true;
+    }
+
+    /**
+     * Checks if a username is unique in the database.
+     *
+     * @param username The username to be checked for uniqueness.
+     * @return true if no existing user has the specified username, false otherwise.
+     */
+    public static boolean isUniqueUsername(String username) {
+        User user = UserDAO.retrieveUserFromDatabase(username);
+        return (user == null); // Returns true if no user with that username exists
+    }
+
+    /**
+     * Validates the email format using a regular expression pattern.
+     *
+     * @param email The email to be validated.
+     * @return true if the email format is valid, false otherwise.
+     */
     public static boolean isValidEmail(String email) {
         if (email == null || email.isEmpty()) {
             return false;
@@ -135,6 +181,12 @@ public class UserAuthenticator {
         return email.matches(emailValidation);
     }
 
+    /**
+     * Validates the password to ensure it meets security requirements.
+     *
+     * @param password The password to be validated.
+     * @return true if the password meets criteria, false otherwise.
+     */
     public static boolean isValidPassword(String password) {
         if (password == null || password.isEmpty()) {
             return false;
