@@ -2,7 +2,6 @@ package userProfile;
 
 import javax.swing.*;
 import db.UserDAO;
-import java.util.List;
 
 /**
  * The UserAuthenticator class manages user authentication, registration, and profile loading operations.
@@ -55,6 +54,14 @@ public class UserAuthenticator {
      * @param password The password provided by the user for login.
      * @return A User object if the login is successful, or null otherwise.
      */
+    /**
+     * Logs in a user by verifying their username and password against stored credentials in the database.
+     * If login is successful, the user’s profiles are loaded and can be selected.
+     *
+     * @param username The username provided by the user for login.
+     * @param password The password provided by the user for login.
+     * @return A User object if the login is successful, or null otherwise.
+     */
     public static User logInUser(String username, String password) {
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Username and password must be provided.");
@@ -67,7 +74,11 @@ public class UserAuthenticator {
             String hashedInputPassword = PasswordHasher.hashPassword(password);
             if (hashedInputPassword.equals(user.getPassword())) {
                 Session.setCurrentUser(user);
-                loadUserProfile(user);
+                
+                // Load and prompt for profile selection
+                ProfileManager profileManager = new ProfileManager(user.getUserId());
+                profileManager.promptUserToSelectProfile();
+                
                 return user;
             }
         }
@@ -75,29 +86,13 @@ public class UserAuthenticator {
         return null;
     }
 
+
     /**
      * Loads user profiles associated with the given user and prompts the user to select one.
      *
      * @param user The logged-in user whose profiles are to be loaded.
      */
-    private static void loadUserProfile(User user) {
-        ProfileManager profileManager = new ProfileManager(user.getUserId());
-        List<String> profiles = profileManager.getProfiles().stream()
-                .map(UserProfile::getProfileName)
-                .toList();
 
-        if (!profiles.isEmpty()) {
-            String selectedProfile = (String) JOptionPane.showInputDialog(
-                    null, "Select a profile:", "Profile Selection",
-                    JOptionPane.QUESTION_MESSAGE, null, profiles.toArray(), profiles.get(0)
-            );
-            if (selectedProfile != null) {
-                JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No profiles found for this user.");
-        }
-    }
 
     /**
      * Validates the user's email format using a regular expression.

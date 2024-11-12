@@ -131,6 +131,27 @@ public class ProfileManager implements ProfileHandler {
             return false;
         }
     }
+    /**
+     * Prompts the user to select a profile from the available profiles.
+     */
+    public void promptUserToSelectProfile() {
+        List<String> profileNames = profiles.stream()
+                .map(UserProfile::getProfileName)
+                .toList();
+
+        if (!profileNames.isEmpty()) {
+            String selectedProfile = (String) JOptionPane.showInputDialog(
+                    null, "Select a profile:", "Profile Selection",
+                    JOptionPane.QUESTION_MESSAGE, null, profileNames.toArray(), profileNames.get(0)
+            );
+            if (selectedProfile != null) {
+                JOptionPane.showMessageDialog(null, "You selected profile: " + selectedProfile);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No profiles found for this user.");
+        }
+    }
+
     
     /**
      * Loads profiles for the user that is currently logged in.
