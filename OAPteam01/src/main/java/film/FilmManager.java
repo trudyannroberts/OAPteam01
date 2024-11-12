@@ -40,7 +40,7 @@ public class FilmManager implements FilmHandler {
         return new Film(title, desc, releaseYear, genre);
     }
 
-    // General method to fetch films based on a query and a parameter
+    // General method to get films based on a query and a parameter
     private List<Film> getFilms(String sql, Object param) {
         List<Film> films = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
