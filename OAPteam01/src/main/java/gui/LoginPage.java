@@ -165,7 +165,6 @@ public class LoginPage {
 
             // Register the user via the UserAuthenticator
             if (UserAuthenticator.registerUser(newUser)) {
-               JOptionPane.showMessageDialog(registrationFrame, "Registration successful! You can now log in.");
                 registrationFrame.dispose(); // Close the registration window
             } else {
                 JOptionPane.showMessageDialog(registrationFrame, "Registration failed. Please try again.");
