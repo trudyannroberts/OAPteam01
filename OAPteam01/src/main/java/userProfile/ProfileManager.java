@@ -43,14 +43,14 @@ public class ProfileManager implements ProfileHandler {
         }
     }
     
-    public void loadProfilesForCurrentUser() {
-        int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
+  /*  public void loadProfilesForCurrentUser() {
+        //int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
         if (userId != -1) {
             loadProfiles(); // Assuming you pass userId to the file-loading method
         } else {
             JOptionPane.showMessageDialog(null, "No user is logged in.");
         }
-    }
+    }*/
 
     @SuppressWarnings("unchecked")
 	public void loadProfiles() {
