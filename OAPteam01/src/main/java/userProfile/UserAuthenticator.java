@@ -28,7 +28,7 @@ public class UserAuthenticator {
         boolean isValidPassword = validatePassword(user);
         if (!isValidPassword) return false;
         
-        boolean isUniqueUsername = validateUser(user);
+        boolean isUniqueUsername = validateUsername(user);
         if (!isUniqueUsername) return false;
 
         String hashedPassword = PasswordHasher.hashPassword(user.getPassword());
@@ -138,7 +138,7 @@ public class UserAuthenticator {
      * @param user The User object containing the username to be validated.
      * @return true if the username is unique, false if it already exists.
      */
-    private static boolean validateUser(User user) {
+    private static boolean validateUsername(User user) {
         while (!isUniqueUsername(user.getUsername())) {
             JOptionPane.showMessageDialog(null, "Username is not available.");
             String newUsername = JOptionPane.showInputDialog("Please enter a different username:");
