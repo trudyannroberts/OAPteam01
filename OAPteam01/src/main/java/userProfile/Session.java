@@ -14,17 +14,8 @@ public class Session {
      */
     public static void setCurrentUser(User user) {
         currentUser = user;
-    }
-    
+    }  
     /**
-     * @return the current user
-     */
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-    
-    /**
-     * 
      * @return only the userId from the user object or -1 if no user is logged in.
      */
     
