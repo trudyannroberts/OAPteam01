@@ -49,22 +49,25 @@ public class BaseGUI extends JFrame {
         panel.setLayout(new FlowLayout());
         panel.setBackground(new Color(70, 130, 180)); 
 
-        JButton homeButton = new JButton("Home");
-        JButton browseButton = new JButton("Browse");
-        JButton accountButton = new JButton("Account");
+        JButton homeButton = new JButton("Homepage");
+        JButton browseButton = new JButton("Browse Movies");
+        JButton accountButton = new JButton("Account Page");
+        JButton importButton = new JButton("Import Films");
 
         styleButton(homeButton);
         styleButton(browseButton);
         styleButton(accountButton);
+        styleButton(importButton);
 
         homeButton.addActionListener(e -> showHomePage());
         browseButton.addActionListener(e -> showBrowsePage());
         accountButton.addActionListener(e -> showAccountPage());
+        //importButton.addActionListener(e -> showFilmImportPage());
 
         panel.add(homeButton);
         panel.add(browseButton);
         panel.add(accountButton);
-
+        panel.add(importButton);
         return panel;
     }
     /**
@@ -105,6 +108,16 @@ public class BaseGUI extends JFrame {
     			new AccountGUI().setVisible(true);
     			this.dispose();
  }
+    	/**
+         * Displays the page that can mass import films to the application.
+         * If the current page is not already the Film Import page, it creates a new FilmImportGUI and disposes of the current window.
+         */
+        //protected void showFilmImportPage() {
+        //	if (!(this instanceof FilmImportGUI)) {
+        //			new FilmImportGUI().setVisible(true);
+        //			this.dispose();
+     //}
+    	
     }
     /**
      * Updates the content panel with new content.
