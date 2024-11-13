@@ -69,8 +69,11 @@ public class ProfileManager implements ProfileHandler {
      * Loads profiles from the user's profile file. Initializes an empty list if the file is not found.
      */
     public void loadProfiles() {
+    	
         File profileFile = new File(getFileName());
         if (!profileFile.exists()) {
+        	 int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
+             if (userId != -1)
             // If the profile file does not exist, initialize with an empty list
             profiles = new ArrayList<>();
             return; // No need to try to load from the file
@@ -151,20 +154,6 @@ public class ProfileManager implements ProfileHandler {
             JOptionPane.showMessageDialog(null, "No profiles found for this user.");
         }
     }
-
-    
-    /**
-     * Loads profiles for the user that is currently logged in.
-     */
-    public void loadProfilesForCurrentUser() {
-        int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
-        if (userId != -1) {
-            loadProfiles(); // Assuming you pass userId to the file-loading method
-        } else {
-            JOptionPane.showMessageDialog(null, "No user is logged in.");
-        }
-    }
-
     /**
      * Displays a dialog to the user for selecting a profile from available profiles.
      */

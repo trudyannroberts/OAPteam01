@@ -60,7 +60,7 @@ public interface ProfileHandler {
      * Loads the profiles associated with the user who is currently logged in.
      * Retrieves profiles from the appropriate file for the current user's ID.
      */
-    void loadProfilesForCurrentUser();
+   // void loadProfilesForCurrentUser();
 
     /**
      * Displays a selection dialog for choosing one of the available profiles.

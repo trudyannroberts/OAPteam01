@@ -98,8 +98,6 @@ public class LoginPage {
         User loggedInUser = UserAuthenticator.logInUser(username, password);
 
         if (loggedInUser != null) {
-        	 Session.setCurrentUser(loggedInUser); // Set the current user
-            //JOptionPane.showMessageDialog(frame, "Welcome, " + loggedInUser.getFirstName() + "!");
             frame.dispose(); // Close the login window
             onLoginSuccess.run();
             // Proceed with other actions such as showing user-specific content
