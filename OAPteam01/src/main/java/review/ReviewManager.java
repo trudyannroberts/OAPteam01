@@ -31,7 +31,7 @@ public class ReviewManager implements ReviewHandler {
 
             if (filmLine == null) {
                 // No existing reviews, add a new entry
-                lines.add(filmTitle + " - " + newReview + " (1 review)");
+                lines.add(filmTitle + " - The average review: " + newReview + " (1 review)");
             } else {
                 // Update the existing review with a new average
                 String updatedLine = updateAverageReview(filmLine, newReview);
@@ -66,7 +66,7 @@ public class ReviewManager implements ReviewHandler {
     public String updateAverageReview(String filmLine, int newReview) {
         try {
             // Extract current average and review count
-            String[] parts = filmLine.split(" - ");  // Split by " - "
+            String[] parts = filmLine.split(" - The average review: ");  // Split by " - "The average review: "
             String reviewPart = parts[1].trim();  // The part with the reviews, e.g., "8 (2 reviews)"
             
             // Find the current average and number of reviews
@@ -79,7 +79,7 @@ public class ReviewManager implements ReviewHandler {
             int newAverage = (currentAverage * currentReviewCount + newReview) / newReviewCount;
             
             // Return updated review line
-            return parts[0] + " - " + newAverage + " (" + newReviewCount + " reviews)";
+            return parts[0] + " The average review: " + newAverage + " (" + newReviewCount + " reviews)";
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error updating review: " + e.getMessage());
             e.printStackTrace();

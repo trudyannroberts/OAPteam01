@@ -99,11 +99,6 @@ public class ReviewGUI extends BaseGUI {
                     try {
                         reviewHandler.saveReview(filmTitle, rating); // Use ReviewHandler interface
                         
-                       /** JOptionPane.showMessageDialog(ReviewGUI.this,
-                                "You rated \"" + filmTitle + "\" " + rating + "/10.",
-                                "Rating Submitted",
-                                JOptionPane.INFORMATION_MESSAGE);*/
-                        
                         Review review = new Review(rating, filmTitle);
                         review.displayReview();
                         dispose();
