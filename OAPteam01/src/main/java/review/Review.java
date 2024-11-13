@@ -4,6 +4,9 @@ package review;
  * The Review class is meant to let the user rate the film from 1-10. We need to connect the rating to a film, and therefore I also included film title.
  */
 import java.nio.file.*;
+
+import javax.swing.JOptionPane;
+
 import java.io.*;
 public class Review {
 	private int review;
@@ -24,6 +27,6 @@ public class Review {
 		return filmTitle;
 	}	
 	public void displayReview() {
-		System.out.println("You've rated " + filmTitle + review + " /10");
+		JOptionPane.showMessageDialog(null, "You've rated " + filmTitle + review + " /10" );
 	}
 }
