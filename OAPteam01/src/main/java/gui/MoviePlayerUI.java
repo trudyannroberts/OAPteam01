@@ -34,7 +34,7 @@ public class MoviePlayerUI extends JFrame {
 
         // Set up the frame
         setTitle("Movie Player");
-        setSize(600, 400);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(45, 45, 45)); // Medium grey background
@@ -113,13 +113,11 @@ public class MoviePlayerUI extends JFrame {
         skipBackButton.addActionListener(e -> {
             int newTime = Math.max(0, progressSlider.getValue() - 15);
             progressSlider.setValue(newTime);
-            System.out.println("Skipped 15 seconds backward");
         });
 
         skipForwardButton.addActionListener(e -> {
             int newTime = Math.min(movieDuration, progressSlider.getValue() + 15);
             progressSlider.setValue(newTime);
-            System.out.println("Skipped 15 seconds forward");
         });
 
         volumeSlider.addChangeListener(e -> System.out.println("Volume set to: " + volumeSlider.getValue()));
