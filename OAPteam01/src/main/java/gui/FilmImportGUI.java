@@ -16,13 +16,13 @@ public class FilmImportGUI extends BaseGUI {
     private JLabel statusLabel;
     private JTextArea logArea;
     private File selectedFile;
-    private static final String FILES_DIRECTORY = "filer"; // Konstant for filmappen
+    private static final String FILES_DIRECTORY = "resources"; // Konstant for filmappen
     
     public FilmImportGUI() {
         super("Import films");
-        filmImport = new FilmImport();
         createFilesDirectory(); // Opprett filmappen hvis den ikke eksisterer
         setupComponents();
+        setVisible(true);
     }
     
     private void createFilesDirectory() {
@@ -30,7 +30,7 @@ public class FilmImportGUI extends BaseGUI {
         if (!filesDir.exists()) {
             boolean created = filesDir.mkdir();
             if (!created) {
-                System.err.println("Kunne ikke opprette 'filer' mappe");
+                System.err.println("Could not create 'resources' folder");
             }
         }
     }
@@ -43,17 +43,17 @@ public class FilmImportGUI extends BaseGUI {
         // Top panel for instructions
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel instructionsLabel = new JLabel(
-            "<html>Importer filmer fra CSV-fil<br>" +
+            "<html>Import films from a CSV-file<br>" +
             "Format: \"title\",\"description\",release_year<br>" +
-            "CSV-filer bør plasseres i 'filer' mappen</html>"
+            "CSV-files are located in the resources folder</html>"
         );
         topPanel.add(instructionsLabel, BorderLayout.CENTER);
         
         // Center panel for controls
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        JButton chooseFileButton = new JButton("Velg CSV-fil");
-        statusLabel = new JLabel("Ingen fil valgt");
-        JButton importButton = new JButton("Importer");
+        JButton chooseFileButton = new JButton("Choose CSV-file");
+        statusLabel = new JLabel("No file is chosen");
+        JButton importButton = new JButton("Import");
         importButton.setEnabled(false);
         
         centerPanel.add(chooseFileButton);
@@ -64,7 +64,7 @@ public class FilmImportGUI extends BaseGUI {
         logArea = new JTextArea(10, 50);
         logArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(logArea);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Import logg"));
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Import log"));
         
         // Add action listeners
         chooseFileButton.addActionListener(e -> {
@@ -75,20 +75,20 @@ public class FilmImportGUI extends BaseGUI {
                 fileChooser.setCurrentDirectory(filesDir);
             }
             
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV filer", "csv");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
             fileChooser.setFileFilter(filter);
             
             int result = fileChooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 selectedFile = fileChooser.getSelectedFile();
-                statusLabel.setText("Valgt fil: " + selectedFile.getName());
+                statusLabel.setText("Chosen file: " + selectedFile.getName());
                 importButton.setEnabled(true);
                 
                 // Hvis filen ikke er i 'filer' mappen, tilby å kopiere den dit
                 if (!selectedFile.getParentFile().getAbsolutePath().equals(new File(FILES_DIRECTORY).getAbsolutePath())) {
                     int response = JOptionPane.showConfirmDialog(this,
-                        "Vil du kopiere filen til 'filer' mappen?",
-                        "Kopier fil",
+                        "Do you want to copy this file to the 'resources' folder?",
+                        "Copy file",
                         JOptionPane.YES_NO_OPTION);
                         
                     if (response == JOptionPane.YES_OPTION) {
@@ -100,9 +100,9 @@ public class FilmImportGUI extends BaseGUI {
                                 java.nio.file.StandardCopyOption.REPLACE_EXISTING
                             );
                             selectedFile = newFile;
-                            statusLabel.setText("Valgt fil: " + selectedFile.getName() + " (kopiert til 'filer' mappen)");
+                            statusLabel.setText("Chosen file: " + selectedFile.getName() + " (copied to 'resources' folder)");
                         } catch (Exception ex) {
-                            logArea.append("Kunne ikke kopiere filen: " + ex.getMessage() + "\n");
+                            logArea.append("Could not import file: " + ex.getMessage() + "\n");
                         }
                     }
                 }
@@ -111,7 +111,7 @@ public class FilmImportGUI extends BaseGUI {
         
         importButton.addActionListener(e -> {
             if (selectedFile != null) {
-                logArea.setText("Starter import...\n");
+                logArea.setText("Staarting import...\n");
                 importButton.setEnabled(false);
                 
                 new SwingWorker<Void, String>() {
@@ -120,7 +120,7 @@ public class FilmImportGUI extends BaseGUI {
                         try {
                             filmImport.importFilmsFromCSV(selectedFile.getAbsolutePath());
                         } catch (Exception ex) {
-                            publish("Feil under import: " + ex.getMessage());
+                            publish("Error during import: " + ex.getMessage());
                         }
                         return null;
                     }
@@ -138,7 +138,7 @@ public class FilmImportGUI extends BaseGUI {
                     }
                 }.execute();
             } else {
-                logArea.append("Ingen fil er valgt!\n");
+                logArea.append("No file is chosen!\n");
             }
         });
         

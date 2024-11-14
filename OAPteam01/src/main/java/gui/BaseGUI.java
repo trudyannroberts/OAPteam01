@@ -62,7 +62,7 @@ public class BaseGUI extends JFrame {
         homeButton.addActionListener(e -> showHomePage());
         browseButton.addActionListener(e -> showBrowsePage());
         accountButton.addActionListener(e -> showAccountPage());
-        //importButton.addActionListener(e -> showFilmImportPage());
+        importButton.addActionListener(e -> showFilmImportPage());
 
         panel.add(homeButton);
         panel.add(browseButton);
