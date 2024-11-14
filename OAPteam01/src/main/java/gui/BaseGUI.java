@@ -107,16 +107,17 @@ public class BaseGUI extends JFrame {
     	if (!(this instanceof AccountGUI)) {
     			new AccountGUI().setVisible(true);
     			this.dispose();
+    	}
  }
     	/**
          * Displays the page that can mass import films to the application.
          * If the current page is not already the Film Import page, it creates a new FilmImportGUI and disposes of the current window.
          */
-        //protected void showFilmImportPage() {
-        //	if (!(this instanceof FilmImportGUI)) {
-        //			new FilmImportGUI().setVisible(true);
-        //			this.dispose();
-     //}
+        protected void showFilmImportPage() {
+        	if (!(this instanceof FilmImportGUI)) {
+        			new FilmImportGUI().setVisible(true);
+        			this.dispose();
+    }
     	
     }
     /**
