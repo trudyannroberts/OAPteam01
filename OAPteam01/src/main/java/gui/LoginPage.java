@@ -101,9 +101,7 @@ public class LoginPage {
             frame.dispose(); // Close the login window
             onLoginSuccess.run();
             // Proceed with other actions such as showing user-specific content
-        } else {
-            JOptionPane.showMessageDialog(frame, "Invalid username or password.");
-        }
+        } 
     }
 
     private void registerUser() {
