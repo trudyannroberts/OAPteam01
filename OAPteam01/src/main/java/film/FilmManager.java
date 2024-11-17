@@ -106,7 +106,7 @@ public class FilmManager implements FilmHandler {
     public void updateFilmTable(List<Film> films, String message) {
     	BrowseMoviesPage.movieTable.setRowCount(0); // Clear previous data
         for (Film film : films) {
-            BrowseMoviesPage.movieTable.addRow(new Object[]{film.getTitle(), film.getReleaseYear(), film.getGenre(),film.getDesc()});
+            BrowseMoviesPage.movieTable.addRow(new Object[]{film.getTitle(), film.getReleaseYear(), film.getGenre(),film.getDescription()});
         }
         if (films.isEmpty()) {
             JOptionPane.showMessageDialog(null, message, "No results", JOptionPane.INFORMATION_MESSAGE);

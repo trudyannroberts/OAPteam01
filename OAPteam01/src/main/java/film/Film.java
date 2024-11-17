@@ -8,10 +8,12 @@ package film;
  */
 public class Film {
 	
-	private String title;
-	private String desc;
-	private int releaseYear;
-	private String genre;
+    private String title;
+    private String description;
+    private int releaseYear;
+    private String genre;
+    private boolean importSuccess;
+    private String failureReason;
 
 	/**
 	 * Constructs a new Film object with the specified title, description, release year, and genre.
@@ -21,13 +23,12 @@ public class Film {
 	 * @param releaseYear the year the film was released
 	 * @param genre the genre of the film
 	 */
-	public Film(String title, String desc, int releaseYear, String genre) {
-		this.setTitle(title);
-		this.setDesc(desc);
-		this.setReleaseYear(releaseYear);
-		this.setGenre(genre); 
-	}
-
+    public Film(String title, String description, int releaseYear, String genre) {
+        this.title = title;
+        this.description = description;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+    }
 	/**
 	 * Returns the title of the film.
 	 * 
@@ -51,8 +52,8 @@ public class Film {
 	 * 
 	 * @return the description of the film
 	 */
-	public String getDesc() {
-		return desc;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -60,8 +61,8 @@ public class Film {
 	 * 
 	 * @param desc the description to set
 	 */
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescription(String desc) {
+		this.description = desc;
 	}
 
 	/**
@@ -100,6 +101,22 @@ public class Film {
 		this.genre = genre;
 	}
 	
+    public boolean isImportSuccess() { 
+    	return importSuccess; 
+    	}
+    
+    public void setImportSuccess(boolean importSuccess) { 
+    	this.importSuccess = importSuccess; 
+    	}
+    
+    public String getFailureReason() { 
+    	return failureReason; 
+    	}
+    
+    public void setFailureReason(String failureReason) { 
+    	this.failureReason = failureReason; 
+    	}
+	
 	/**
 	 * Returns a string representation of the Film object.
 	 * 
@@ -108,8 +125,14 @@ public class Film {
 	@Override
 	public String toString() {
 		return "Title: '" + title + '\'' +
-                "\nDescription: '" + desc + '\'' +
+                "\nDescription: '" + description + '\'' +
                 "\nRelease year: " + releaseYear +
                 "\nGenre: '" + genre + '\'' + "\n";
 	}
+	
+	/*
+    
+
+}
+	 */
 }

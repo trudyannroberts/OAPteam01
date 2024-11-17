@@ -1,28 +1,30 @@
 package gui;
-/**
- * @author Erica Laub Varpe
- */
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import film.FilmImport;
+import film.FilmImportService;
+import film.ImportResult;
 
 import java.awt.*;
 import java.io.File;
 
+/**
+ * @author Erica Laub Varpe
+ */
 @SuppressWarnings("serial")
 public class FilmImportGUI extends BaseGUI {
-    private FilmImport filmImport;
+    private FilmImportService importService;
     private JLabel statusLabel;
     private JTextArea logArea;
     private File selectedFile;
-    private static final String FILES_DIRECTORY = "resources"; // Konstant for filmappen
+    private static final String FILES_DIRECTORY = "resources";
     
     public FilmImportGUI() {
-        super("Import films");
-        createFilesDirectory(); // Opprett filmappen hvis den ikke eksisterer
+        super("Import Films");
+        importService = new FilmImportService();
+        createFilesDirectory();
         setupComponents();
-        setVisible(true);
     }
     
     private void createFilesDirectory() {
@@ -37,14 +39,14 @@ public class FilmImportGUI extends BaseGUI {
     
     private void setupComponents() {
         // Main panel with padding
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+    	JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         // Top panel for instructions
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel instructionsLabel = new JLabel(
             "<html>Import films from a CSV-file<br>" +
-            "Format: \"title\",\"description\",release_year<br>" +
+            "Format: \"title\",\"description\",release_year,\"genre\"<br>" +
             "CSV-files are located in the resources folder</html>"
         );
         topPanel.add(instructionsLabel, BorderLayout.CENTER);
@@ -111,30 +113,43 @@ public class FilmImportGUI extends BaseGUI {
         
         importButton.addActionListener(e -> {
             if (selectedFile != null) {
-                logArea.setText("Staarting import...\n");
+                logArea.setText("Starting import...\n");
                 importButton.setEnabled(false);
                 
-                new SwingWorker<Void, String>() {
+                new SwingWorker<ImportResult, String>() {
                     @Override
-                    protected Void doInBackground() {
-                        try {
-                            filmImport.importFilmsFromCSV(selectedFile.getAbsolutePath());
-                        } catch (Exception ex) {
-                            publish("Error during import: " + ex.getMessage());
-                        }
-                        return null;
+                    protected ImportResult doInBackground() throws Exception {
+                        publish("Starting import from " + selectedFile.getName());
+                        return importService.importFilmsFromCSV(selectedFile.getAbsolutePath());
                     }
-                    
+
                     @Override
                     protected void process(java.util.List<String> chunks) {
                         for (String message : chunks) {
                             logArea.append(message + "\n");
                         }
                     }
-                    
+
                     @Override
                     protected void done() {
                         importButton.setEnabled(true);
+                        try {
+                            ImportResult result = get();
+                            logArea.append("Import completed!\n");
+                            logArea.append("Successfully imported: " + result.getTotalSuccessful() + " films\n");
+                            logArea.append("Failed to import: " + result.getTotalFailed() + " films\n");
+                            
+                            // Show the summary dialog
+                            ImportSummaryDialog summaryDialog = new ImportSummaryDialog(FilmImportGUI.this, result);
+                            summaryDialog.setVisible(true);
+                            
+                        } catch (Exception ex) {
+                            logArea.append("An error occurred during the import.\n");
+                            JOptionPane.showMessageDialog(FilmImportGUI.this,
+                                "An error occurred: " + ex.getMessage(),
+                                "Import Failed",
+                                JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }.execute();
             } else {
@@ -147,7 +162,11 @@ public class FilmImportGUI extends BaseGUI {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         mainPanel.add(scrollPane, BorderLayout.SOUTH);
         
-        // Add main panel to frame
-        add(mainPanel);
+        // Add main panel to contentPanel instead of directly to the frame
+        contentPanel.add(mainPanel, BorderLayout.CENTER);
+        
+        // Refresh the display
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 }
