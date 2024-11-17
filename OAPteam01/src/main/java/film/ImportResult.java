@@ -23,8 +23,19 @@ public class ImportResult {
         failedImports.add(film);
     }
     
-    public List<Film> getSuccessfulImports() { return successfulImports; }
-    public List<Film> getFailedImports() { return failedImports; }
-    public int getTotalSuccessful() { return successfulImports.size(); }
-    public int getTotalFailed() { return failedImports.size(); }
+    public List<Film> getSuccessfulImports() { 
+    	return successfulImports; 
+    	}
+    
+    public List<Film> getFailedImports() { 
+    	return failedImports; 
+    	}
+    
+    public int getTotalSuccessful() { 
+    	return successfulImports.size(); 
+    	}
+    
+    public int getTotalFailed() { 
+    	return failedImports.size(); 
+    	}
 }

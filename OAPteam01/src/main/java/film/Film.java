@@ -129,10 +129,4 @@ public class Film {
                 "\nRelease year: " + releaseYear +
                 "\nGenre: '" + genre + '\'' + "\n";
 	}
-	
-	/*
-    
-
-}
-	 */
 }

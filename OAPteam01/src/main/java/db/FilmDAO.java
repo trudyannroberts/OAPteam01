@@ -3,6 +3,10 @@ package db;
 import film.Film;
 import java.sql.*;
 
+/**
+ * 
+ * @author Erica Laub Varpe
+ */
 public class FilmDAO {
     private static final String INSERT_FILM_SQL = 
         "INSERT INTO film (title, description, release_year, language_id, rental_duration, " +
