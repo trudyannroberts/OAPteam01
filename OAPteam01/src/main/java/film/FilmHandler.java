@@ -56,7 +56,7 @@ public interface FilmHandler {
      * 
      * @param title the title to search for, matching exactly or partially with the film's title in the database
      */
-    void updateFilmTableTitle(String title);
+    void updateFilmViewTitle(String title);
 
     /**
      * Updates the film table to display only the films that match the specified genre.
@@ -64,7 +64,7 @@ public interface FilmHandler {
      * 
      * @param genre the genre to filter films by, matching with the genre name in the database 
      */
-    void updateFilmTableGenre(String genre);
+    void updateFilmViewGenre(String genre);
 
     /**
      * Updates the film table to display only the films released in the specified year.
@@ -72,11 +72,11 @@ public interface FilmHandler {
      * 
      * @param year the release year to filter films by
      */
-    void updateFilmTableYear(int year);
+    void updateFilmViewYear(int year);
 
     /**
      * Updates the film table to display all films currently stored in the database.
      * This method can be used to reset the table view to its default state, showing all films.
      */
-    void updateFilmTableAll();
+    void updateFilmViewAll();
 }

@@ -24,7 +24,7 @@ public class BrowseMoviesPage extends BaseGUI {
     private JButton searchButton;
     private JButton showAllButton;
     private JButton showAllReviewsButton;
-    public static DefaultTableModel movieTable;
+    public static DefaultTableModel filmView;
     private JComboBox<String> searchTypeComboBox;
     private FilmHandler filmHandler;
 	private ReviewManager reviewManager;
@@ -39,7 +39,7 @@ public class BrowseMoviesPage extends BaseGUI {
         initializeBrowseMoviesPanel();
         initializeListeners();
         
-        filmHandler.updateFilmTableAll();
+        filmHandler.updateFilmViewAll();
         
         setVisible(true);
     }
@@ -72,8 +72,8 @@ public class BrowseMoviesPage extends BaseGUI {
         browsePanel.add(searchPanel, BorderLayout.NORTH);
         
         String[] columnNames = {"Title", "Release Year", "Genre", "Description"};
-        movieTable = new DefaultTableModel(columnNames, 0);
-        JTable table = new JTable(movieTable);
+        filmView = new DefaultTableModel(columnNames, 0);
+        JTable table = new JTable(filmView);
         
         browsePanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
@@ -113,15 +113,15 @@ public class BrowseMoviesPage extends BaseGUI {
                 if (!searchText.isEmpty()) {
                     switch (searchType) {
                         case "Title":
-                            filmHandler.updateFilmTableTitle(searchText);
+                            filmHandler.updateFilmViewTitle(searchText);
                             break;
                         case "Genre":
-                            filmHandler.updateFilmTableGenre(searchText);
+                            filmHandler.updateFilmViewGenre(searchText);
                             break;
                         case "Year":
                             try {
                                 int year = Integer.parseInt(searchText);
-                                filmHandler.updateFilmTableYear(year);
+                                filmHandler.updateFilmViewYear(year);
                             } catch (NumberFormatException ex) {
                                 JOptionPane.showMessageDialog(null, "Invalid year format", "Error", JOptionPane.ERROR_MESSAGE);
                             }
@@ -136,7 +136,7 @@ public class BrowseMoviesPage extends BaseGUI {
         showAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                filmHandler.updateFilmTableAll();
+                filmHandler.updateFilmViewAll();
             }
         });
         
