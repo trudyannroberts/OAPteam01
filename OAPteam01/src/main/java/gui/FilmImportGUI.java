@@ -54,6 +54,7 @@ public class FilmImportGUI extends BaseGUI {
         // Center panel for controls
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         JButton chooseFileButton = new JButton("Choose CSV-file");
+        	//TODO add tooltip saying which folder opens up
         statusLabel = new JLabel("No file is chosen");
         JButton importButton = new JButton("Import");
         importButton.setEnabled(false);
