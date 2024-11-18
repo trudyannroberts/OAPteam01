@@ -20,7 +20,7 @@ import gui.BrowseMoviesPage;
  * <ul>
  *   <li>Retrieving all films</li>
  *   <li>Searching films by title, genre, or release year</li>
- *   <li>Updating the film display in the GUI</li>
+ *   <li>Updating the film view in the GUI</li>
  * </ul>
  *
  * <p>Internal helper methods are used for database mapping and query execution.
@@ -102,8 +102,7 @@ public class FilmManager implements FilmHandler {
         return getFilms(sql, releaseYear);
     }
 
-    // Methods to update the film table display
-    public void updateFilmTable(List<Film> films, String message) {
+    public void updateFilmView(List<Film> films, String message) {
     	BrowseMoviesPage.filmView.setRowCount(0); // Clear previous data
         for (Film film : films) {
             BrowseMoviesPage.filmView.addRow(new Object[]{film.getTitle(), film.getReleaseYear(), film.getGenre(),film.getDescription()});
@@ -116,24 +115,24 @@ public class FilmManager implements FilmHandler {
     @Override
     public void updateFilmViewTitle(String title) {
         List<Film> films = getFilmByTitle(title);
-        updateFilmTable(films, "No films found with title: " + title);
+        updateFilmView(films, "No films found with title: " + title);
     }
 
     @Override
     public void updateFilmViewGenre(String genre) {
         List<Film> films = getFilmByGenre(genre);
-        updateFilmTable(films, "No films found in genre: " + genre);
+        updateFilmView(films, "No films found in genre: " + genre);
     }
 
     @Override
     public void updateFilmViewYear(int year) {
         List<Film> films = getFilmByReleaseYear(year);
-        updateFilmTable(films, "No films found from the year: " + year);
+        updateFilmView(films, "No films found from the year: " + year);
     }
 
     @Override
     public void updateFilmViewAll() {
         List<Film> films = getAllFilms();
-        updateFilmTable(films, "No films found in the db");
+        updateFilmView(films, "No films found in the db");
     }
 }
