@@ -6,11 +6,20 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * A dialog window that displays a summary of film import results.
+ * Shows both successful and failed imports in a tabbed interface with detailed information
+ * about each imported film.
  * @author Erica Laub Varpe
  */
 @SuppressWarnings("serial")
 public class ImportSummaryDialog extends JDialog {
     
+    /**
+     * Creates a new import summary dialog.
+     * 
+     * @param parent The parent frame that owns this dialog
+     * @param result The ImportResult containing data about successful and failed imports
+     */
     public ImportSummaryDialog(Frame parent, ImportResult result) {
         super(parent, "Import Summary", true);
         
