@@ -27,6 +27,6 @@ public class Review {
 		return filmTitle;
 	}	
 	public void displayReview() {
-		JOptionPane.showMessageDialog(null, "You've rated " + filmTitle + review + " /10" );
+		JOptionPane.showMessageDialog(null, "You've rated " + filmTitle + " " + review + "/10" );
 	}
 }
