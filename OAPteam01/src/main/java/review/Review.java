@@ -51,6 +51,6 @@ public class Review {
 	 * Uses JOptionPane to show a pop-up with review information.
 	 */
 	public void displayReview() {
-		JOptionPane.showMessageDialog(null, "You've rated " + filmTitle  + review + " /10" );
+		JOptionPane.showMessageDialog(null, "You've rated " + filmTitle + " " + review + "/10" );
 	}
 }
