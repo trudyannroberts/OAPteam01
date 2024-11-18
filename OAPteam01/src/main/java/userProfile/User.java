@@ -36,7 +36,7 @@ public class User {
     /**
      * 
      * @param userId is the auto-incremented userId (staff_id) created in the database
-    * @param firstName the user's first name
+     * @param firstName the user's first name
      * @param lastName the user's last name
      * @param email the user's email address
      * @param username the user's chosen username

@@ -77,6 +77,7 @@ public class UserAuthenticator {
         JOptionPane.showMessageDialog(null, "Invalid username or password.");
         return null;
     }
+    
     /**
      * Validates the user's email format using a regular expression.
      *

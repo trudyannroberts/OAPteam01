@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 import userProfile.ProfileManager;
-import userProfile.ProfilePanel;
 import userProfile.UserProfile;
 import userProfile.Session;
 import java.awt.*;

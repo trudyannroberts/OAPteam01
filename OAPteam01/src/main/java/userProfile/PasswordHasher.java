@@ -15,24 +15,40 @@ import java.security.NoSuchAlgorithmException; //in case the system does not sup
  */
 
 public class PasswordHasher {
-	/**
-	 * 
-	 * @param password is the plain-text password from the user
-	 * @return the hashed password (converted to a String)
-	 */
+    /**
+     * Hashes a plain-text password using the MD5 algorithm.
+     * 
+     * Converts the input password to a fixed-length 32-character 
+     * hexadecimal string representation.
+     * 
+     * @param password the plain-text password to be hashed
+     * @return the hashed password as a 32-character hexadecimal string
+     * @throws RuntimeException if the MD5 algorithm is not supported by the system
+     */
     public static String hashPassword(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5"); //Creating a MessageDigest object that implements the MD5 algorithm.
-            md.update(password.getBytes()); //converting the password into a byte array (as MessageDigest does read binary data, not text)
-            byte[] digest = md.digest(); //hashes the password and produces the hashed password in bytes.
-            StringBuilder sb = new StringBuilder(); // creating a StringBuilder object.
-            for (byte b : digest) { //iterate over every byte in the digest array
-                sb.append(String.format("%02x", b)); //each byte (b) is converted to a two-digit hexadecimal string and appended into the StringBuilder.
+            // Creating a MessageDigest object that implements the MD5 algorithm
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            
+            // Converting the password into a byte array for hashing
+            md.update(password.getBytes());
+            
+            // Hashes the password and produces the hashed password in bytes
+            byte[] digest = md.digest();
+            
+            // Create a StringBuilder to construct the hexadecimal string
+            StringBuilder sb = new StringBuilder();
+            
+            // Convert each byte to a two-digit hexadecimal string
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
             }
-            return sb.toString(); //returns the StringBuilder (converted into java string)
+            
+            // Return the hashed password as a string
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e); // Throwing a RuntimeException if the MD5 algorithm is not supported
+            // Throw a runtime exception if MD5 algorithm is not supported
+            throw new RuntimeException("MD5 algorithm not available", e);
         }
     }
 }
-

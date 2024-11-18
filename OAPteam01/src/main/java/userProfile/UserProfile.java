@@ -9,7 +9,9 @@ import java.io.Serializable;
  * 
  * @author Trudy Ann Roberts
  */
+@SuppressWarnings("serial")
 public class UserProfile implements Serializable {
+	
 	/**
      * Enum representing the type of user profile, which can be either ADULT or CHILD.
      * This has not been implemented, but the idea is that in the future

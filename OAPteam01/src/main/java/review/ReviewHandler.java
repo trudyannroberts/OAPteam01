@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * Interface for handling film reviews in the media streaming service.
+ * 
+ * @author Trudy Ann Roberts
  */
 public interface ReviewHandler {
 
@@ -17,15 +19,6 @@ public interface ReviewHandler {
      * @throws IOException If there is an error during the file writing process.
      */
     void saveReview(String filmTitle, int newReview) throws IOException;
-
-    /**
-     * Finds the line in the review file associated with the specified film title.
-     *
-     * @param lines     A list of lines from the review file.
-     * @param filmTitle The title of the film to search for.
-     * @return The line with the film's review data, or null if the film is not found.
-     */
-    String findFilmLine(List<String> lines, String filmTitle);
 
     /**
      * Updates the average review score for the specified film based on a new review.

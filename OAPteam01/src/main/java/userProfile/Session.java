@@ -2,6 +2,7 @@ package userProfile;
 
 /**
  * This class will store the user that is currently logged in.
+ * 
  * @author Trudy Ann Roberts
  */
 
@@ -9,17 +10,21 @@ public class Session {
     private static User currentUser;
 
     /**
-     * This constructor sets a user as the current user of the application.
-     * @param user is the user object
+     * Sets the current user for the application session.
+     * 
+     * @param user the User object to set as the current user
      */
     public static void setCurrentUser(User user) {
         currentUser = user;
     }  
+    
     /**
-     * @return only the userId from the user object or -1 if no user is logged in.
+     * Retrieves the user ID of the currently logged-in user.
+     * 
+     * @return the user ID if a user is logged in, or -1 if no user is currently logged in
      */
     
     public static int getCurrentUserId() {
-        return currentUser != null ? currentUser.getUserId() : -1;  // Return -1 if no user is logged in
+        return currentUser != null ? currentUser.getUserId() : -1; 
     }
 }

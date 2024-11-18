@@ -1,7 +1,6 @@
 package review;
 
 import javax.swing.*;
-import film.FilmManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,8 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class creates and manages a file to store film reviews.
+ * It handles adding new reviews, updating existing reviews, 
+ * and calculating average review scores for films.
+ * 
  * @author Trudy Ann Roberts
- * This class creates a file to store the reviews and film title.
  */
 public class ReviewManager implements ReviewHandler {
     private static final String REVIEW_FILE = "film_reviews.txt";  // File to store reviews
@@ -27,16 +29,21 @@ public class ReviewManager implements ReviewHandler {
             }
 
             // Check if the film already has reviews
-            String filmLine = findFilmLine(lines, filmTitle);
+            boolean filmFound = false;
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.startsWith(filmTitle + " ")) {
+                    // Film exists, update its review
+                    String updatedLine = updateAverageReview(line, newReview);
+                    lines.set(i, updatedLine);
+                    filmFound = true;
+                    break;
+                }
+            }
 
-            if (filmLine == null) {
-                // No existing reviews, add a new entry
+            // If film was not found, add a new entry
+            if (!filmFound) {
                 lines.add(filmTitle + " - The average review: " + newReview + " (1 review)");
-            } else {
-                // Update the existing review with a new average
-                String updatedLine = updateAverageReview(filmLine, newReview);
-                lines.remove(filmLine);
-                lines.add(updatedLine);
             }
 
             // Write to the file
@@ -49,37 +56,37 @@ public class ReviewManager implements ReviewHandler {
     }
 
     /**
-     * Finds the line in the file for the given film title.
-     */
-    public String findFilmLine(List<String> lines, String filmTitle) {
-        for (String line : lines) {
-            if (line.startsWith(filmTitle)) {
-                return line;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Updates the average review for a film.
+     * Updates the average review for a film by incorporating a new review.
+     * Calculates the new average rating and increments the review count.
      */
     public String updateAverageReview(String filmLine, int newReview) {
         try {
-            // Extract current average and review count
-            String[] parts = filmLine.split(" - The average review: ");  // Split by " - "The average review: "
-            String reviewPart = parts[1].trim();  // The part with the reviews, e.g., "8 (2 reviews)"
+            // Split the line carefully
+            String[] parts = filmLine.split(" - The average review: ");
+            if (parts.length < 2) {
+                // If the format is unexpected, handle it gracefully
+                return filmLine;
+            }
             
-            // Find the current average and number of reviews
-            int currentAverage = Integer.parseInt(reviewPart.split(" ")[0]);  // Extract current average
-            String reviewCountPart = reviewPart.split("\\(")[1].split(" ")[0]; // Extract the count within brackets
-            int currentReviewCount = Integer.parseInt(reviewCountPart);
+            String filmTitle = parts[0];
+            String reviewPart = parts[1].trim();
+            
+            // Extract current average and review count
+            String[] reviewDetails = reviewPart.split(" \\(");
+            if (reviewDetails.length < 2) {
+                // Unexpected format
+                return filmLine;
+            }
+            
+            int currentAverage = Integer.parseInt(reviewDetails[0]);
+            int currentReviewCount = Integer.parseInt(reviewDetails[1].split(" ")[0]);
             
             // Calculate new average
             int newReviewCount = currentReviewCount + 1;
             int newAverage = (currentAverage * currentReviewCount + newReview) / newReviewCount;
             
             // Return updated review line
-            return parts[0] + " The average review: " + newAverage + " (" + newReviewCount + " reviews)";
+            return filmTitle + " - The average review: " + newAverage + " (" + newReviewCount + " reviews)";
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error updating review: " + e.getMessage());
             e.printStackTrace();
@@ -88,13 +95,9 @@ public class ReviewManager implements ReviewHandler {
     }
     
     /**
-     * Loads all reviews from the film_reviews.txt file.
-     * Each review is represented by a line in the file.
-     */
-    /**
      * Loads all reviews from the review file.
      * 
-     * @return a list of reviews
+     * @return a list of all stored film reviews, or an empty list if no reviews exist
      */
     public List<String> loadAllReviews() {
         List<String> reviews = new ArrayList<>();
