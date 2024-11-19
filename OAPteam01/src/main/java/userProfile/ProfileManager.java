@@ -80,7 +80,6 @@ public class ProfileManager implements ProfileHandler {
     	
         File profileFile = new File(getFileName());
         if (!profileFile.exists()) {
-        	 int userId = Session.getCurrentUserId();  // Get the current user's ID from the session
              if (userId != -1)
             // If the profile file does not exist, initialize with an empty list
             profiles = new ArrayList<>();
