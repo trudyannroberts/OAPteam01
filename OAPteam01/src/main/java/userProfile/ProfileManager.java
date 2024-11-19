@@ -118,6 +118,10 @@ public class ProfileManager implements ProfileHandler {
      * Edits an existing profile by updating its name and type, then saves changes to file.
      */
     public boolean editProfile(String oldProfileName, String newProfileName, String newProfileType) {
+        if (newProfileName == null || newProfileName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "You must enter a new profile name.");
+            return false;
+        }
         Optional<UserProfile> profileToEdit = profiles.stream()
                 .filter(profile -> profile.getProfileName().equals(oldProfileName))
                 .findFirst();
