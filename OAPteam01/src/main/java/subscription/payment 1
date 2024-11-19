@@ -1,0 +1,67 @@
+package payment;
+
+import java.util.Scanner;
+
+/**
+ *
+ */
+public class Payment {
+    
+    /**
+     * Displays the card payment message.
+     */
+    public void cardPayment() {
+        System.out.println("Sending you to a third party for processing card payment...");
+    }
+    
+    /**
+     * Displays the Vipps payment message.
+     */
+    public void vipps() {
+        System.out.println("Please open Vipps to process payment...");
+    }
+    
+    /**
+     * Displays the invoice message.
+     */
+    public void invoice() {
+        System.out.println("Generating invoice...");
+    }
+    
+    /**
+     * Takes the user's choice and calls the appropriate payment method.
+     */
+    public void choosePaymentMethod(int choice) {
+        switch (choice) {
+            case 1:
+                cardPayment();
+                break;
+            case 2:
+                vipps();
+                break;
+            case 3:
+                invoice();
+                break;
+            default:
+                System.out.println("Invalid choice. Please select 1, 2, or 3.");
+                break;
+        }
+    }
+    
+    public static void main(String[] args) {
+        Payment payment = new Payment();
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Choose a payment method:");
+        System.out.println("1. Card Payment");
+        System.out.println("2. Vipps");
+        System.out.println("3. Invoice");
+        
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        
+        payment.choosePaymentMethod(choice);
+        
+        scanner.close();
+    }
+}

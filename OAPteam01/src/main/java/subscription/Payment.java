@@ -1,4 +1,4 @@
-package payment;
+package subscription;
 
 /**
  * @author Trudy Ann Roberts
