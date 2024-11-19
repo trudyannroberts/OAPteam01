@@ -12,26 +12,36 @@ import db.DatabaseConnection;
 import gui.BrowseMoviesPage;
 
 /**
- * The FilmManager class manages film data retrieval from the database.
- * It implements the FilmHandler interface and follows the DAO pattern 
- * to access film related information.
+ * The FilmManager class manages film data retrieval from the database and updates the GUI.
+ * It implements both FilmHandler for data operations and FilmViewHandler for GUI updates.
  *
- * <p>This class supports:
+ * <p>This class provides functionality for:
  * <ul>
- *   <li>Retrieving all films</li>
- *   <li>Searching films by title, genre, or release year</li>
- *   <li>Updating the film view in the GUI</li>
+ *   <li>Retrieving films using various search criteria</li>
+ *   <li>Mapping database results to Film objects</li>
+ *   <li>Updating the GUI film view with search results</li>
  * </ul>
  *
- * <p>Internal helper methods are used for database mapping and query execution.
+ * <p>Database queries support searching by:
+ * <ul>
+ *   <li>Film title (partial matches supported)</li>
+ *   <li>Genre (exact matches)</li>
+ *   <li>Release year</li>
+ * </ul>
  * 
- * <p><b>Note:</b> Database errors are logged with stack traces.
+ * <p>SQL queries join the film, film_category, and category tables to retrieve complete film information.
  * 
  * @author Erica Laub Varpe
  */
-public class FilmManager implements FilmHandler {
-
-    // Helper method to map ResultSet to a Film object
+public class FilmManager implements FilmHandler, FilmViewHandler {
+    
+	/**
+     * Helpet method to map database ResultSet row to a Film object.
+     * 
+     * @param resultSet 	The ResultSet containing film data
+     * @return A new Film object populated with data from the ResultSet
+     * @throws SQLException if there's an error accessing the ResultSet
+     */
     private Film mapResultSetToFilm(ResultSet resultSet) throws SQLException {
         String title = resultSet.getString("title");
         String desc = resultSet.getString("description");
@@ -40,7 +50,15 @@ public class FilmManager implements FilmHandler {
         return new Film(title, desc, releaseYear, genre);
     }
 
-    // General method to get films based on a query and a parameter
+    /**
+     * Executes a parameterized SQL query and returns a list of Film objects.
+     * Supports both String and Integer parameters for different search types.
+     * 
+     * @param sql 		The SQL query to execute
+     * @param param 	The parameter to bind to the prepared statement (can be String or Integer),
+     *             		or null for queries without parameters
+     * @return List of Film objects matching the query criteria
+     */
     private List<Film> getFilms(String sql, Object param) {
         List<Film> films = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
@@ -102,10 +120,22 @@ public class FilmManager implements FilmHandler {
         return getFilms(sql, releaseYear);
     }
 
-    public void updateFilmView(List<Film> films, String message) {
-    	BrowseMoviesPage.filmView.setRowCount(0); // Clear previous data
+    /**
+     * Helper method to update the film view in the GUI with the provided list of films.
+     * Clears the previous data and displays a message if no films are found.
+     *
+     * @param films 	The list of films to display
+     * @param message The message to show if no films are found
+     */
+    private void updateFilmView(List<Film> films, String message) {
+        BrowseMoviesPage.filmView.setRowCount(0); // Clear previous data
         for (Film film : films) {
-            BrowseMoviesPage.filmView.addRow(new Object[]{film.getTitle(), film.getReleaseYear(), film.getGenre(),film.getDescription()});
+            BrowseMoviesPage.filmView.addRow(new Object[]{
+                film.getTitle(), 
+                film.getReleaseYear(), 
+                film.getGenre(),
+                film.getDescription()
+            });
         }
         if (films.isEmpty()) {
             JOptionPane.showMessageDialog(null, message, "No results", JOptionPane.INFORMATION_MESSAGE);

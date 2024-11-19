@@ -6,17 +6,32 @@ import javax.swing.*;
 import userProfile.Session;
 import java.awt.*;
 
+/**
+ * Represents the login page for the Media Streaming Service.
+ * Provides functionality for user authentication and registration.
+ * 
+ * @author
+ */
 public class LoginPage {
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private Runnable onLoginSuccess;
 
+    /**
+     * Constructs a new LoginPage with specified post-login behavior.
+     * 
+     * @param onLoginSuccess 	callback to execute after successful login
+     */
     public LoginPage(Runnable onLoginSuccess) {
         this.onLoginSuccess = onLoginSuccess;
         initialize();
     }
 
+    /**
+     * Initializes and configures the login window components.
+     * Sets up the main frame, input fields, and buttons.
+     */
     private void initialize() {
     	
         // Frame setup
@@ -90,6 +105,10 @@ public class LoginPage {
         frame.setVisible(true);
     }
     
+    /**
+     * Handles the login process by authenticating user credentials.
+     * Closes the login window and executes success callback if authentication succeeds.
+     */
     private void logIn() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -104,6 +123,10 @@ public class LoginPage {
         } 
     }
 
+    /**
+     * Opens a registration window for new users.
+     * Collects user information and creates a new user account.
+     */
     private void registerUser() {
         // Create a new JFrame for registration
         JFrame registrationFrame = new JFrame("Register New User");
@@ -176,7 +199,13 @@ public class LoginPage {
         registrationFrame.setVisible(true);
     }
 
-    // Helper method to create field panels
+    /**
+     * Helper method to create field panels.
+     * 
+     * @param labelText the text to display beside the field
+     * @param field the text field component
+     * @return a panel containing the label and text field
+     */
     private JPanel createFieldPanel(String labelText, JTextField field) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBackground(new Color(255, 255, 255));

@@ -10,16 +10,25 @@ import java.awt.*;
 import java.io.File;
 
 /**
+ * A graphical user interface for importing films from CSV files.
+ * The GUI provides functionality to select CSV files, import film data, and view import results.
+ * CSV files should follow the format: "title","description",release_year,"genre"
+ *
  * @author Erica Laub Varpe
  */
 @SuppressWarnings("serial")
 public class FilmImportGUI extends BaseGUI {
-    private FilmImportService importService;
-    private JLabel statusLabel;
-    private JTextArea logArea;
-    private File selectedFile;
-    private static final String FILES_DIRECTORY = "resources";
+    private FilmImportService importService; // Service handling the film import operations.
+    private JLabel statusLabel; // Label showing the current status of file selection and import.
+    private JTextArea logArea; // Text area for displaing import logs and progress.
+    private File selectedFile; // Currently selected file for import.
+    private static final String FILES_DIRECTORY = "resources"; // Directory for storing resource files.
     
+    /**
+     * Constructs a new FilmImportGUI.
+     * Initializes the import service, creates the resources directory if needed,
+     * and sets up the GUI components.
+     */
     public FilmImportGUI() {
         super("Import Films");
         importService = new FilmImportService();
@@ -27,6 +36,10 @@ public class FilmImportGUI extends BaseGUI {
         setupComponents();
     }
     
+    /**
+     * Creates the resources directory if it doesn't exist.
+     * Prints an error message if directory creation fails.
+     */
     private void createFilesDirectory() {
         File filesDir = new File(FILES_DIRECTORY);
         if (!filesDir.exists()) {
@@ -37,6 +50,11 @@ public class FilmImportGUI extends BaseGUI {
         }
     }
     
+    /**
+     * Sets up all GUI components including file chooser, import button,
+     * status label, and log area. Configures layout and event listeners
+     * for handling file selection and import operations.
+     */
     private void setupComponents() {
         // Main panel with padding
     	JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
@@ -53,8 +71,10 @@ public class FilmImportGUI extends BaseGUI {
         
         // Center panel for controls
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        
         JButton chooseFileButton = new JButton("Choose CSV-file");
-        	//TODO add tooltip saying which folder opens up
+        chooseFileButton.setToolTipText("Opens up the resource folder located in the project by default");
+        
         statusLabel = new JLabel("No file is chosen");
         JButton importButton = new JButton("Import");
         importButton.setEnabled(false);

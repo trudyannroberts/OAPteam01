@@ -4,7 +4,7 @@ import film.Film;
 import java.sql.*;
 
 /**
- * Data Access Object for handling film-related database operations.
+ * Data Access Object for handling film import database operations.
  * Provides methods for inserting films and managing film categories in the database.
  * 
  * @author Erica Laub Varpe

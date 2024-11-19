@@ -12,7 +12,9 @@ import javax.swing.Timer;
 
 /**
  * The MoviePlayerUI serves as a bare bones representation for how playing movies through the application might look like.
- * 
+ * Provides controls for playing, pausing, skipping, and volume adjustment.
+ * Includes a progress bar and offers the option to rate the movie after watching.
+ *
  * @author August Monen
  */
 public class MoviePlayerUI extends JFrame {
@@ -28,7 +30,11 @@ public class MoviePlayerUI extends JFrame {
     private final int movieDuration = 600; // Duration in seconds
     private String currentFilmTitle;
 
-    // Constructor that initializes the movie player UI with the film title
+    /**
+     * Creates a new movie player window for the specified film.
+     *
+     * @param filmTitle	 the title of the film to play
+     */
     public MoviePlayerUI(String filmTitle) {
         this.currentFilmTitle = filmTitle;
 
@@ -164,7 +170,10 @@ public class MoviePlayerUI extends JFrame {
          setVisible(true); // Make the frame visible after all components are added
      }
 
- // Method to confirm and open Review GUI
+    /**
+     * Shows a dialog asking if the user wants to rate the movie
+     * and opens the review GUI if confirmed.
+     */
     private void confirmAndOpenReviewGUI() {
         int response = JOptionPane.showConfirmDialog(this,
                 "Do you want to rate \"" + currentFilmTitle + "\"?",
@@ -176,14 +185,20 @@ public class MoviePlayerUI extends JFrame {
         }
     }
     
- // Method to open Review GUI
+    /**
+     * Opens the review GUI for the current film.
+     */
     private void openReviewGUI() {
         SwingUtilities.invokeLater(() -> {
             new ReviewGUI(currentFilmTitle); // Open Review GUI with current film title
         });
     }
-
-     // Method to style buttons consistently
+ 
+    /**
+     * Method to style buttons consistently
+     *
+     * @param button the button to style
+     */
      private void styleButton(JButton button) {
          button.setBackground(Color.DARK_GRAY); // Dark grey background
          button.setForeground(Color.WHITE);     // White text
