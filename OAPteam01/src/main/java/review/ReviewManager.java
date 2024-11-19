@@ -9,8 +9,11 @@ import java.util.List;
 
 /**
  * This class creates and manages a file to store film reviews.
- * It handles adding new reviews, updating existing reviews, 
- * and calculating average review scores for films.
+ * It handles adding new reviews, updating existing reviews, and calculating average review scores for films.
+ * 
+ * Currently, a user can review a film several times, which is not optimal. 
+ * An improvement would be to make sure a user could not review a film several times, 
+ * but rather change their review.
  * 
  * @author Trudy Ann Roberts
  */
