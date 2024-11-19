@@ -2,6 +2,7 @@ package film;
 
 /**
  * @author Stian
+ * @deprecated not enough time for us to implement it properly.
  */
 
 import java.util.ArrayList;
