@@ -3,14 +3,13 @@ package gui;
 import userProfile.User;
 import userProfile.UserAuthenticator;
 import javax.swing.*;
-import userProfile.Session;
 import java.awt.*;
 
 /**
  * Represents the login page for the Media Streaming Service.
  * Provides functionality for user authentication and registration.
  * 
- * @author
+ * @author Aryan Hedow
  */
 public class LoginPage {
     private JFrame frame;
