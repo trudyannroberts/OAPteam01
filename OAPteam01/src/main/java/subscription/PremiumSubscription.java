@@ -1,10 +1,8 @@
 package subscription;
 
-
-
-public class basicSubscription implements subscription {
-    private final double price = 9.99;
-    private final String type = "Basic";
+public class PremiumSubscription implements Subscription {
+    private final double price = 15.99;
+    private final String type = "Premium";
 
     @Override
     public double getPrice() {
@@ -16,4 +14,3 @@ public class basicSubscription implements subscription {
         return type;
     }
 }
-
