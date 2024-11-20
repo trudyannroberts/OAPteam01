@@ -1,17 +1,14 @@
 package subscription;
 
-public class subscriptionManager {
-    public subscription createSubscription(String type) {
+public class SubscriptionManager {
+    public Subscription createSubscription(String type) {
         if ("Basic".equalsIgnoreCase(type)) {
-            return new basicSubscription();
+            return new BasicSubscription();
         } else if ("Premium".equalsIgnoreCase(type)) {
-            return new premiumSubscription();
+            return new PremiumSubscription();
         } else {
-            return null; // Return null for invalid type
+            return null; // Returner null for ugyldige abonnementstyper
         }
     }
-
-    public void changeSubscription(user user, subscription subscription) {
-        user.setSubscription(subscription);
-    }
 }
+
