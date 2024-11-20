@@ -1,7 +1,4 @@
 package userProfile;
-
-import subscription.Subscription;
-
 /**
  * The User class represents a user in the media streaming service application.
  * It encapsulates the user's information, including their personal details and credentials.
@@ -18,7 +15,6 @@ public class User {
     private String username;
     private String password;
     private int userId;
-    private Subscription subscription;
 
     /**
      * Constructs a User instance with the specified details.
@@ -154,13 +150,5 @@ public class User {
      */
     public void setPassword(String password) {
         this.password = password;
-    }
-    
-    public void setSubscription(Subscription subscription) {
-        this.subscription = subscription;
-    }
-    
-    public Subscription getSubscription() {
-        return subscription;
     }
 }
