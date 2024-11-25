@@ -156,7 +156,7 @@ public class UserAuthenticator {
         if (email == null || email.isEmpty()) {
             return false;
         }
-        String emailValidation = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String emailValidation = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,3}$";
         return email.matches(emailValidation);
     }
 
