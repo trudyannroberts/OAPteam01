@@ -2,13 +2,14 @@ package film;
 
 /**
  * @author Stian
- * @deprecated not enough time for us to implement it properly.
+ * @deprecated We ran out of time and were not able to implement this class properly.
  */
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public class WatchlistManager {
 	
 	//Hashmap to connect a profile to a list of films watched
