@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 /**
- * @author Trudy Ann Roberts
  * This class will connect to the db. The idea is that other classes can import this class and then connect to the db through here.
+ * @author Trudy Ann Roberts
  */
 public class DatabaseConnection {
 	/**
