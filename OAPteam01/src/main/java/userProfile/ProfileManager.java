@@ -49,6 +49,12 @@ public class ProfileManager implements ProfileHandler {
      * Saves the updated profile list to the file.
      */
     public boolean addProfile(UserProfile profile) {
+        // Validate that the profile is not null and has valid fields
+        if (profile == null || profile.getProfileName() == null || profile.getProfileName().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Profile cannot be empty. Please provide valid details.");
+            return false;
+        }
+        
         if (profiles.size() < MAX_PROFILES) {
             profiles.add(profile);
             saveProfiles();
