@@ -9,9 +9,9 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
 	/**
-	 * @param DB_URL is the url for the local db. This url can be used by all team members.
-	 * @param DB_USER shows the username. No need to change this. I think we are all "root"
-	 * @param DB_PASSWORD is out individual passwords to the db. Here you need to enter the password for your workbench Local Instance.
+	 * @param DB_URL is the url for the local db..
+	 * @param DB_USER shows the username.
+	 * @param DB_PASSWORD is out individual passwords to the db.
 	 */
     private static final String DB_URL = "jdbc:mysql://localhost:3306/sakila";
     private static final String DB_USER = "student"; 
